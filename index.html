@@ -315,7 +315,6 @@ input,select,textarea{font-size:16px !important;}
     <input id="authPassword" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;padding:13px 14px;border:1.5px solid #dde3ea;border-radius:10px;font-size:16px;font-family:'Barlow',sans-serif;margin-bottom:8px;outline:none;box-sizing:border-box;">
     <div id="authError" style="color:#e63946;font-size:13px;font-family:'Barlow',sans-serif;min-height:20px;margin-bottom:12px;"></div>
     <button onclick="authSignIn()" style="width:100%;background:linear-gradient(135deg,#1e5aa8,#0f2d62);color:#fff;border:none;border-radius:10px;padding:14px;font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;cursor:pointer;margin-bottom:10px;">SIGN IN</button>
-    <button onclick="authSignUp()" style="width:100%;background:#f0f4f8;color:#1A2B4A;border:none;border-radius:10px;padding:14px;font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;cursor:pointer;">CREATE ACCOUNT</button>
     <div id="authMsg" style="text-align:center;color:#2D7D46;font-size:13px;font-family:'Barlow',sans-serif;min-height:20px;margin-top:12px;"></div>
   </div>
 </div>
@@ -339,6 +338,7 @@ input,select,textarea{font-size:16px !important;}
     <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;">
       <button id="wakeLockBtn" onclick="toggleWakeLock()">☀️ Screen on</button>
       <button id="signOutBtn" onclick="authSignOut()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:rgba(255,255,255,0.55);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;cursor:pointer;margin-top:6px;">SIGN OUT</button>
+      <span id="syncState" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;color:rgba(126,203,204,0.8);margin-top:6px;"></span>
     </div>
   </div>
   <nav class="tab-nav">
@@ -476,6 +476,8 @@ input,select,textarea{font-size:16px !important;}
       <div class="bh" style="background:rgba(29,125,179,0.2)">DRILL BLOCK</div>
       <div class="pool-set"><div class="pool-set-name"><b>Catch-up drill</b>Pause lead hand at extension until trailing hand arrives. Long stroke timing.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-dk)">🤿 Snorkel optional</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db-catchup" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db-catchup-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db-catchup')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db-catchup')">History</button></div></div>
       <div class="dist-log-prev" id="dl-db-catchup"></div>
+      <div class="pool-set"><div class="pool-set-name"><b>Fingertip drag drill</b>Drag fingertips along the surface during recovery. Keeps the elbow high and sets up the catch.</div><div class="dist-wrap"><input class="dist-input" data-key="db-drag" value="25" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db-drag-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db-drag')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db-drag')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-db-drag"></div>
 
 
       <div class="bh" style="background:rgba(29,125,179,0.2)">LEG STRENGTH DRILL</div>
@@ -640,68 +642,6 @@ input,select,textarea{font-size:16px !important;}
   .tech-sub-body b{color:#333;}
   .tech-cat{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;padding:7px 16px 5px;background:rgba(0,0,0,0.25);border-top:1px solid rgba(255,255,255,0.1);}
 
-/* ─── DASHBOARD REDESIGN ─────────────────────────────── */
-body{background:#EAECF0;}
-
-/* App Header */
-.app-header{position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,0.25);}
-.app-bar{background:linear-gradient(160deg,#1e5aa8 0%,#163b78 60%,#0f2d62 100%);padding:14px 16px 10px;position:relative;overflow:hidden;}
-.app-bar::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(255,255,255,0.07) 0%,transparent 60%);pointer-events:none;}
-.app-bar-content{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;position:relative;z-index:1;}
-.app-bar-left{}
-.app-bar-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:1.5px;line-height:1;}
-.app-bar-sub{font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
-.app-bar-right{text-align:right;}
-.app-bar-time{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1;letter-spacing:1px;}
-.app-bar-date{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.5px;text-align:right;margin-top:3px;line-height:1;}
-.app-bar-meta{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:rgba(255,255,255,0.5);margin-top:3px;display:flex;align-items:center;gap:4px;justify-content:flex-end;}
-.app-bar-weather{font-size:18px;color:rgba(255,255,255,0.9);}
-#wakeLockBtn{display:inline-block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:rgba(255,255,255,0.55);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.2s;position:relative;z-index:1;margin-top:6px;}
-#wakeLockBtn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
-
-/* Tab Nav */
-.tab-nav{background:rgba(15,42,88,0.95);backdrop-filter:blur(4px);overflow-x:auto;scrollbar-width:none;display:flex;border-top:1px solid rgba(255,255,255,0.08);}
-.tab-nav::-webkit-scrollbar{display:none;}
-.tab-nav-inner{display:flex;padding:0 4px;}
-.tnav-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;color:rgba(255,255,255,0.4);background:transparent;border:none;border-bottom:2px solid transparent;padding:10px 12px 8px;cursor:pointer;white-space:nowrap;transition:all 0.18s;-webkit-tap-highlight-color:transparent;}
-.tnav-btn.active{color:#fff;border-bottom-color:#7ecbcc;}
-
-/* Content */
-.content{max-width:860px;margin:0 auto;padding:14px 12px 80px;}
-
-/* Stats strip in dashboard */
-.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:20px;}
-@media(max-width:480px){.dash-stats{grid-template-columns:repeat(2,1fr);}}
-.dash-stat{background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.08);-webkit-tap-highlight-color:transparent;}
-.dash-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94A3B8;margin-bottom:4px;}
-.dash-stat-value{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#0E1B35;line-height:1;}
-.dash-stat-input{background:transparent;border:none;border-bottom:1.5px solid var(--teal);color:#0E1B35;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;width:100%;text-align:center;outline:none;}
-
-/* Dashboard section labels */
-.dash-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
-
-/* Dashboard cards */
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.dash-card{border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.1);transition:transform 0.12s,box-shadow 0.12s;-webkit-tap-highlight-color:transparent;border:none;}
-.dash-card:active{transform:scale(0.97);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
-.dash-card-h{padding:14px 14px 10px;}
-.dash-card-icon{font-size:26px;line-height:1;margin-bottom:6px;}
-.dash-card-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:#fff;letter-spacing:0.5px;line-height:1.1;}
-.dash-card-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
-.dash-card-b{padding:8px 14px 13px;background:#fff;}
-.dash-card-desc{font-size:11px;color:#6B7280;line-height:1.4;}
-
-/* Goals section */
-.dash-goals-head{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
-
-/* Section heads — subtle improvement */
-.sh{border-radius:0;margin-left:0;margin-right:0;}
-
-/* Cards get shadows throughout */
-.session-card{box-shadow:0 2px 12px rgba(0,0,0,0.09);}
-.acc-section{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
-.ncard{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
-.goals-card,.nutr-blurb{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
 </style>
 
   <!-- FREESTYLE SWIMMING TECHNIQUE -->
@@ -832,68 +772,6 @@ body{background:#EAECF0;}
   .ncard-tip b{font-weight:600;}
   .ntab-note{background:var(--pale-teal);border:1px solid var(--teal);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--grey);line-height:1.65;margin-bottom:10px;}
 
-/* ─── DASHBOARD REDESIGN ─────────────────────────────── */
-body{background:#EAECF0;}
-
-/* App Header */
-.app-header{position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,0.25);}
-.app-bar{background:linear-gradient(160deg,#1e5aa8 0%,#163b78 60%,#0f2d62 100%);padding:14px 16px 10px;position:relative;overflow:hidden;}
-.app-bar::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(255,255,255,0.07) 0%,transparent 60%);pointer-events:none;}
-.app-bar-content{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;position:relative;z-index:1;}
-.app-bar-left{}
-.app-bar-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:1.5px;line-height:1;}
-.app-bar-sub{font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
-.app-bar-right{text-align:right;}
-.app-bar-time{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1;letter-spacing:1px;}
-.app-bar-date{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.5px;text-align:right;margin-top:3px;line-height:1;}
-.app-bar-meta{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:rgba(255,255,255,0.5);margin-top:3px;display:flex;align-items:center;gap:4px;justify-content:flex-end;}
-.app-bar-weather{font-size:18px;color:rgba(255,255,255,0.9);}
-#wakeLockBtn{display:inline-block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:rgba(255,255,255,0.55);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.2s;position:relative;z-index:1;margin-top:6px;}
-#wakeLockBtn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
-
-/* Tab Nav */
-.tab-nav{background:rgba(15,42,88,0.95);backdrop-filter:blur(4px);overflow-x:auto;scrollbar-width:none;display:flex;border-top:1px solid rgba(255,255,255,0.08);}
-.tab-nav::-webkit-scrollbar{display:none;}
-.tab-nav-inner{display:flex;padding:0 4px;}
-.tnav-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;color:rgba(255,255,255,0.4);background:transparent;border:none;border-bottom:2px solid transparent;padding:10px 12px 8px;cursor:pointer;white-space:nowrap;transition:all 0.18s;-webkit-tap-highlight-color:transparent;}
-.tnav-btn.active{color:#fff;border-bottom-color:#7ecbcc;}
-
-/* Content */
-.content{max-width:860px;margin:0 auto;padding:14px 12px 80px;}
-
-/* Stats strip in dashboard */
-.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:20px;}
-@media(max-width:480px){.dash-stats{grid-template-columns:repeat(2,1fr);}}
-.dash-stat{background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.08);-webkit-tap-highlight-color:transparent;}
-.dash-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94A3B8;margin-bottom:4px;}
-.dash-stat-value{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#0E1B35;line-height:1;}
-.dash-stat-input{background:transparent;border:none;border-bottom:1.5px solid var(--teal);color:#0E1B35;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;width:100%;text-align:center;outline:none;}
-
-/* Dashboard section labels */
-.dash-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
-
-/* Dashboard cards */
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.dash-card{border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.1);transition:transform 0.12s,box-shadow 0.12s;-webkit-tap-highlight-color:transparent;border:none;}
-.dash-card:active{transform:scale(0.97);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
-.dash-card-h{padding:14px 14px 10px;}
-.dash-card-icon{font-size:26px;line-height:1;margin-bottom:6px;}
-.dash-card-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:#fff;letter-spacing:0.5px;line-height:1.1;}
-.dash-card-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
-.dash-card-b{padding:8px 14px 13px;background:#fff;}
-.dash-card-desc{font-size:11px;color:#6B7280;line-height:1.4;}
-
-/* Goals section */
-.dash-goals-head{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
-
-/* Section heads — subtle improvement */
-.sh{border-radius:0;margin-left:0;margin-right:0;}
-
-/* Cards get shadows throughout */
-.session-card{box-shadow:0 2px 12px rgba(0,0,0,0.09);}
-.acc-section{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
-.ncard{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
-.goals-card,.nutr-blurb{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
 </style>
 
   <!-- HYDRATION -->
@@ -1036,68 +914,6 @@ body{background:#EAECF0;}
     .cog-expand-body.open{display:block;}
     .cog-expand-hdr.open .cog-expand-arr{transform:rotate(180deg);}
   
-/* ─── DASHBOARD REDESIGN ─────────────────────────────── */
-body{background:#EAECF0;}
-
-/* App Header */
-.app-header{position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,0.25);}
-.app-bar{background:linear-gradient(160deg,#1e5aa8 0%,#163b78 60%,#0f2d62 100%);padding:14px 16px 10px;position:relative;overflow:hidden;}
-.app-bar::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(255,255,255,0.07) 0%,transparent 60%);pointer-events:none;}
-.app-bar-content{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;position:relative;z-index:1;}
-.app-bar-left{}
-.app-bar-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:1.5px;line-height:1;}
-.app-bar-sub{font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
-.app-bar-right{text-align:right;}
-.app-bar-time{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1;letter-spacing:1px;}
-.app-bar-date{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.5px;text-align:right;margin-top:3px;line-height:1;}
-.app-bar-meta{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:rgba(255,255,255,0.5);margin-top:3px;display:flex;align-items:center;gap:4px;justify-content:flex-end;}
-.app-bar-weather{font-size:18px;color:rgba(255,255,255,0.9);}
-#wakeLockBtn{display:inline-block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:rgba(255,255,255,0.55);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.2s;position:relative;z-index:1;margin-top:6px;}
-#wakeLockBtn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
-
-/* Tab Nav */
-.tab-nav{background:rgba(15,42,88,0.95);backdrop-filter:blur(4px);overflow-x:auto;scrollbar-width:none;display:flex;border-top:1px solid rgba(255,255,255,0.08);}
-.tab-nav::-webkit-scrollbar{display:none;}
-.tab-nav-inner{display:flex;padding:0 4px;}
-.tnav-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;color:rgba(255,255,255,0.4);background:transparent;border:none;border-bottom:2px solid transparent;padding:10px 12px 8px;cursor:pointer;white-space:nowrap;transition:all 0.18s;-webkit-tap-highlight-color:transparent;}
-.tnav-btn.active{color:#fff;border-bottom-color:#7ecbcc;}
-
-/* Content */
-.content{max-width:860px;margin:0 auto;padding:14px 12px 80px;}
-
-/* Stats strip in dashboard */
-.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:20px;}
-@media(max-width:480px){.dash-stats{grid-template-columns:repeat(2,1fr);}}
-.dash-stat{background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.08);-webkit-tap-highlight-color:transparent;}
-.dash-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94A3B8;margin-bottom:4px;}
-.dash-stat-value{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#0E1B35;line-height:1;}
-.dash-stat-input{background:transparent;border:none;border-bottom:1.5px solid var(--teal);color:#0E1B35;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;width:100%;text-align:center;outline:none;}
-
-/* Dashboard section labels */
-.dash-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
-
-/* Dashboard cards */
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.dash-card{border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.1);transition:transform 0.12s,box-shadow 0.12s;-webkit-tap-highlight-color:transparent;border:none;}
-.dash-card:active{transform:scale(0.97);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
-.dash-card-h{padding:14px 14px 10px;}
-.dash-card-icon{font-size:26px;line-height:1;margin-bottom:6px;}
-.dash-card-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:#fff;letter-spacing:0.5px;line-height:1.1;}
-.dash-card-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
-.dash-card-b{padding:8px 14px 13px;background:#fff;}
-.dash-card-desc{font-size:11px;color:#6B7280;line-height:1.4;}
-
-/* Goals section */
-.dash-goals-head{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
-
-/* Section heads — subtle improvement */
-.sh{border-radius:0;margin-left:0;margin-right:0;}
-
-/* Cards get shadows throughout */
-.session-card{box-shadow:0 2px 12px rgba(0,0,0,0.09);}
-.acc-section{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
-.ncard{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
-.goals-card,.nutr-blurb{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
 </style>
 
   <!-- ICE BATH -->
@@ -1285,32 +1101,6 @@ async function loadWeather(){
 }
 
 
-// ── Section navigation (no tab bar) ──────────────────────────────────────────
-function showSection(id, title) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  const el = document.getElementById('tab-' + id);
-  if (el) el.classList.add('active');
-  document.getElementById('brandingArea').style.display = 'none';
-  document.getElementById('backBtn').style.display = 'flex';
-  document.getElementById('sectionNameArea').style.display = 'block';
-  document.getElementById('sectionTitle').textContent = title;
-  window.scrollTo({top: 0, behavior: 'instant'});
-}
-function goBack() {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-overview').classList.add('active');
-  document.getElementById('brandingArea').style.display = 'block';
-  document.getElementById('backBtn').style.display = 'none';
-  document.getElementById('sectionNameArea').style.display = 'none';
-  window.scrollTo({top: 0, behavior: 'instant'});
-}
-function showDay(day) {
-  showSection('sessions', 'SESSIONS');
-  const stabBtn = document.getElementById('stab-' + day);
-  if (stabBtn) showSession(day, stabBtn);
-}
-
-
 // ── Data export / import ─────────────────────────────────────────────────────
 function exportData(){
   const blob=new Blob([JSON.stringify(_cache,null,2)],{type:'application/json'});
@@ -1325,22 +1115,31 @@ function exportData(){
   document.body.removeChild(a);URL.revokeObjectURL(url);
   showToast('✓ Data exported — save that file somewhere safe');
 }
+// App keys (without the tp_ prefix). Anything else in a backup file is ignored.
+const _APP_KEY=/^(stats|goals|achieved_goals|pool_distances|progress_v2|db2-active|dist_log_.+|weights_.+)$/;
 function importData(){
+  if(!_uid){showToast('Sign in before importing');return;}
   const inp=document.createElement('input');
-  inp.type='file';inp.accept='.json';
+  inp.type='file';inp.accept='.json,application/json';
   inp.onchange=(e)=>{
     const file=e.target.files[0];if(!file)return;
     const reader=new FileReader();
     reader.onload=async (ev)=>{
-      try{
-        const data=JSON.parse(ev.target.result);
-        // Upsert all keys to Supabase and update local cache
-        const rows=Object.keys(data).map(k=>({user_id:_uid,key:k,value:data[k]}));
-        await _sb.from('training_user_data').upsert(rows,{onConflict:'user_id,key'});
-        Object.assign(_cache,data);
-        showToast('✓ Data imported — reloading…');
-        setTimeout(()=>location.reload(),1200);
-      }catch(err){showToast('⚠️ Import failed — check the file');}
+      let data;
+      try{data=JSON.parse(ev.target.result);}catch(err){showToast('⚠️ Import failed — not a valid backup file',3500);return;}
+      if(!data||typeof data!=='object'||Array.isArray(data)){showToast('⚠️ Import failed — not a valid backup file',3500);return;}
+      let n=0;
+      Object.keys(data).forEach(k=>{
+        const base=k.startsWith('tp_')?k.slice(3):k;
+        if(!_APP_KEY.test(base)||data[k]===null||data[k]===undefined)return;
+        LS.set(base,data[k]);n++;
+      });
+      if(!n){showToast('⚠️ No training data found in that file',3500);return;}
+      await _flush();
+      showToast(Object.keys(_pending).length
+        ?'Imported '+n+' items — saved on this device, will sync when online'
+        :'✓ Imported '+n+' items — reloading…',3500);
+      setTimeout(()=>location.reload(),1500);
     };
     reader.readAsText(file);
   };
@@ -1355,7 +1154,7 @@ function showSwimHist(key){
   const modal=document.getElementById('swHistModal');
   const title=document.getElementById('swHistTitle');
   modal.style.display='flex';
-  const labels={'wu-kick':'Kickboard kick','wu-free':'Easy freestyle','db-catchup':'Catch-up drill','leg-vert':'Vertical kick','leg-sprint':'Kickboard sprint','fs-interval':'Freestyle intervals','fs-cont':'Continuous freestyle','db2-snorkel':'Snorkel freestyle','db2-paddles':'Hand paddles','db2-buoy':'Pull buoy','fins-2':'Freestyle with fins'};
+  const labels={'wu-kick':'Kickboard kick','wu-free':'Easy freestyle','db-catchup':'Catch-up drill','db-drag':'Fingertip drag drill','leg-vert':'Vertical kick','leg-sprint':'Kickboard sprint','fs-interval':'Freestyle intervals','fs-cont':'Continuous freestyle','db2-snorkel':'Snorkel freestyle','db2-paddles':'Hand paddles','db2-buoy':'Pull buoy','fins-2':'Freestyle with fins'};
   title.textContent=labels[key]||key;
   _renderSwimHist();
 }
@@ -1451,35 +1250,93 @@ async function toggleWakeLock(){
   }catch(err){showToast('⚠️ Could not lock screen — try Chrome',3500);}
 }
 
-// ── localStorage helpers ──────────────────────────────────────────────────
 // ── Supabase data layer ───────────────────────────────────────────────────
+// Reads come from _cache. Writes go to _cache, a copy in localStorage, and a
+// queue of unsynced keys that is pushed to Supabase and retried until it lands,
+// so a dropped connection at the pool never loses a logged set.
 const _SURL = 'https://fjcqujatwlcikhmisvqy.supabase.co';
 const _SKEY = 'sb_publishable_TuiRxBROZqHBlTV4WRjgmw_ETza0LmH';
 const _sb = supabase.createClient(_SURL, _SKEY);
-let _cache = {};   // in-memory mirror of Supabase rows
-let _uid = null;   // current user id
+const _TABLE = 'training_user_data';
+let _cache = {};    // key -> value, mirror of this user's rows
+let _pending = {};  // key -> write number, for writes Supabase hasn't confirmed
+let _uid = null;    // current user id
+let _seq = Date.now();
 
-// Load all rows for this user into _cache
+function _lsRead(k,fb){try{const v=localStorage.getItem(k);return v==null?fb:JSON.parse(v);}catch(e){return fb;}}
+function _lsWrite(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function _mirrorKey(){return 'tp_mirror_'+_uid;}
+function _pendingKey(){return 'tp_pending_'+_uid;}
+function _saveMirror(){if(_uid){_lsWrite(_mirrorKey(),_cache);_lsWrite(_pendingKey(),_pending);}}
+
+// Load this user's rows. Unsynced local edits win over the server copy.
+// Returns false if Supabase couldn't be reached (the local copy is used instead).
 async function _loadAllData() {
-  const { data, error } = await _sb.from('training_user_data').select('key,value');
-  _cache = {};
-  if (data) data.forEach(r => { _cache[r.key] = r.value; });
+  const local = _lsRead(_mirrorKey(), {});
+  _pending = _lsRead(_pendingKey(), {});
+  const { data, error } = await _sb.from(_TABLE).select('key,value');
+  if (error) { _cache = local; return false; }
+  const server = {};
+  data.forEach(r => { server[r.key] = r.value; });
+  Object.keys(_pending).forEach(k => { if (k in local) server[k] = local[k]; else delete _pending[k]; });
+  _cache = server;
+  _saveMirror();
+  return true;
 }
 
-// LS replaces localStorage — sync reads from cache, async writes to Supabase
+let _flushing = false, _flushQueued = false, _flushTimer = null, _syncFailed = false;
+function _scheduleFlush(){clearTimeout(_flushTimer);_flushTimer=setTimeout(_flush,400);}
+async function _flush() {
+  if (!_uid) return;
+  if (_flushing) { _flushQueued = true; return; }
+  const keys = Object.keys(_pending).filter(k => {
+    if (_cache[k] === undefined || _cache[k] === null) { delete _pending[k]; return false; }
+    return true;
+  });
+  if (!keys.length) { _setSync(); return; }
+  _flushing = true;
+  const sent = {};
+  const rows = keys.map(k => { sent[k] = _pending[k]; return { user_id: _uid, key: k, value: _cache[k] }; });
+  let error;
+  try { ({ error } = await _sb.from(_TABLE).upsert(rows, { onConflict: 'user_id,key' })); }
+  catch (e) { error = e; }
+  _flushing = false;
+  if (error) {
+    console.warn('Supabase write error:', error.message || error);
+    if (!_syncFailed) showToast('⚠️ Not saved to cloud yet — kept on this device, will retry', 3500);
+    _syncFailed = true;
+  } else {
+    // Keys changed again while this request was in flight stay queued
+    keys.forEach(k => { if (_pending[k] === sent[k]) delete _pending[k]; });
+    if (_syncFailed) showToast('✓ Synced');
+    _syncFailed = false;
+  }
+  _saveMirror();
+  _setSync();
+  if (_flushQueued) { _flushQueued = false; _scheduleFlush(); }
+}
+function _setSync(){
+  const el=document.getElementById('syncState');if(!el)return;
+  const n=Object.keys(_pending).length;
+  el.textContent=n?'● '+n+' unsynced':'● synced';
+  el.style.color=n?'#fbbf24':'rgba(126,203,204,0.8)';
+}
+window.addEventListener('online', _flush);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') _flush(); });
+setInterval(() => { if (Object.keys(_pending).length) _flush(); }, 30000);
+
 const LS = {
   get(k) {
     const v = _cache['tp_' + k];
     return (v === undefined || v === null) ? null : v;
   },
   set(k, v) {
-    _cache['tp_' + k] = v;
-    if (_uid) {
-      _sb.from('training_user_data').upsert(
-        { user_id: _uid, key: 'tp_' + k, value: v },
-        { onConflict: 'user_id,key' }
-      ).then(({ error }) => { if (error) console.warn('Supabase write error:', error.message); });
-    }
+    const key = 'tp_' + k;
+    _cache[key] = v;
+    _pending[key] = ++_seq;
+    _saveMirror();
+    _setSync();
+    _scheduleFlush();
   }
 };
 
@@ -1495,18 +1352,45 @@ async function authSignIn() {
   if (error) { _setAuthMsg(''); _setAuthError(error.message); }
 }
 
-async function authSignUp() {
-  const email    = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  _setAuthError(''); _setAuthMsg('Creating account…');
-  const { error } = await _sb.auth.signUp({ email, password });
-  if (error) { _setAuthMsg(''); _setAuthError(error.message); }
-  else _setAuthMsg('✓ Account created — check your email to confirm, then sign in.');
+async function authSignOut() {
+  await _flush();
+  if (Object.keys(_pending).length) {
+    showToast('⚠️ Unsynced changes — reconnect before signing out', 3500);
+    return;
+  }
+  try { localStorage.removeItem(_mirrorKey()); localStorage.removeItem(_pendingKey()); } catch (e) {}
+  await _sb.auth.signOut();
 }
 
-async function authSignOut() {
-  await _sb.auth.signOut();
-  _uid = null; _cache = {};
+// Runs on every auth event. Only the first sign-in (or a change of user) sets the app up;
+// token refreshes are ignored.
+async function _onAuth(session) {
+  const overlay = document.getElementById('loginOverlay');
+  if (!session) {
+    if (_uid) { location.reload(); return; }
+    if (overlay) overlay.style.display = 'flex';
+    return;
+  }
+  if (_uid === session.user.id) return;
+  if (_uid) { location.reload(); return; }
+  _uid = session.user.id;
+  _setAuthMsg('Loading your data…');
+  const ok = await _loadAllData();
+  if (!ok && !Object.keys(_cache).length) {
+    // Nothing to show and the server is unreachable. Don't start with empty data,
+    // or the defaults would be saved over the real data once back online.
+    _uid = null;
+    _setAuthMsg('');
+    _setAuthError("Can't reach the server — retrying…");
+    setTimeout(() => _onAuth(session), 5000);
+    return;
+  }
+  _setAuthError(''); _setAuthMsg('');
+  if (overlay) overlay.style.display = 'none';
+  _initApp();
+  if (!ok) showToast('Offline — showing data saved on this device', 3500);
+  _setSync();
+  _flush();
 }
 
 // ── Stats ─────────────────────────────────────────────────────────────────
@@ -1673,7 +1557,7 @@ function calcOceanTotal(){
   if(b) b.textContent=(base+dv('ocean-optB')).toLocaleString()+'m';
 }
 function loadDistLogs(){
-  ['wu-kick','wu-free','db-catchup','leg-vert','leg-sprint',
+  ['wu-kick','wu-free','db-catchup','db-drag','leg-vert','leg-sprint',
    'fs-interval','fs-cont','db2-snorkel','db2-paddles','db2-buoy','fins-2',
    'ocean-beach','ocean-sight','ocean-optA','ocean-optB'].forEach(updateDistLog);
 }
@@ -1694,6 +1578,7 @@ function calcPoolTotal(){
     (distVal('wu-kick')*distVal('wu-kick-reps'))+
     (distVal('wu-free')*distVal('wu-free-reps'))+
     (distVal('db-catchup')*distVal('db-catchup-reps'))+
+    (distVal('db-drag')*distVal('db-drag-reps'))+
     (distVal('leg-sprint')*distVal('leg-sprint-reps'))+
     (distVal('fs-interval')*distVal('fs-reps'))+
     (distVal('fs-cont')*distVal('fs-cont-reps'))+
@@ -1750,7 +1635,7 @@ function renderProgress(){
       <div class="prog-test-head">${test}</div>
       ${entries.length===0?'<div class="prog-no-entry">No entries yet</div>':
         entries.map(e=>`<div class="prog-entry">
-          <div class="prog-entry-val">${e.value}</div>
+          <div class="prog-entry-val">${_escH(e.value)}</div>
           <div class="prog-entry-date">${fmtProgDate(e.date)}</div>
           <button class="prog-entry-del" onclick="delProgEntry('${test.replace(/'/g,"\'")}','${e.id}')">×</button>
         </div>`).join('')}
@@ -1821,7 +1706,7 @@ function renderGoals(){
   el.innerHTML=goals.map(g=>`
     <div class="goal-item" id="goal-${g.id}">
       <button class="goal-tick" onclick="tickGoal('${g.id}')" title="Mark as achieved">○</button>
-      <span class="goal-text" onclick="editGoalText('${g.id}')">${g.text}</span>
+      <span class="goal-text" onclick="editGoalText('${g.id}')">${_escH(g.text)}</span>
       <button class="goal-del" onclick="deleteGoal('${g.id}')" title="Delete">×</button>
     </div>`).join('');
 }
@@ -1890,7 +1775,7 @@ function _achvFmtDate(iso){
   const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();
 }
-function _escH(s){return(s||'')  .replace(/&/g,'&amp;')  .replace(/</g,'&lt;')  .replace(/>/g,'&gt;');}
+function _escH(s){return String(s??'').replace(/&/g,'&amp;')  .replace(/</g,'&lt;')  .replace(/>/g,'&gt;');}
 function saveAchvDate(idx,val){
   if(!val)return;
   _achvList[idx].completedDate=_achvFmtDate(val);
@@ -1946,19 +1831,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   updateClock();setInterval(updateClock,1000);
   loadWeather();
 
-  // Listen for auth state — show/hide overlay accordingly
-  _sb.auth.onAuthStateChange(async (event, session) => {
-    const overlay = document.getElementById('loginOverlay');
-    if (session) {
-      _uid = session.user.id;
-      if (overlay) overlay.style.display = 'none';
-      await _loadAllData();
-      _initApp();
-    } else {
-      _uid = null;
-      _cache = {};
-      if (overlay) overlay.style.display = 'flex';
-    }
+  // Listen for auth state. Supabase advises against awaiting its own calls inside
+  // this callback, so the work runs on the next tick.
+  _sb.auth.onAuthStateChange((event, session) => {
+    setTimeout(() => _onAuth(session), 0);
   });
 
   // Allow Enter key on login form
