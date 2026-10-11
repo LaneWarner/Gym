@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Session" />
+<meta name="theme-color" content="#eef1f4" />
+<title>Session</title>
+<style>
+  :root{
+    --bg:#edf0f3; --card:#ffffff; --line:#e2e8ee; --line2:#eef2f6;
+    --ink:#0f1b26; --ink2:#586878; --ink3:#8b99a6;
+    --green:#0a9a60; --green-fill:#10b981; --green-bg:#ecfdf5; --green-line:#9fe9c8;
+    --amber:#a4620b; --amber-bg:#fdf3de; --amber-line:#f1cd84;
+    --accent:#2f6f8f;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --shadow:0 1px 2px rgba(15,27,38,.05),0 1px 3px rgba(15,27,38,.04);
+    --maxw:560px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);}
+  body{-webkit-font-smoothing:antialiased;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  button:active{transform:translateY(1px);}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+
+  /* header */
+  .hdr{position:sticky;top:0;z-index:20;background:rgba(237,240,243,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .hdr-inner{max-width:var(--maxw);margin:0 auto;padding:14px 16px 12px;}
+  .hdr-top{display:flex;align-items:flex-start;justify-content:space-between;}
+  .eyebrow{display:flex;align-items:center;gap:7px;color:var(--green);font-size:11px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;}
+  .eyebrow svg{display:block;}
+  .sub{color:var(--ink3);font-size:12px;margin-top:3px;}
+  .reset-btn{display:flex;align-items:center;gap:5px;color:var(--ink2);font-size:11px;border:1px solid var(--line);background:var(--card);border-radius:7px;padding:5px 9px;}
+  .meter{margin-top:13px;display:flex;align-items:center;gap:12px;}
+  .meter-track{flex:1;height:6px;background:#dde4ea;border-radius:99px;overflow:hidden;}
+  .meter-fill{height:100%;background:var(--green-fill);border-radius:99px;transition:width .28s ease;}
+  .meter-num{font-size:13px;color:var(--ink2);min-width:46px;text-align:right;}
+  .flash{background:var(--green-bg);border-top:1px solid var(--green-line);color:#0a7048;font-size:13px;text-align:center;padding:6px 12px;font-weight:600;}
+
+  /* layout */
+  .main{max-width:var(--maxw);margin:0 auto;padding:16px 16px 132px;}
+  .block{margin-bottom:26px;}
+  .block-head{display:flex;align-items:baseline;gap:11px;}
+  .block-n{font-family:var(--mono);font-size:12px;color:#9fb0bd;font-weight:700;}
+  .block-title{font-size:17px;font-weight:700;letter-spacing:-.01em;margin:0;}
+  .block-meta{font-size:12px;color:var(--ink3);font-style:italic;}
+  .block-body{margin-top:12px;}
+
+  /* superset group */
+  .group{position:relative;padding-left:14px;margin-bottom:12px;}
+  .group-rule{position:absolute;left:0;top:6px;bottom:6px;width:2px;background:#bcd3df;border-radius:2px;}
+  .group-tag{font-size:10px;letter-spacing:.16em;color:var(--accent);font-weight:700;text-transform:uppercase;margin-bottom:8px;}
+  .group-items{display:flex;flex-direction:column;gap:8px;}
+  .solo{margin-bottom:12px;}
+
+  /* check row */
+  .row{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px;box-shadow:var(--shadow);}
+  .row.done{background:var(--green-bg);border-color:var(--green-line);box-shadow:none;}
+  .checkbox{margin-top:1px;width:22px;height:22px;border-radius:6px;flex:0 0 auto;border:1.5px solid #c4d0da;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:900;}
+  .row.done .checkbox{background:var(--green-fill);border-color:var(--green-fill);}
+  .row-main{flex:1;min-width:0;}
+  .row-line{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+  .row-name{font-size:14.5px;font-weight:600;}
+  .row.done .row-name{color:#6f9183;text-decoration:line-through;}
+  .row-scheme{font-family:var(--mono);font-size:12.5px;color:var(--ink2);white-space:nowrap;}
+  .row-note{font-size:12px;color:var(--ink2);line-height:1.45;margin-top:4px;}
+
+  /* load card */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 14px;box-shadow:var(--shadow);}
+  .card.done{border-color:var(--green-line);}
+  .card.flag{border-color:var(--amber-line);}
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+  .card-name{font-size:15px;font-weight:700;}
+  .opt-tag{font-size:9px;letter-spacing:.1em;font-weight:700;color:var(--ink2);border:1px solid var(--line);border-radius:4px;padding:1px 5px;text-transform:uppercase;margin-left:7px;vertical-align:middle;}
+  .card-scheme{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:2px;}
+  .status{font-size:10px;letter-spacing:.1em;font-weight:800;border-radius:6px;padding:3px 8px;text-transform:uppercase;white-space:nowrap;}
+  .status-done{color:var(--green);background:var(--green-bg);border:1px solid var(--green-line);}
+  .status-flag{color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);}
+  .status-idle{display:inline-block;width:8px;height:8px;border-radius:99px;background:#d3dde4;margin-top:6px;}
+  .last{font-family:var(--mono);font-size:11.5px;color:var(--ink3);margin-top:6px;}
+
+  .load-box{margin-top:11px;display:flex;align-items:center;justify-content:space-between;background:#f6f9fb;border:1px solid var(--line2);border-radius:10px;padding:7px 11px;}
+  .load-label{font-size:10px;letter-spacing:.16em;color:var(--ink3);font-weight:700;text-transform:uppercase;}
+  .load-controls{display:flex;align-items:center;gap:12px;}
+  .load-num{font-family:var(--mono);font-size:26px;font-weight:700;min-width:64px;text-align:center;}
+  .load-unit{font-size:13px;color:var(--ink3);margin-left:3px;}
+
+  .stepper{width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #cfd9e1;color:#46586a;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:20px;line-height:1;font-weight:500;}
+  .stepper.sm{width:32px;height:32px;font-size:17px;}
+  .stepper:active{background:#eef2f6;}
+
+  .sets{margin-top:11px;display:flex;flex-direction:column;gap:8px;}
+  .set{display:flex;align-items:center;gap:8px;}
+  .set-label{font-family:var(--mono);font-size:11px;color:var(--ink3);width:26px;}
+  .set-reps{font-family:var(--mono);font-size:16px;font-weight:600;width:30px;text-align:center;}
+  .set-reps.done{color:var(--green);}
+  .set-spacer{flex:1;}
+  .set-toggle{width:88px;height:38px;border-radius:10px;border:1.5px solid #c4d0da;background:#fff;color:var(--ink2);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px;}
+  .set-toggle.done{background:var(--green-fill);border-color:var(--green-fill);color:#fff;}
+
+  .flagbox{margin-top:11px;display:flex;gap:8px;align-items:flex-start;background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:10px;padding:9px 11px;color:var(--amber);}
+  .flagbox .tri{font-size:13px;line-height:1.4;}
+  .flagbox .txt{font-size:12.5px;font-weight:600;line-height:1.4;}
+
+  /* reference */
+  .ref-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 16px;color:var(--ink2);box-shadow:var(--shadow);}
+  .ref-btn span{font-size:11px;letter-spacing:.18em;font-weight:700;text-transform:uppercase;}
+  .chev{transition:transform .2s;font-size:12px;}
+  .chev.open{transform:rotate(180deg);}
+  .ref-panel{margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:4px 16px;box-shadow:var(--shadow);}
+  .ref-item{padding:11px 0;border-top:1px solid var(--line2);}
+  .ref-item:first-child{border-top:none;}
+  .ref-t{font-size:13px;font-weight:700;color:var(--ink);}
+  .ref-d{font-size:12.5px;color:var(--ink2);line-height:1.5;margin-top:3px;}
+
+  /* bottom bar */
+  .bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(237,240,243,.95);backdrop-filter:blur(8px);border-top:1px solid var(--line);}
+  .bar-inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));}
+  .rest{display:flex;align-items:center;gap:8px;flex:1;}
+  .rest svg{color:var(--ink3);flex:0 0 auto;}
+  .rest-chip{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #cfd9e1;border-radius:7px;padding:7px 9px;}
+  .rest-time{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--green);min-width:58px;}
+  .rest-time.zero{color:var(--amber);}
+  .rest-mini{font-size:12px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #cfd9e1;border-radius:7px;padding:7px 9px;}
+  .rest-mini.ghost{background:transparent;}
+  .finish-btn{background:var(--green-fill);color:#fff;font-size:14px;font-weight:700;border-radius:10px;padding:12px 18px;white-space:nowrap;box-shadow:0 1px 2px rgba(16,185,129,.4);}
+
+  .loading{min-height:100vh;display:flex;align-items:center;justify-content:center;color:#9fb0bd;}
+</style>
+</head>
+<body>
+<div id="root"><div class="loading">Loading…</div></div>
+
+<script>
+/* ============================================================ *
+ *  THE SESSION — fixed full-body, 2x / week. Self-contained.    *
+ *  Persists to localStorage so double-progression self-runs.    *
+ * ============================================================ */
+
+/* ---------- persistence (graceful if storage blocked) ---------- */
+var HAS_LS = (function(){ try{ var k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } })();
+var KH="lane.session.history", KW="lane.session.weights", KC="lane.session.current";
+function load(key, fb){ if(!HAS_LS) return fb; try{ var v=localStorage.getItem(key); return v!=null?JSON.parse(v):fb; }catch(e){ return fb; } }
+function save(key,val){ if(!HAS_LS) return; try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+/* ---------- the session ---------- */
+var BLOCKS=[
+ {n:"00",title:"Warm-up",meta:"~8 min",items:[
+   {id:"wu1",type:"check",name:"Row, bike or walk",scheme:"2 min"},
+   {id:"wu2",type:"check",name:"Foam-roller thoracic ext + open-book",scheme:"\u00d78 \u00b7 \u00d76 / side"},
+   {id:"wu3",type:"check",name:"Wall slides",scheme:"\u00d710"},
+   {id:"wu4",type:"check",name:"Bodyweight squats + hip hinges",scheme:"\u00d710 + a few"},
+ ]},
+ {n:"01",title:"Scapular / cuff",meta:"done fresh",items:[
+   {id:"c1",type:"check",group:"g1",name:"Push-up-plus / serratus punch",scheme:"10\u201312"},
+   {id:"c2",type:"check",group:"g1",name:"Prone YTW",scheme:"8 / letter"},
+   {id:"c3",type:"check",group:"g1",name:"DB external rotation",scheme:"12\u201315 \u00b7 light",
+     note:"Default side-lying (mid-range, safe). Progress to prone 90/90 only when the posterior shoulder is quiet \u2014 light, pain-free. One variation per session."},
+ ]},
+ {n:"02",title:"Lower",meta:"",items:[
+   {id:"bulg",type:"load",group:"g2",name:"Bulgarian split squat",scheme:"3 \u00d7 6\u20138 / leg",sets:3,lo:6,hi:8,weight:20,step:2.5,unit:"kg"},
+   {id:"calf",type:"load",group:"g2",name:"Single-leg calf raise",scheme:"3 \u00d7 12\u201315 / leg",sets:3,lo:12,hi:15,weight:0,step:2.5,unit:"kg",note:"Bodyweight, or hold a DB."},
+   {id:"thrust",type:"load",name:"Hip thrust",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:30,step:5,unit:"kg",note:"Progress load aggressively \u2014 glutes tolerate it. End-range hip extension for the kick and body-line."},
+   {id:"rdl",type:"load",optional:true,name:"Romanian deadlift",scheme:"4 \u00d7 5\u20136",sets:4,lo:5,hi:6,weight:40,step:2.5,unit:"kg",note:"Optional but highly recommended \u2014 your only lengthened-hamstring eccentric and true hinge. Do it here while fresh. Skip only when genuinely time-crunched."},
+ ]},
+ {n:"03",title:"Push / pull",meta:"",items:[
+   {id:"press",type:"load",group:"g3",name:"DB chest press",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:12,step:2,unit:"kg"},
+   {id:"row",type:"load",group:"g3",name:"DB row",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:12,step:2,unit:"kg"},
+ ]},
+ {n:"04",title:"Vertical pull",meta:"",items:[
+   {id:"pull",type:"load",group:"g4",name:"Lat pulldown",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:9.5,step:1,unit:""},
+   {id:"over",type:"load",group:"g4",name:"DB pullover",scheme:"3 \u00d7 10",sets:3,lo:10,hi:10,weight:10,step:2,unit:"kg",note:"Keep controlled and light \u2014 overlaps the pulldown by design."},
+ ]},
+ {n:"05",title:"Core finisher",meta:"tri-set",items:[
+   {id:"f1",type:"check",group:"g5",name:"Push-ups",scheme:"2\u00d7 near failure",note:"Protract hard at the top \u2014 push the floor away. Closed-chain serratus, not extra pressing."},
+   {id:"f2",type:"check",group:"g5",name:"Dead-bug",scheme:"10 / side"},
+   {id:"f3",type:"check",group:"g5",name:"Side plank",scheme:"2 \u00d7 30\u201345 s / side"},
+ ]},
+];
+var GROUP_TAG={g1:"Superset \u00b7 2 rounds \u00b7 minimal rest",g2:"Superset",g3:"Superset",g4:"Superset",g5:"Tri-set"};
+var REFERENCE=[
+ {t:"Double progression",d:"Work the top of each rep range. When every set hits the top number, the card flags amber \u2014 add the smallest load next session and drop back to the bottom."},
+ {t:"Block 01 stays light",d:"The cuff / serratus work is endurance for small muscles \u2014 chase clean reps, not load. It runs every session on purpose; winging is a motor-control problem and rewards frequency."},
+ {t:"Shoulder ER",d:"Default side-lying \u2014 mid-range, out of the provocative position. Move to prone 90/90 only when the posterior shoulder is reliably quiet, kept light and pain-free."},
+ {t:"Push-ups",d:"Near failure, protract hard at the top. This is your closed-chain serratus dose, not extra pressing \u2014 two sets is enough."},
+ {t:"RDL",d:"Optional but highly recommended. It's your only lengthened-hamstring eccentric and your only true hinge \u2014 the swing factor for the hour."},
+];
+var LOAD_ITEMS=[]; BLOCKS.forEach(function(b){ b.items.forEach(function(i){ if(i.type==="load") LOAD_ITEMS.push(i); }); });
+var ITEM_BY_ID={}; BLOCKS.forEach(function(b){ b.items.forEach(function(i){ ITEM_BY_ID[i.id]=i; }); });
+
+/* ---------- state ---------- */
+function freshLog(weights){
+  var log={};
+  LOAD_ITEMS.forEach(function(ex){
+    var w=(weights&&weights[ex.id]!=null)?weights[ex.id]:ex.weight;
+    var sets=[]; for(var i=0;i<ex.sets;i++) sets.push({reps:ex.hi,done:false});
+    log[ex.id]={weight:w,sets:sets};
+  });
+  var checks={};
+  BLOCKS.forEach(function(b){ b.items.forEach(function(i){ if(i.type==="check") checks[i.id]=false; }); });
+  return {log:log,checks:checks};
+}
+var weights=load(KW,{}), history=load(KH,[]), current=load(KC,null);
+var state=(current&&current.log)?current:freshLog(weights);
+var restTarget=null, showRef=false, flash="", flashTimer=null, saveTimer=null;
+
+function loadDone(e){ return e&&e.sets.length>0&&e.sets.every(function(s){return s.done;}); }
+function thresholdMet(ex,e){ return loadDone(e)&&e.sets.every(function(s){return s.reps>=ex.hi;}); }
+function lastOf(id){ for(var i=history.length-1;i>=0;i--){ if(history[i].log[id]) return history[i].log[id]; } return null; }
+
+function scheduleSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(function(){ save(KC,state); },400); }
+function setFlash(msg,ms){ flash=msg; render(); clearTimeout(flashTimer); flashTimer=setTimeout(function(){ flash=""; render(); },ms||2400); }
+
+/* ---------- mutations ---------- */
+function changeWeight(id,dir){ var ex=ITEM_BY_ID[id],e=state.log[id]; e.weight=Math.max(0,Math.round((e.weight+dir*ex.step)*2)/2); scheduleSave(); render(); }
+function changeReps(id,idx,dir){ var e=state.log[id]; e.sets[idx].reps=Math.max(1,e.sets[idx].reps+dir); scheduleSave(); render(); }
+function toggleSet(id,idx){ var e=state.log[id]; e.sets[idx].done=!e.sets[idx].done; scheduleSave(); render(); }
+function toggleCheck(id){ state.checks[id]=!state.checks[id]; scheduleSave(); render(); }
+
+function finish(){
+  var session={date:Date.now(),log:{}}, w={};
+  LOAD_ITEMS.forEach(function(ex){
+    var e=state.log[ex.id]; w[ex.id]=e.weight;
+    var dr=e.sets.filter(function(s){return s.done;}).map(function(s){return s.reps;});
+    if(dr.length) session.log[ex.id]={weight:e.weight,reps:dr};
+  });
+  history=history.concat([session]).slice(-30);
+  save(KH,history); save(KW,w); save(KC,null);
+  weights=w; state=freshLog(w);
+  window.scrollTo({top:0,behavior:"smooth"});
+  setFlash("Session logged \u00b7 "+fmtDate(session.date),2600);
+}
+function resetSession(){
+  var w={}; LOAD_ITEMS.forEach(function(ex){ w[ex.id]=state.log[ex.id].weight; });
+  save(KC,null); weights=w; state=freshLog(w);
+  setFlash("Session cleared",1800);
+}
+
+/* ---------- rest timer ---------- */
+function startRest(sec){ restTarget=Date.now()+sec*1000; render(); }
+function addRest(){ restTarget=(restTarget||Date.now())+30000; render(); }
+function stopRest(){ restTarget=null; render(); }
+function vibrate(){ try{ if(navigator.vibrate) navigator.vibrate([180,90,180]); }catch(e){} }
+setInterval(function(){
+  if(restTarget==null) return;
+  var rem=Math.max(0,restTarget-Date.now()), sec=Math.ceil(rem/1000);
+  var el=document.getElementById("rest-time");
+  if(el){ el.textContent=mmss(sec); if(sec<=0) el.className="rest-time zero"; }
+  if(rem<=0){ vibrate(); restTarget=null; setTimeout(render,1200); }
+},250);
+
+/* ---------- format ---------- */
+function fmtNum(n){ return (n%1===0)?String(n):n.toFixed(1); }
+function fmtW(n,u){ return u?fmtNum(n)+" "+u:fmtNum(n); }
+function fmtDate(ts){ return new Date(ts).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"}); }
+function mmss(sec){ sec=Math.max(0,sec); return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0"); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+
+/* ---------- view ---------- */
+function progress(){
+  var total=0,done=0;
+  BLOCKS.forEach(function(b){ b.items.forEach(function(it){
+    var d=it.type==="load"?loadDone(state.log[it.id]):state.checks[it.id];
+    if(!it.optional||d) total++; if(d) done++;
+  });});
+  return {total:total,done:done,pct:total?Math.round(done/total*100):0};
+}
+
+function checkRowHTML(it){
+  var done=state.checks[it.id];
+  return '<button class="row'+(done?' done':'')+'" data-act="check" data-id="'+it.id+'">'
+    +'<span class="checkbox">'+(done?'\u2713':'')+'</span>'
+    +'<span class="row-main"><span class="row-line">'
+    +'<span class="row-name">'+esc(it.name)+'</span>'
+    +'<span class="row-scheme">'+esc(it.scheme)+'</span></span>'
+    +(it.note?'<span class="row-note">'+esc(it.note)+'</span>':'')
+    +'</span></button>';
+}
+function statusHTML(flag,done){
+  if(flag) return '<span class="status status-flag">\u25b2 Add load</span>';
+  if(done) return '<span class="status status-done">Done</span>';
+  return '<span class="status-idle"></span>';
+}
+function loadCardHTML(it){
+  var e=state.log[it.id], last=lastOf(it.id), done=loadDone(e), flag=thresholdMet(it,e);
+  var sets=e.sets.map(function(s,idx){
+    return '<div class="set">'
+      +'<span class="set-label">S'+(idx+1)+'</span>'
+      +'<button class="stepper sm" data-act="rep-" data-id="'+it.id+'" data-idx="'+idx+'">\u2212</button>'
+      +'<span class="set-reps'+(s.done?' done':'')+'">'+s.reps+'</span>'
+      +'<button class="stepper sm" data-act="rep+" data-id="'+it.id+'" data-idx="'+idx+'">+</button>'
+      +'<span class="set-spacer"></span>'
+      +'<button class="set-toggle'+(s.done?' done':'')+'" data-act="set" data-id="'+it.id+'" data-idx="'+idx+'">'
+      +(s.done?'\u2713 Done':'Log set')+'</button>'
+      +'</div>';
+  }).join("");
+  return '<div class="card'+(flag?' flag':done?' done':'')+'">'
+    +'<div class="card-top"><div>'
+    +'<div class="card-name">'+esc(it.name)+(it.optional?'<span class="opt-tag">optional</span>':'')+'</div>'
+    +'<div class="card-scheme">'+esc(it.scheme)+'</div></div>'
+    +statusHTML(flag,done)+'</div>'
+    +(last?'<div class="last">Last \u00b7 '+esc(fmtW(last.weight,it.unit))+' \u00b7 '+last.reps.join(" \u00b7 ")+'</div>':'')
+    +'<div class="load-box"><span class="load-label">Load</span><div class="load-controls">'
+    +'<button class="stepper" data-act="w-" data-id="'+it.id+'">\u2212</button>'
+    +'<span class="load-num">'+fmtNum(e.weight)+(it.unit?'<span class="load-unit">'+it.unit+'</span>':'')+'</span>'
+    +'<button class="stepper" data-act="w+" data-id="'+it.id+'">+</button>'
+    +'</div></div>'
+    +'<div class="sets">'+sets+'</div>'
+    +(flag?'<div class="flagbox"><span class="tri">\u25b2</span><span class="txt">Threshold met \u2014 add the smallest load next session, drop back to '+it.lo+'.</span></div>':'')
+    +'</div>';
+}
+function itemHTML(it){ return it.type==="load"?loadCardHTML(it):checkRowHTML(it); }
+
+function blockHTML(b){
+  var body="", i=0, items=b.items;
+  while(i<items.length){
+    var g=items[i].group;
+    if(g){
+      var inner="";
+      while(i<items.length&&items[i].group===g){ inner+=itemHTML(items[i]); i++; }
+      body+='<div class="group"><div class="group-rule"></div>'
+        +'<div class="group-tag">'+GROUP_TAG[g]+'</div>'
+        +'<div class="group-items">'+inner+'</div></div>';
+    } else {
+      body+='<div class="solo">'+itemHTML(items[i])+'</div>'; i++;
+    }
+  }
+  return '<section class="block">'
+    +'<div class="block-head"><span class="block-n">'+b.n+'</span>'
+    +'<h2 class="block-title">'+esc(b.title)+'</h2>'
+    +(b.meta?'<span class="block-meta">\u00b7 '+esc(b.meta)+'</span>':'')+'</div>'
+    +'<div class="block-body">'+body+'</div></section>';
+}
+
+function restHTML(){
+  if(restTarget==null){
+    var pulse='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>';
+    return '<div class="rest">'+pulse
+      +'<button class="rest-chip" data-act="rest" data-sec="60">1:00</button>'
+      +'<button class="rest-chip" data-act="rest" data-sec="90">1:30</button>'
+      +'<button class="rest-chip" data-act="rest" data-sec="120">2:00</button></div>';
+  }
+  var sec=Math.ceil(Math.max(0,restTarget-Date.now())/1000);
+  return '<div class="rest"><span id="rest-time" class="rest-time'+(sec<=0?' zero':'')+'">'+mmss(sec)+'</span>'
+    +'<button class="rest-mini" data-act="rest-add">+30s</button>'
+    +'<button class="rest-mini ghost" data-act="rest-stop">Stop</button></div>';
+}
+
+function render(){
+  var p=progress();
+  var heart='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg>';
+  var html=''
+    +'<header class="hdr"><div class="hdr-inner">'
+      +'<div class="hdr-top"><div>'
+        +'<div class="eyebrow">'+heart+'Today\u2019s session</div>'
+        +'<div class="sub">Full-body \u00b7 2\u00d7 / week \u00b7 '+fmtDate(Date.now())+'</div></div>'
+        +'<button class="reset-btn" data-act="reset">\u21ba Reset</button></div>'
+      +'<div class="meter"><div class="meter-track"><div class="meter-fill" style="width:'+p.pct+'%"></div></div>'
+        +'<span class="meter-num mono">'+p.done+' / '+p.total+'</span></div>'
+    +'</div>'+(flash?'<div class="flash">'+esc(flash)+'</div>':'')+'</header>'
+    +'<main class="main">'
+      +BLOCKS.map(blockHTML).join("")
+      +'<button class="ref-btn" data-act="ref"><span>How this runs</span><span class="chev'+(showRef?' open':'')+'">\u25be</span></button>'
+      +(showRef?'<div class="ref-panel">'+REFERENCE.map(function(r){return '<div class="ref-item"><div class="ref-t">'+esc(r.t)+'</div><div class="ref-d">'+esc(r.d)+'</div></div>';}).join("")+'</div>':'')
+    +'</main>'
+    +'<div class="bar"><div class="bar-inner">'+restHTML()
+      +'<button class="finish-btn" data-act="finish">Finish session</button>'
+    +'</div></div>';
+  document.getElementById("root").innerHTML=html;
+}
+
+/* ---------- one delegated listener ---------- */
+document.getElementById("root").addEventListener("click",function(ev){
+  var b=ev.target.closest("[data-act]"); if(!b) return;
+  var act=b.getAttribute("data-act"), id=b.getAttribute("data-id"),
+      idx=parseInt(b.getAttribute("data-idx"),10), sec=parseInt(b.getAttribute("data-sec"),10);
+  switch(act){
+    case "check": toggleCheck(id); break;
+    case "set": toggleSet(id,idx); break;
+    case "rep-": changeReps(id,idx,-1); break;
+    case "rep+": changeReps(id,idx,1); break;
+    case "w-": changeWeight(id,-1); break;
+    case "w+": changeWeight(id,1); break;
+    case "rest": startRest(sec); break;
+    case "rest-add": addRest(); break;
+    case "rest-stop": stopRest(); break;
+    case "reset": resetSession(); break;
+    case "finish": finish(); break;
+    case "ref": showRef=!showRef; render(); break;
+  }
+});
+
+render();
+</script>
+</body>
+</html>
