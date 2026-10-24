@@ -113,6 +113,12 @@ body{font-family:'Barlow',sans-serif;background:#f5f7fa;color:var(--grey);}
 .wt-input:focus{border-color:var(--gym);}
 .wt-btn{background:var(--gym);color:#fff;border:none;border-radius:7px;padding:6px 11px;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .wt-label{font-size:10px;color:#888;font-family:'Barlow Condensed',sans-serif;}
+.eq-seg{display:flex;width:max-content;margin-top:8px;border:1.5px solid #c8e6c9;border-radius:8px;overflow:hidden;background:#fff;}
+.eq-seg button{border:none;background:transparent;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#6B7280;padding:7px 11px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.eq-seg button+button{border-left:1px solid #e5e7eb;}
+.eq-seg button.on{background:var(--navy);color:#fff;}
+.eq-tag{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.3px;border-radius:10px;padding:2px 7px;color:#fff;flex-shrink:0;}
+.eq-bb{background:#1A2B4A;}.eq-db{background:#2D7D46;}.eq-mc{background:#7B3FA0;}
 
 /* DAY C TOGGLE */
 .dc-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
@@ -620,7 +626,7 @@ input,select,textarea{font-size:16px !important;}
       <div class="si"><div class="si-phase" style="color:var(--orange)">WEIGHTED STEP-UPS<br>25 reps</div><div class="si-detail">10kg vest + 8kg kettlebell each hand. Drive through heel, stand tall, controlled descent. Alternate legs.<div class="wt-row"><span class="wt-prev" id="wtp-dc-step-ups">No previous entry</span><input type="number" class="wt-input" id="wt-dc-step-ups" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-step-ups')" style="background:var(--orange)">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)">HIP THRUSTS<br>3×12</div><div class="si-detail">Upper back on bench, barbell or DB across hips. Drive hips up — full glute squeeze at top, hold 1 sec. Lower controlled. Posterior chain power that transfers directly to swim kick drive. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dc-hip-thrusts">No previous entry</span><input type="number" class="wt-input" id="wt-dc-hip-thrusts" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-hip-thrusts')" style="background:var(--orange)">Log ✓</button></div></div></div>
       <div class="bh" style="background:rgba(232,89,12,0.15)">UPPER BODY · ~12 min</div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">DB BENCH PRESS<br>3×10</div><div class="si-detail">Controlled descent. Elbows 45° flare max. Pause at chest, press explosively.<div class="wt-row"><span class="wt-prev" id="wtp-dc-bench">No previous entry</span><input type="number" class="wt-input" id="wt-dc-bench" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-bench')" style="background:var(--orange)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">BENCH PRESS<br>3×10</div><div class="si-detail">Barbell or dumbbells — pick which below. Controlled descent. Elbows 45° flare max. Pause at chest, press explosively.<div class="wt-row"><span class="wt-prev" id="wtp-dc-bench">No previous entry</span><input type="number" class="wt-input" id="wt-dc-bench" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-bench')" style="background:var(--orange)">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)">PUSH-UP PLUS<br>3×10</div><div class="si-detail">At top of push-up, 'punch' ceiling to protract scapula. Slow 3-sec eccentric.<div class="wt-row"><span class="wt-prev" id="wtp-dc-pushup-plus">No previous entry</span><input type="number" class="wt-input" id="wt-dc-pushup-plus" placeholder="reps" step="1" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-pushup-plus')" style="background:var(--orange)">Log reps ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)">PRONE Y-T-W<br>3×8 each</div><div class="si-detail">Incline bench. Y = arms overhead, T = arms wide, W = elbows 90°. 2-sec hold each shape.<div class="wt-row"><span class="wt-prev" id="wtp-dc-ytw">No previous entry</span><input type="number" class="wt-input" id="wt-dc-ytw" placeholder="kg" step="0.25" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-ytw')" style="background:var(--orange)">Log ✓</button></div></div></div>
       <div class="bh" style="background:rgba(232,89,12,0.15)">CORE · ~7 min</div>
@@ -1116,7 +1122,7 @@ function exportData(){
   showToast('✓ Data exported — save that file somewhere safe');
 }
 // App keys (without the tp_ prefix). Anything else in a backup file is ignored.
-const _APP_KEY=/^(stats|goals|achieved_goals|pool_distances|progress_v2|db2-active|dist_log_.+|weights_.+)$/;
+const _APP_KEY=/^(stats|goals|achieved_goals|pool_distances|progress_v2|db2-active|equip_pref|dist_log_.+|weights_.+)$/;
 function importData(){
   if(!_uid){showToast('Sign in before importing');return;}
   const inp=document.createElement('input');
@@ -1420,6 +1426,40 @@ function editStat(card,key){
 }
 
 // ── Weight logging ────────────────────────────────────────────────────────
+// ── Equipment (barbell / dumbbell / machine) ────────────────────────────────
+// Each weighted exercise logs which equipment was used. The three are tracked
+// separately because the numbers aren't comparable (a 40kg bar vs 15kg DBs).
+const EQUIP={bb:'Barbell',db:'Dumbbell',mc:'Machine'};
+// Default per exercise. Entries logged before equipment tracking get this type.
+const EQUIP_DEFAULT={'step-ups':'db','calf-raises':'mc','rdl':'bb','split-squat':'db','cable-ext-rot':'mc','cable-ext-90':'mc','ytw':'db','serratus':'db','chest-press':'db','db-rows':'db','lat-pulldown':'mc','shoulder-press':'db','pallof':'mc','dc-step-ups':'db','dc-hip-thrusts':'bb','dc-bench':'bb','dc-ytw':'db'};
+function entryEquip(key,e){return e.equip||EQUIP_DEFAULT[key]||null;}
+// Last chosen type for this exercise, else the type of its latest entry, else the default
+function currentEquip(key){
+  const pref=LS.get('equip_pref')||{};
+  if(pref[key])return pref[key];
+  const h=LS.get('weights_'+key)||[];
+  return h.length?entryEquip(key,h[0]):EQUIP_DEFAULT[key];
+}
+function setEquip(key,eq){
+  const pref=LS.get('equip_pref')||{};
+  pref[key]=eq;LS.set('equip_pref',pref);
+  _renderEquipSeg(key);updateWeightDisplay(key);
+}
+function _renderEquipSeg(key){
+  const seg=document.getElementById('eq-'+key);if(!seg)return;
+  const cur=currentEquip(key);
+  seg.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.eq===cur));
+}
+function _addEquipSeg(key){
+  const inp=document.getElementById('wt-'+key);
+  if(!inp||document.getElementById('eq-'+key))return;
+  const seg=document.createElement('div');
+  seg.className='eq-seg';seg.id='eq-'+key;
+  seg.innerHTML=Object.keys(EQUIP).map(eq=>`<button type="button" data-eq="${eq}" onclick="setEquip('${key}','${eq}')">${EQUIP[eq]}</button>`).join('');
+  inp.closest('.wt-row').before(seg);
+  _renderEquipSeg(key);
+}
+
 function logWeight(key,unit){
   unit=unit||'kg';
   const inp=document.getElementById('wt-'+key);
@@ -1427,21 +1467,35 @@ function logWeight(key,unit){
   const kg=parseFloat(inp.value);
   if(isNaN(kg))return;
   const entry={date:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}),kg:kg,unit:unit};
+  const eq=EQUIP_DEFAULT[key]?currentEquip(key):null;
+  if(eq)entry.equip=eq;
   const history=LS.get('weights_'+key)||[];
   history.unshift(entry);
-  LS.set('weights_'+key,history.slice(0,20));
+  LS.set('weights_'+key,history.slice(0,60));
   inp.value='';
   updateWeightDisplay(key);
-  showToast('✓ '+kg+unit+' logged');
+  showToast('✓ '+(eq?EQUIP[eq]+' ':'')+kg+unit+' logged');
 }
 function updateWeightDisplay(key){
   const el=document.getElementById('wtp-'+key);
   if(!el)return;
   const history=LS.get('weights_'+key)||[];
   if(history.length===0){el.innerHTML='No previous entry';return;}
-  const last=history[0];
-  const unit=last.unit||'kg';
-  el.innerHTML='Last: <b>'+last.kg+unit+'</b> <span style="color:#bbb;font-size:10px;">'+last.date+'</span>';
+  const dateSpan=d=>' <span style="color:#bbb;font-size:10px;">'+d+'</span>';
+  if(!EQUIP_DEFAULT[key]){
+    const last=history[0];
+    el.innerHTML='Last: <b>'+last.kg+(last.unit||'kg')+'</b>'+dateSpan(last.date);
+  }else{
+    // Most recent entry for each equipment type, selected type first
+    const cur=currentEquip(key);
+    const lastBy={};
+    history.forEach(e=>{const eq=entryEquip(key,e);if(!lastBy[eq])lastBy[eq]=e;});
+    const order=[cur].concat(Object.keys(EQUIP).filter(eq=>eq!==cur)).filter(eq=>lastBy[eq]);
+    el.innerHTML=lastBy[cur]?'':'No '+EQUIP[cur].toLowerCase()+' entry yet<br>';
+    el.innerHTML+=order.map(eq=>{const e=lastBy[eq];
+      return (eq===cur?'Last ':'<span style="opacity:0.7">')+EQUIP[eq].toLowerCase()+': <b>'+e.kg+(e.unit||'kg')+'</b>'+dateSpan(e.date)+(eq===cur?'':'</span>');
+    }).join('<br>');
+  }
   // Add/update History button
   let btn=document.getElementById('wthbtn-'+key);
   if(!btn){
@@ -1461,7 +1515,7 @@ function showWtHist(key){
   const modal=document.getElementById('wtHistModal');
   const title=document.getElementById('wtHistTitle');
   modal.style.display='flex';
-  title.textContent=key.replace(/-/g,' ');
+  title.textContent=key.replace(/^dc-/,'').replace(/-/g,' ');
   _renderWtHist();
 }
 function closeWtHist(){
@@ -1473,13 +1527,16 @@ function _renderWtHist(){
   if(!content)return;
   const history=LS.get('weights_'+_wtHistKey)||[];
   if(!history.length){content.innerHTML='<p style="color:#94A3B8;font-size:12px;text-align:center;padding:20px 0">No entries yet</p>';return;}
-  content.innerHTML=history.map((e,i)=>`
+  content.innerHTML=history.map((e,i)=>{
+    const eq=entryEquip(_wtHistKey,e);
+    return `
     <div style="display:flex;align-items:center;padding:9px 0;border-bottom:1px solid #F3F4F6;gap:8px;" id="whe-${i}">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--navy);min-width:68px;">${e.kg}${e.unit||'kg'}</div>
+      ${eq?`<span class="eq-tag eq-${eq}">${EQUIP[eq]}</span>`:''}
       <div style="flex:1;font-size:11px;color:#94A3B8;">${e.date}</div>
       <button onclick="startWtEdit(${i})" style="background:none;border:1px solid #CBD5E1;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;color:#64748B;font-family:'Barlow Condensed',sans-serif;font-weight:700;">✎</button>
       <button onclick="delWtEntry(${i})" style="background:#FEE2E2;border:none;border-radius:8px;color:#EF4444;font-size:14px;font-weight:700;cursor:pointer;padding:8px 10px;min-width:38px;min-height:38px;display:flex;align-items:center;justify-content:center;">×</button>
-    </div>`).join('');
+    </div>`;}).join('');
 }
 function delWtEntry(idx){
   const history=LS.get('weights_'+_wtHistKey)||[];
@@ -1494,28 +1551,40 @@ function startWtEdit(idx){
   let isoDate='';
   try{const d=new Date(e.date+' 12:00');if(!isNaN(d))isoDate=d.toISOString().split('T')[0];}catch(er){}
   const el=document.getElementById('whe-'+idx);if(!el)return;
+  const eq=entryEquip(_wtHistKey,e);
+  const eqSel=eq?`<select id="we-e-${idx}" style="border:1.5px solid #CBD5E1;border-radius:7px;padding:4px 2px;font-size:11px;outline:none;flex-shrink:0;">${Object.keys(EQUIP).map(k=>`<option value="${k}"${k===eq?' selected':''}>${EQUIP[k]}</option>`).join('')}</select>`:'';
+  el.style.flexWrap='wrap';
   el.innerHTML=`<input type="number" id="we-v-${idx}" value="${e.kg}" step="0.5" style="width:72px;border:1.5px solid var(--teal);border-radius:7px;padding:5px 7px;font-size:13px;outline:none;font-family:'Barlow',sans-serif;">
     <span style="font-size:11px;color:#94A3B8;flex-shrink:0;">${e.unit||'kg'}</span>
-    <input type="date" id="we-d-${idx}" value="${isoDate}" style="flex:1;border:1.5px solid #CBD5E1;border-radius:7px;padding:5px 5px;font-size:11px;outline:none;min-width:0;">
+    ${eqSel}
+    <input type="date" id="we-d-${idx}" value="${isoDate}" style="flex:1;border:1.5px solid #CBD5E1;border-radius:7px;padding:5px 5px;font-size:11px;outline:none;min-width:110px;">
     <button onclick="saveWtEdit(${idx})" style="background:var(--teal);color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;cursor:pointer;flex-shrink:0;">Save</button>
     <button onclick="_renderWtHist()" style="background:none;border:1px solid #ddd;border-radius:7px;padding:5px 8px;font-size:12px;cursor:pointer;color:#aaa;flex-shrink:0;">✕</button>`;
 }
 function saveWtEdit(idx){
   const valEl=document.getElementById('we-v-'+idx);
   const dateEl=document.getElementById('we-d-'+idx);
+  const eqEl=document.getElementById('we-e-'+idx);
   if(!valEl||!dateEl)return;
   const kg=parseFloat(valEl.value);if(isNaN(kg))return;
-  const d=new Date(dateEl.value+'T12:00:00');
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const dateStr=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
   const history=LS.get('weights_'+_wtHistKey)||[];
-  if(history[idx]){history[idx].kg=kg;history[idx].date=dateStr;LS.set('weights_'+_wtHistKey,history);}
+  if(history[idx]){
+    history[idx].kg=kg;
+    if(dateEl.value){
+      const d=new Date(dateEl.value+'T12:00:00');
+      const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      history[idx].date=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+    }
+    if(eqEl)history[idx].equip=eqEl.value;
+    LS.set('weights_'+_wtHistKey,history);
+  }
   _renderWtHist();
   updateWeightDisplay(_wtHistKey);
 }
 
 function loadAllWeights(){
   const keys=['step-ups','calf-raises','rdl','split-squat','cable-ext-rot','cable-ext-90','ytw','serratus','chest-press','db-rows','lat-pulldown','shoulder-press','pushups-b','pallof','side-plank','dc-step-ups','dc-hip-thrusts','dc-bench','dc-ytw','dc-pushup-plus'];
+  Object.keys(EQUIP_DEFAULT).forEach(_addEquipSeg);
   keys.forEach(updateWeightDisplay);
 }
 
