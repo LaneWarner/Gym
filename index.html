@@ -317,10 +317,18 @@ input,select,textarea{font-size:16px !important;}
   <div style="background:#fff;border-radius:20px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#1A2B4A;letter-spacing:1px;margin-bottom:4px;">LANE'S TRAINING PLAN</div>
     <div style="font-family:'Barlow',sans-serif;font-size:13px;color:#888;margin-bottom:28px;">Sign in to access your training data</div>
+    <div id="signInForm">
     <input id="authEmail" type="email" placeholder="Email address" autocomplete="email" style="width:100%;padding:13px 14px;border:1.5px solid #dde3ea;border-radius:10px;font-size:16px;font-family:'Barlow',sans-serif;margin-bottom:12px;outline:none;box-sizing:border-box;">
     <input id="authPassword" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;padding:13px 14px;border:1.5px solid #dde3ea;border-radius:10px;font-size:16px;font-family:'Barlow',sans-serif;margin-bottom:8px;outline:none;box-sizing:border-box;">
-    <div id="authError" style="color:#e63946;font-size:13px;font-family:'Barlow',sans-serif;min-height:20px;margin-bottom:12px;"></div>
     <button onclick="authSignIn()" style="width:100%;background:linear-gradient(135deg,#1e5aa8,#0f2d62);color:#fff;border:none;border-radius:10px;padding:14px;font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;cursor:pointer;margin-bottom:10px;">SIGN IN</button>
+    <button onclick="authForgot()" style="width:100%;background:none;border:none;color:#1e5aa8;font-size:14px;font-family:'Barlow',sans-serif;padding:8px;cursor:pointer;">Forgot password? / Set a password</button>
+    </div>
+    <div id="newPwForm" style="display:none;">
+      <div style="font-family:'Barlow',sans-serif;font-size:14px;color:#1A2B4A;margin-bottom:10px;">Choose a new password (at least 6 characters).</div>
+      <input id="newPassword" type="password" placeholder="New password" autocomplete="new-password" style="width:100%;padding:13px 14px;border:1.5px solid #dde3ea;border-radius:10px;font-size:16px;font-family:'Barlow',sans-serif;margin-bottom:12px;outline:none;box-sizing:border-box;">
+      <button onclick="authSetPassword()" style="width:100%;background:linear-gradient(135deg,#1e5aa8,#0f2d62);color:#fff;border:none;border-radius:10px;padding:14px;font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;cursor:pointer;">SAVE PASSWORD</button>
+    </div>
+    <div id="authError" style="color:#e63946;font-size:13px;font-family:'Barlow',sans-serif;min-height:20px;margin-bottom:12px;"></div>
     <div id="authMsg" style="text-align:center;color:#2D7D46;font-size:13px;font-family:'Barlow',sans-serif;min-height:20px;margin-top:12px;"></div>
   </div>
 </div>
@@ -1358,6 +1366,40 @@ async function authSignIn() {
   if (error) { _setAuthMsg(''); _setAuthError(error.message); }
 }
 
+// Password reset: Supabase emails a link back to this page, which opens a
+// "choose a new password" form. Also works for setting a first password.
+let _recovering = /type=recovery/.test(location.hash);
+async function authForgot() {
+  const email = document.getElementById('authEmail').value.trim();
+  _setAuthError(''); _setAuthMsg('');
+  if (!email) { _setAuthError('Type your email above first'); return; }
+  _setAuthMsg('Sending…');
+  const { error } = await _sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+  if (error) { _setAuthMsg(''); _setAuthError(error.message); }
+  else _setAuthMsg('✓ Check your email for a link to set your password');
+}
+function _showNewPwForm() {
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('signInForm').style.display = 'none';
+  document.getElementById('newPwForm').style.display = 'block';
+  _setAuthError(''); _setAuthMsg('');
+}
+async function authSetPassword() {
+  const password = document.getElementById('newPassword').value;
+  _setAuthError('');
+  if (password.length < 6) { _setAuthError('Use at least 6 characters'); return; }
+  _setAuthMsg('Saving…');
+  const { error } = await _sb.auth.updateUser({ password });
+  if (error) { _setAuthMsg(''); _setAuthError(error.message); return; }
+  _recovering = false;
+  history.replaceState(null, '', location.pathname);
+  document.getElementById('newPwForm').style.display = 'none';
+  document.getElementById('signInForm').style.display = 'block';
+  _setAuthMsg('✓ Password saved');
+  const { data } = await _sb.auth.getSession();
+  _onAuth(data.session);
+}
+
 async function authSignOut() {
   await _flush();
   if (Object.keys(_pending).length) {
@@ -1372,6 +1414,7 @@ async function authSignOut() {
 // token refreshes are ignored.
 async function _onAuth(session) {
   const overlay = document.getElementById('loginOverlay');
+  if (_recovering && session) { _showNewPwForm(); return; }
   if (!session) {
     if (_uid) { location.reload(); return; }
     if (overlay) overlay.style.display = 'flex';
@@ -1903,6 +1946,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Listen for auth state. Supabase advises against awaiting its own calls inside
   // this callback, so the work runs on the next tick.
   _sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') _recovering = true;
     setTimeout(() => _onAuth(session), 0);
   });
 
