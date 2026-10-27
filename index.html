@@ -65,7 +65,7 @@ body{font-family:'Barlow',sans-serif;background:#f5f7fa;color:var(--grey);}
 
 
 /* SESSION TABS */
-.session-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;}
+.session-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
 .stab{border-radius:10px;border-width:2px;border-style:solid;padding:9px 4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;transition:all 0.18s;text-align:center;line-height:1.2;}
 .stab .s-sub{font-size:9px;font-weight:400;opacity:0.8;margin-top:3px;}
 
@@ -120,10 +120,6 @@ body{font-family:'Barlow',sans-serif;background:#f5f7fa;color:var(--grey);}
 .eq-tag{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.3px;border-radius:10px;padding:2px 7px;color:#fff;flex-shrink:0;}
 .eq-bb{background:#1A2B4A;}.eq-db{background:#2D7D46;}.eq-mc{background:#7B3FA0;}
 
-/* DAY C TOGGLE */
-.dc-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.dc-btn{border-radius:10px;border:2px solid;padding:12px 8px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-align:center;transition:all 0.18s;line-height:1.2;}
-.dc-btn .s-sub{font-size:10px;font-weight:400;opacity:0.8;margin-top:3px;}
 
 /* TECHNIQUE TABLES */
 .tip-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;}
@@ -469,7 +465,8 @@ input,select,textarea{font-size:16px !important;}
   <div class="session-tabs">
     <button class="stab" id="stab-dayA" style="border-color:var(--pool);background:var(--pool);color:#fff" onclick="showSession('dayA',this)">Day A<div class="s-sub">Pool</div></button>
     <button class="stab" id="stab-dayB" style="border-color:var(--gym);background:var(--pale-grn);color:var(--gym)" onclick="showSession('dayB',this)">Day B<div class="s-sub">Gym</div></button>
-    <button class="stab" id="stab-dayC" style="border-color:var(--ocean);background:var(--pale-ocean);color:var(--ocean)" onclick="showSession('dayC',this)">Day C<div class="s-sub">Ocean / Gym</div></button>
+    <button class="stab" id="stab-dayC" style="border-color:var(--ocean);background:var(--pale-ocean);color:var(--ocean)" onclick="showSession('dayC',this)">Day C<div class="s-sub">Ocean</div></button>
+    <button class="stab" id="stab-dayD" style="border-color:var(--orange);background:var(--pale-org);color:var(--orange)" onclick="showSession('dayD',this)">Day D<div class="s-sub">Heli gym</div></button>
   </div>
 
   <!-- ═ DAY A — POOL ═ -->
@@ -549,43 +546,97 @@ input,select,textarea{font-size:16px !important;}
       <div class="si"><div class="si-phase" style="color:var(--gym)">ROMANIAN DEADLIFT<br>3×10</div><div class="si-detail">Barbell or DBs. Hinge at the hips — soft knee, back flat, send hips back. Lower the weight down the front of your legs until you feel a strong hamstring stretch, then drive hips forward to stand. Slow controlled descent — 3 sec down. Builds the hamstrings and hip hinge pattern that drives kick recovery and posterior chain strength. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-rdl">No previous entry</span><input type="number" class="wt-input" id="wt-rdl" placeholder="kg" step="2.5" min="0"><button class="wt-btn" onclick="logWeight('rdl')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--gym)">BULGARIAN SPLIT SQUAT<br>3×6 each</div><div class="si-detail">Rear foot elevated on bench. Front knee tracks over toe — long stride. Controlled descent, drive through front heel to stand. 60 sec rest between sets. Unilateral loading prevents compensation, hip flexor stretch under load directly improves kick range of motion.<div class="wt-row"><span class="wt-prev" id="wtp-split-squat">No previous entry</span><input type="number" class="wt-input" id="wt-split-squat" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('split-squat')">Log ✓</button></div></div></div>
 
-      <div class="bh" style="background:rgba(123,63,160,0.2)">SHOULDER REHABILITATION · ~12 min</div>
+      <div class="bh" style="background:rgba(123,63,160,0.2)">SHOULDER REHABILITATION · ~15 min</div>
       <div class="si"><div class="si-phase" style="color:var(--rehab)">CABLE EXT. ROTATION<br>2×12 each</div><div class="si-detail">Cable at waist height. Upper arm pinned to torso, elbow bent 90°. Rotate forearm away from body. Low or no weight — precision exercise. Targets infraspinatus and teres minor. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-cable-ext-rot">No previous entry</span><input type="number" class="wt-input" id="wt-cable-ext-rot" placeholder="kg" step="0.25" min="0"><button class="wt-btn" onclick="logWeight('cable-ext-rot')" style="background:var(--rehab)">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--rehab)">CABLE EXT. ROT. 90°<br>2×12 each</div><div class="si-detail">Cable at shoulder height. Upper arm abducted 90° from body, elbow bent 90°. Rotate forearm upward toward ceiling. Trains the rotator cuff in an elevated position — directly relevant to the swimming catch. Low weight, controlled. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-cable-ext-90">No previous entry</span><input type="number" class="wt-input" id="wt-cable-ext-90" placeholder="kg" step="0.25" min="0"><button class="wt-btn" onclick="logWeight('cable-ext-90')" style="background:var(--rehab)">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--rehab)">YTW RAISES<br>2×8 each</div><div class="si-detail">Face-down on incline bench, light plates or no weight.<br><b>Y</b> — arms overhead in Y, thumbs up, 2-sec hold.<br><b>T</b> — arms out to sides, 2-sec hold.<br><b>W</b> — elbows 90°, pull back as in double-bicep, 2-sec hold.<br>Complete all 3 shapes before resting. Targets all trapezius fibres. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-ytw">No previous entry</span><input type="number" class="wt-input" id="wt-ytw" placeholder="kg" step="0.25" min="0" style="border-color:#d8b4f8"><button class="wt-btn" onclick="logWeight('ytw')" style="background:var(--rehab)">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--rehab)">SERRATUS PUNCH<br>2×10 each</div><div class="si-detail">Lying on back, DB in one hand, arm vertical. Press DB toward ceiling past neutral — fully protract scapula at top. Slow and controlled. Primary serratus anterior isolation drill.<div class="wt-row"><span class="wt-prev" id="wtp-serratus">No previous entry</span><input type="number" class="wt-input" id="wt-serratus" placeholder="kg" step="0.25" min="0" style="border-color:#d8b4f8"><button class="wt-btn" onclick="logWeight('serratus')" style="background:var(--rehab)">Log ✓</button></div></div></div>
 
-      <div class="bh" style="background:rgba(45,125,70,0.2)">UPPER BODY · ~16 min</div>
-      <div class="si"><div class="si-phase" style="color:var(--gym)">SUPERSET A<br>3 rounds</div><div class="si-detail"><b>Do chest press immediately followed by DB rows — no rest between. Rest 60 sec after both.</b><br><br><b>DB Chest Press × 10</b> — lying on bench, controlled descent, elbows no more than 45° flare, pause at chest, press explosively.<br><br><b>DB Bent-Over Rows × 10 each</b> — hinge at hips, back flat. Pull to lower ribs, elbows drive back, squeeze shoulder blades at top. Slow descent. Core braced.<div class="wt-row"><span class="wt-label">Chest press (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-chest-press">No previous entry</span><input type="number" class="wt-input" id="wt-chest-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('chest-press')">Log ✓</button></div><div class="wt-row"><span class="wt-label">DB rows (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-db-rows">No previous entry</span><input type="number" class="wt-input" id="wt-db-rows" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('db-rows')">Log ✓</button></div></div></div>
+      <div class="bh" style="background:rgba(45,125,70,0.2)">UPPER BODY · ~15 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">CHEST AND ROW COMBO<br>3 rounds</div><div class="si-detail"><b>Do chest press immediately followed by rows — no rest between. Rest 60 sec after both.</b><br><br><b>Chest Press × 10</b> — lying on bench, controlled descent, elbows no more than 45° flare, pause at chest, press explosively.<br><br><b>Bent-Over Rows × 10 each</b> — hinge at hips, back flat. Pull to lower ribs, elbows drive back, squeeze shoulder blades at top. Slow descent. Core braced.<div class="wt-row"><span class="wt-label">Chest press (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-chest-press">No previous entry</span><input type="number" class="wt-input" id="wt-chest-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('chest-press')">Log ✓</button></div><div class="wt-row"><span class="wt-label">Rows (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-db-rows">No previous entry</span><input type="number" class="wt-input" id="wt-db-rows" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('db-rows')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--gym)">LAT PULLDOWN<br>3×10</div><div class="si-detail">Wide overhand grip. Pull bar to upper chest — elbows drive down and back. Don't let shoulders shrug on the return. Rest 60 sec.<div class="wt-row"><span class="wt-prev" id="wtp-lat-pulldown">No previous entry</span><input type="number" class="wt-input" id="wt-lat-pulldown" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('lat-pulldown')">Log ✓</button></div></div></div>
-      <div class="si"><div class="si-phase" style="color:var(--gym)">DB SHOULDER PRESS<br>3×10</div><div class="si-detail">Seated or standing. Forearms directly vertical and in line with trunk throughout — don't let elbows flare forward or drift back. Full lockout at top. Rest 60 sec.<div class="wt-row"><span class="wt-prev" id="wtp-shoulder-press">No previous entry</span><input type="number" class="wt-input" id="wt-shoulder-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('shoulder-press')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">SHOULDER PRESS<br>3×10</div><div class="si-detail">Seated or standing. Forearms directly vertical and in line with trunk throughout — don't let elbows flare forward or drift back. Full lockout at top. Rest 60 sec.<div class="wt-row"><span class="wt-prev" id="wtp-shoulder-press">No previous entry</span><input type="number" class="wt-input" id="wt-shoulder-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('shoulder-press')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--gym)">PUSH-UPS<br>2×max</div><div class="si-detail">Controlled descent, chest to within 2 cm of floor, body in straight line throughout. Go to failure or near-failure on each set — this is where the bulk stimulus comes from. Note your reps each set. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-pushups-b">No previous entry</span><input type="number" class="wt-input" id="wt-pushups-b" placeholder="reps" step="1" min="0"><button class="wt-btn" onclick="logWeight('pushups-b','reps')">Log reps ✓</button></div></div></div>
 
-      <div class="bh" style="background:rgba(45,125,70,0.2)">CORE · ~7 min</div>
+      <div class="bh" style="background:rgba(45,125,70,0.2)">CORE · ~10 min</div>
       <div class="si"><div class="si-phase" style="color:var(--gym)">PALLOF PRESS<br>2×10 each</div><div class="si-detail">Cable or band at chest height. Stand sideways to the stack. Hold handle at chest, brace core hard, feet shoulder width. Press handle straight out — hold 2 sec — return to chest. The cable tries to pull you into rotation; your core resists it. This is anti-rotation — the most swimming-specific core pattern. Complete all reps one side then turn and repeat. 45 sec rest between sides.<div class="wt-row"><span class="wt-prev" id="wtp-pallof">No previous entry</span><input type="number" class="wt-input" id="wt-pallof" placeholder="kg" step="2.5" min="0"><button class="wt-btn" onclick="logWeight('pallof')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--gym)">DEAD BUG<br>2×10 each</div><div class="si-detail">Lying on back, arms vertical, knees 90°. Lower opposite arm and leg toward floor simultaneously — lower back stays flat to floor throughout. 30 sec rest between sets.</div></div>
       <div class="si"><div class="si-phase" style="color:var(--gym)">SIDE PLANK<br>2×30 sec each</div><div class="si-detail">Side-lying, forearm on floor, hips stacked. Body in straight line. Fires lateral core and hip abductors — transfers to swim body rotation stability. 20 sec rest between sides. Log your hold time.<div class="wt-row"><span class="wt-prev" id="wtp-side-plank">No previous entry</span><input type="number" class="wt-input" id="wt-side-plank" placeholder="sec" step="5" min="0"><button class="wt-btn" onclick="logWeight('side-plank','sec')">Log sec ✓</button></div></div></div>
 
-      <div class="bh" style="background:rgba(45,125,70,0.2)">STRETCHING · ~4 min</div>
+      <div class="bh" style="background:rgba(45,125,70,0.2)">STRETCHING · ~5 min</div>
       <div class="si"><div class="si-phase" style="color:var(--gym)">ESSENTIAL 3</div><div class="si-detail"><b>Hip flexor lunge</b> — 45s each side. Non-negotiable: tight hip flexors directly cap your kick range of motion.<br><b>Pec doorway stretch</b> — 45s. Swimmers are chronically internally rotated — this counteracts it.<br><b>Child's pose</b> — 45s. Thoracic extension and lat release. Counteracts shift work rounding.<br><br>Everything else — hamstring, glute, lat, neck — do at home or poolside on swim days.</div></div>
 
     </div>
   </div>
 
 
-  <!-- ═ DAY C — OCEAN / GYM ═ -->
+  <!-- ═ DAY D — HELI GYM ═ -->
+  <div id="session-dayD" class="session-card" style="border-color:var(--orange);display:none">
+    <div class="sc-head" style="background:var(--orange)">
+      <div class="sc-title">Day D · HELI GYM — Full Body Strength</div>
+      <div class="sc-sub">Same lifts as Day B, dumbbell rehab, long mobility finish · weights shared with Day B</div>
+    </div>
+    <div style="background:var(--pale-org)">
+
+      <div class="bh" style="background:rgba(232,89,12,0.15)">WARM-UP · ~8 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">ROWING MACHINE<br>5 min</div><div class="si-detail">Easy to moderate, damper around 3–5. Long smooth strokes — legs drive, then hips open, then arms finish. Warms legs, back and shoulders together. Conversational effort — this is prep.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">THORACIC ROTATIONS<br>2×10 each</div><div class="si-detail">Seated or kneeling, hands behind head. Rotate upper back left and right. Unlocks thoracic stiffness from shift work. Essential pre-lift.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">BODYWEIGHT SQUATS<br>2×10</div><div class="si-detail">Slow controlled descent, pause at bottom. Primes quads, glutes and hip flexors before loading.</div></div>
+
+      <div class="bh" style="background:rgba(232,89,12,0.15)">LEGS · ~15 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">WEIGHTED STEP-UPS<br>25 reps × 2</div><div class="si-detail">50 cm step up onto box. Drive through heel of leading foot and stand tall at the top with a controlled descent. Alternate legs.<div class="wt-row"><span class="wt-prev" id="wtp-dd-step-ups">No previous entry</span><input type="number" class="wt-input" id="wt-dd-step-ups" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-step-ups')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">STANDING CALF RAISES<br>3×15</div><div class="si-detail">Feet shoulder-width on edge of step. Full range — heel below step at bottom, full rise on toes at top. Controlled descent. Add weight when 3×15 feels easy.<div class="wt-row"><span class="wt-prev" id="wtp-dd-calf-raises">No previous entry</span><input type="number" class="wt-input" id="wt-dd-calf-raises" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-calf-raises')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">ROMANIAN DEADLIFT<br>3×10</div><div class="si-detail">Barbell or DBs. Hinge at the hips — soft knee, back flat, send hips back. Lower the weight down the front of your legs until you feel a strong hamstring stretch, then drive hips forward to stand. Slow controlled descent — 3 sec down. Builds the hamstrings and hip hinge pattern that drives kick recovery and posterior chain strength. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-rdl">No previous entry</span><input type="number" class="wt-input" id="wt-dd-rdl" placeholder="kg" step="2.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-rdl')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">BULGARIAN SPLIT SQUAT<br>3×6 each</div><div class="si-detail">Rear foot elevated on bench. Front knee tracks over toe — long stride. Controlled descent, drive through front heel to stand. 60 sec rest between sets. Unilateral loading prevents compensation, hip flexor stretch under load directly improves kick range of motion.<div class="wt-row"><span class="wt-prev" id="wtp-dd-split-squat">No previous entry</span><input type="number" class="wt-input" id="wt-dd-split-squat" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-split-squat')">Log ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(123,63,160,0.2)">SHOULDER REHABILITATION · ~15 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">DB EXT. ROTATION<br>side-lying · 2×12 each</div><div class="si-detail">Lie on your side, top elbow bent 90° with a rolled towel between elbow and ribs. Rotate the forearm up toward the ceiling, pause, lower over 3 sec. Elbow stays on the towel. Very light — 1–3 kg. Same target as the cable version: infraspinatus and teres minor. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-db-ext-rot">No previous entry</span><input type="number" class="wt-input" id="wt-dd-db-ext-rot" placeholder="kg" step="0.25" min="0"><button class="wt-btn" onclick="logWeight('dd-db-ext-rot')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">DB EXT. ROT. 90°<br>2×12 each</div><div class="si-detail">Seated, upper arm out to the side at shoulder height and resting on an incline bench back (elbow bent 90°, forearm pointing forward). Rotate the forearm up until it points at the ceiling, then lower over 3 sec. Only the forearm moves. Very light — the rotator cuff in the elevated swim-catch position. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-db-ext-90">No previous entry</span><input type="number" class="wt-input" id="wt-dd-db-ext-90" placeholder="kg" step="0.25" min="0"><button class="wt-btn" onclick="logWeight('dd-db-ext-90')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">YTW RAISES<br>2×8 each</div><div class="si-detail">Face-down on incline bench, light plates or no weight.<br><b>Y</b> — arms overhead in Y, thumbs up, 2-sec hold.<br><b>T</b> — arms out to sides, 2-sec hold.<br><b>W</b> — elbows 90°, pull back as in double-bicep, 2-sec hold.<br>Complete all 3 shapes before resting. Targets all trapezius fibres. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-ytw">No previous entry</span><input type="number" class="wt-input" id="wt-dd-ytw" placeholder="kg" step="0.25" min="0" style="border-color:#d8b4f8"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-ytw')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">SERRATUS PUNCH<br>2×10 each</div><div class="si-detail">Lying on back, DB in one hand, arm vertical. Press DB toward ceiling past neutral — fully protract scapula at top. Slow and controlled. Primary serratus anterior isolation drill.<div class="wt-row"><span class="wt-prev" id="wtp-dd-serratus">No previous entry</span><input type="number" class="wt-input" id="wt-dd-serratus" placeholder="kg" step="0.25" min="0" style="border-color:#d8b4f8"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-serratus')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(232,89,12,0.15)">UPPER BODY · ~15 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">CHEST AND ROW COMBO<br>3 rounds</div><div class="si-detail"><b>Do chest press immediately followed by rows — no rest between. Rest 60 sec after both.</b><br><br><b>Chest Press × 10</b> — lying on bench, controlled descent, elbows no more than 45° flare, pause at chest, press explosively.<br><br><b>Bent-Over Rows × 10 each</b> — hinge at hips, back flat. Pull to lower ribs, elbows drive back, squeeze shoulder blades at top. Slow descent. Core braced.<div class="wt-row"><span class="wt-label">Chest press (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-dd-chest-press">No previous entry</span><input type="number" class="wt-input" id="wt-dd-chest-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-chest-press')">Log ✓</button></div><div class="wt-row"><span class="wt-label">Rows (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-dd-db-rows">No previous entry</span><input type="number" class="wt-input" id="wt-dd-db-rows" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-db-rows')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">SHOULDER PRESS<br>3×10</div><div class="si-detail">Seated or standing. Forearms directly vertical and in line with trunk throughout — don't let elbows flare forward or drift back. Full lockout at top. Rest 60 sec.<div class="wt-row"><span class="wt-prev" id="wtp-dd-shoulder-press">No previous entry</span><input type="number" class="wt-input" id="wt-dd-shoulder-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-shoulder-press')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">PUSH-UPS<br>2×max</div><div class="si-detail">Controlled descent, chest to within 2 cm of floor, body in straight line throughout. Go to failure or near-failure on each set — this is where the bulk stimulus comes from. Note your reps each set. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-pushups-b">No previous entry</span><input type="number" class="wt-input" id="wt-dd-pushups-b" placeholder="reps" step="1" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-pushups-b','reps')">Log reps ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(232,89,12,0.15)">CORE · ~10 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">PALLOF PRESS<br>2×10 each</div><div class="si-detail">Cable or band at chest height. Stand sideways to the stack. Hold handle at chest, brace core hard, feet shoulder width. Press handle straight out — hold 2 sec — return to chest. The cable tries to pull you into rotation; your core resists it. This is anti-rotation — the most swimming-specific core pattern. Complete all reps one side then turn and repeat. 45 sec rest between sides.<div class="wt-row"><span class="wt-prev" id="wtp-dd-pallof">No previous entry</span><input type="number" class="wt-input" id="wt-dd-pallof" placeholder="kg" step="2.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-pallof')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">DEAD BUG<br>2×10 each</div><div class="si-detail">Lying on back, arms vertical, knees 90°. Lower opposite arm and leg toward floor simultaneously — lower back stays flat to floor throughout. 30 sec rest between sets.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">SIDE PLANK<br>2×30 sec each</div><div class="si-detail">Side-lying, forearm on floor, hips stacked. Body in straight line. Fires lateral core and hip abductors — transfers to swim body rotation stability. 20 sec rest between sides. Log your hold time.<div class="wt-row"><span class="wt-prev" id="wtp-dd-side-plank">No previous entry</span><input type="number" class="wt-input" id="wt-dd-side-plank" placeholder="sec" step="5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-side-plank','sec')">Log sec ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(14,124,123,0.3)">STRETCHING &amp; MOBILITY · ~30 min</div>
+      <div class="si"><div class="si-detail" style="grid-column:1/-1"><b>Take your time here.</b> Ease into each stretch until you feel a mild pull, then breathe slowly through the hold. Shoulder stretches should never pinch or hurt at the front of the shoulder — back off if they do. Use box breathing (4-4-4-4) through the long holds.</div></div>
+      <div class="bh" style="background:rgba(14,124,123,0.18)">SOFT TISSUE · ~5 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">FOAM ROLL<br>~5 min total</div><div class="si-detail"><b>Thoracic spine</b> 60s — roller across mid-back, arms crossed, small movements.<br><b>Lats</b> 45s each side — lying on your side, roller under the armpit.<br><b>Quads &amp; hip flexors</b> 45s each.<br><b>Calves</b> 45s each — especially after calf raises.</div></div>
+      <div class="bh" style="background:rgba(14,124,123,0.18)">THORACIC &amp; SHOULDERS · ~12 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">THORACIC EXTENSION<br>60s</div><div class="si-detail">Roller across mid-back, hands behind head, elbows in. Lower your upper back over the roller, then move it up a few cm and repeat. Undoes the rounded posture from driving and shifts.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">OPEN BOOK<br>2×8 each side</div><div class="si-detail">Side-lying, knees bent and stacked. Rotate the top arm open across to the other side, eyes following the hand, knees stay together. Exhale as you open. Thoracic rotation for breathing to the side.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">THREAD THE NEEDLE<br>8 each side</div><div class="si-detail">On hands and knees. Slide one arm under your body along the floor, letting the shoulder and head drop, then reach it up to the ceiling. Slow.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">WALL SLIDES<br>2×10</div><div class="si-detail">Forearms on the wall, elbows at shoulder height. Slide arms up into a Y while keeping ribs down, then lift hands off the wall 1–2 cm at the top. Trains serratus and lower trap through overhead range — directly works the winging pattern.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">PEC DOORWAY STRETCH<br>45s × 2 positions</div><div class="si-detail">Forearm on the door frame with elbow at shoulder height, then again with elbow higher (~120°). Step through gently. The higher position targets pec minor, which pulls the shoulder blade forward.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">LAT STRETCH ON BENCH<br>60s</div><div class="si-detail">Kneel facing a bench, elbows on it, hands together. Sit hips back toward heels and let the chest sink. Opens the overhead reach for the freestyle catch.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">CROSS-BODY SHOULDER<br>30s each</div><div class="si-detail">Arm straight across the chest, other hand pulls it in at the elbow. Shoulder stays down. Back of the shoulder.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">CHILD'S POSE<br>60s</div><div class="si-detail">Sit back to heels, arms long on the floor, walk hands to one side then the other for 20s each.</div></div>
+      <div class="bh" style="background:rgba(14,124,123,0.18)">HIPS &amp; LEGS · ~11 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">HALF-KNEELING HIP FLEXOR<br>60s each</div><div class="si-detail">Back knee on a pad. Tuck the pelvis under and squeeze the back glute, then shift forward slightly. Reach the same-side arm overhead to add the lat. Tight hip flexors cap your kick.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">90/90 HIPS<br>8 switches, then 30s each</div><div class="si-detail">Sit with both knees bent at 90°, one in front and one to the side. Rotate the knees to the other side without using your hands, then hold each side tall-chested.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">PIGEON<br>60s each</div><div class="si-detail">Front shin across the body, back leg long. Sink the hips and breathe.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">HAMSTRING WITH BAND<br>45s each</div><div class="si-detail">Lying on your back, band around the foot, leg straight up. Keep the other leg flat on the floor.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">ADDUCTOR ROCK-BACK<br>10 each side</div><div class="si-detail">On hands and knees, one leg out straight to the side. Rock hips back toward the heel and forward again.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">ANKLE &amp; CALF<br>60s + 45s each</div><div class="si-detail"><b>Kneeling ankle stretch</b> — sit back on your heels with toes pointed (60s). Pointed-toe range drives kick efficiency.<br><b>Calf wall stretch</b> — straight knee then bent knee, 45s each.</div></div>
+      <div class="bh" style="background:rgba(14,124,123,0.18)">FINISH · ~2 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--teal)">NECK &amp; BREATHING<br>~2 min</div><div class="si-detail"><b>Neck side tilt</b> 30s each side.<br>Then lie on your back with calves up on a bench and do 1 min of slow breathing — long exhales — to switch off before you leave.</div></div>
+    </div>
+  </div>
+
+
+  <!-- ═ DAY C — OCEAN SWIM ═ -->
   <div id="session-dayC" class="session-card" style="border-color:var(--ocean);display:none">
     <div class="sc-head" style="background:var(--ocean)">
-      <div class="sc-title">Day C · OCEAN SWIM or GYM</div>
-      <div class="sc-sub">Choose on the day based on conditions, energy and what you need</div>
+      <div class="sc-title">Day C · OCEAN SWIM</div>
+      <div class="sc-sub">Open water session · check conditions first</div>
     </div>
-    <div style="background:var(--pale-ocean);padding:12px 14px">
-      <div class="dc-toggle">
-        <button class="dc-btn active-dc" id="dc-ocean" style="border-color:var(--ocean);background:var(--ocean);color:#fff" onclick="showDC('ocean',this)">🌊 Ocean Swim<div class="s-sub">Open water session</div></button>
-        <button class="dc-btn" id="dc-gym" style="border-color:var(--gym);background:var(--pale-grn);color:var(--gym)" onclick="showDC('gym',this)">🏋 Gym Session<div class="s-sub">Optional strength</div></button>
-      </div>
-    </div>
-
     <!-- OCEAN CONTENT -->
     <div id="dc-content-ocean" style="background:var(--pale-ocean)">
       <div class="ocean-safety" style="margin:12px 14px 0">
@@ -623,25 +674,6 @@ input,select,textarea{font-size:16px !important;}
           <span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff;" id="ocean-total-b">—</span>
         </div>
       </div>
-    </div>
-
-    <!-- GYM CONTENT -->
-    <div id="dc-content-gym" style="background:var(--pale-org);display:none">
-      <div class="bh" style="background:rgba(232,89,12,0.15)">CARDIO · ~20 min</div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">RUN<br>20–25 min</div><div class="si-detail">Easy to moderate. Conversational for first 10 min, then push to where talking is difficult. Log your pace each time to track improvement.</div></div>
-      <div class="bh" style="background:rgba(232,89,12,0.15)">LEGS · ~10 min</div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">WEIGHTED STEP-UPS<br>25 reps</div><div class="si-detail">10kg vest + 8kg kettlebell each hand. Drive through heel, stand tall, controlled descent. Alternate legs.<div class="wt-row"><span class="wt-prev" id="wtp-dc-step-ups">No previous entry</span><input type="number" class="wt-input" id="wt-dc-step-ups" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-step-ups')" style="background:var(--orange)">Log ✓</button></div></div></div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">HIP THRUSTS<br>3×12</div><div class="si-detail">Upper back on bench, barbell or DB across hips. Drive hips up — full glute squeeze at top, hold 1 sec. Lower controlled. Posterior chain power that transfers directly to swim kick drive. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dc-hip-thrusts">No previous entry</span><input type="number" class="wt-input" id="wt-dc-hip-thrusts" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-hip-thrusts')" style="background:var(--orange)">Log ✓</button></div></div></div>
-      <div class="bh" style="background:rgba(232,89,12,0.15)">UPPER BODY · ~12 min</div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">BENCH PRESS<br>3×10</div><div class="si-detail">Barbell or dumbbells — pick which below. Controlled descent. Elbows 45° flare max. Pause at chest, press explosively.<div class="wt-row"><span class="wt-prev" id="wtp-dc-bench">No previous entry</span><input type="number" class="wt-input" id="wt-dc-bench" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-bench')" style="background:var(--orange)">Log ✓</button></div></div></div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">PUSH-UP PLUS<br>3×10</div><div class="si-detail">At top of push-up, 'punch' ceiling to protract scapula. Slow 3-sec eccentric.<div class="wt-row"><span class="wt-prev" id="wtp-dc-pushup-plus">No previous entry</span><input type="number" class="wt-input" id="wt-dc-pushup-plus" placeholder="reps" step="1" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-pushup-plus')" style="background:var(--orange)">Log reps ✓</button></div></div></div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">PRONE Y-T-W<br>3×8 each</div><div class="si-detail">Incline bench. Y = arms overhead, T = arms wide, W = elbows 90°. 2-sec hold each shape.<div class="wt-row"><span class="wt-prev" id="wtp-dc-ytw">No previous entry</span><input type="number" class="wt-input" id="wt-dc-ytw" placeholder="kg" step="0.25" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-ytw')" style="background:var(--orange)">Log ✓</button></div></div></div>
-      <div class="bh" style="background:rgba(232,89,12,0.15)">CORE · ~7 min</div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">DEAD BUG<br>3×10 each</div><div class="si-detail">Lower back flat throughout. Opposite arm and leg lower simultaneously.</div></div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">SIDE PLANK<br>3×30 sec each</div><div class="si-detail">Side-lying, forearm on floor, hips stacked. Body in straight line. 20 sec rest between sides.</div></div>
-      <div class="bh" style="background:rgba(232,89,12,0.15)">STRETCHING · ~6 min</div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)">STRETCHES</div><div class="si-detail">Pec doorway 45s · Lat side-bend 30s each · Shoulder cross-body 30s each · Child's pose 45s · Thoracic roller 45s</div></div>
-      <div class="opt-note">★ Optional day — only when genuinely recovered. Do not run on swim days.</div>
     </div>
   </div>
 </div><!-- /sessions tab -->
@@ -696,7 +728,7 @@ input,select,textarea{font-size:16px !important;}
   </div>
 
   <!-- GYM EXERCISE GUIDE -->
-  <div class="sh" style="background:var(--gym);cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleTech(this)">GYM EXERCISE GUIDE — DAYS B &amp; C<span class="tech-arr">▼</span></div>
+  <div class="sh" style="background:var(--gym);cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleTech(this)">GYM EXERCISE GUIDE — DAYS B &amp; D<span class="tech-arr">▼</span></div>
   <div class="tech-body" style="display:none;background:var(--gym);">
 
     <div class="tech-cat">LEGS</div>
@@ -706,8 +738,6 @@ input,select,textarea{font-size:16px !important;}
     <div class="tech-sub-body"><b>Soft knee, back flat.</b> Hinge from the hip — send hips back as weight lowers down the front of your legs. Stop at strong hamstring stretch. Drive hips forward to stand. 3-sec descent.</div>
     <div class="tech-sub" style="background:rgba(45,125,70,0.75)" onclick="toggleSub(this)">Bulgarian Split Squat<span>▼</span></div>
     <div class="tech-sub-body"><b>Rear foot elevated.</b> Lower rear knee toward floor. Drive through the front heel. Front knee tracks over second toe — don't let it cave inward.</div>
-    <div class="tech-sub" style="background:rgba(45,125,70,0.75)" onclick="toggleSub(this)">Hip Thrusts<span>▼</span></div>
-    <div class="tech-sub-body"><b>Drive with glutes — not your lower back.</b> Hold 1 sec at the top. Lower slowly. Upper back stays on the bench edge throughout.</div>
 
     <div class="tech-cat">SHOULDER REHABILITATION</div>
     <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">Serratus Punch<span>▼</span></div>
@@ -716,19 +746,21 @@ input,select,textarea{font-size:16px !important;}
     <div class="tech-sub-body"><b>Upper arm pinned to torso, elbow 90°.</b> Only the forearm rotates outward. Low or no weight. If the upper arm lifts away, you're compensating — reduce weight.</div>
     <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">Cable Ext. Rotation at 90°<span>▼</span></div>
     <div class="tech-sub-body"><b>Upper arm parallel to floor, elbow 90°.</b> Rotate forearm upward toward the ceiling — only the forearm moves. Low weight, precision only.</div>
+    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">DB Ext. Rotation — side-lying (Day D)<span>▼</span></div>
+    <div class="tech-sub-body"><b>Towel between elbow and ribs.</b> Only the forearm rotates up. If the elbow lifts off the towel or you roll backwards, the weight is too heavy.</div>
+    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">DB Ext. Rotation at 90° (Day D)<span>▼</span></div>
+    <div class="tech-sub-body"><b>Upper arm supported at shoulder height.</b> Forearm starts pointing forward and rotates up to vertical. Slow down, slow up. Very light.</div>
     <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">YTW Raises<span>▼</span></div>
     <div class="tech-sub-body"><b>Face-down on incline bench.</b> Y — arms overhead, thumbs up, 2-sec hold. T — arms wide, 2-sec hold. W — elbows 90° pulled back, 2-sec hold. All three shapes before resting.</div>
-    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">Push-Up Plus<span>▼</span></div>
-    <div class="tech-sub-body"><b>Standard push-up, then at the top:</b> push further — round the upper back as the scapula protracts fully forward. Hold 1 sec. 3-sec eccentric down.</div>
 
     <div class="tech-cat">UPPER BODY</div>
-    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">DB Chest Press<span>▼</span></div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">Chest Press<span>▼</span></div>
     <div class="tech-sub-body"><b>Elbows max 45° from torso.</b> Pause at chest. Press explosively. Core braced — don't arch off the bench. Move straight to rows in the superset.</div>
-    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">DB Bent-Over Rows<span>▼</span></div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">Bent-Over Rows<span>▼</span></div>
     <div class="tech-sub-body"><b>Back flat, hinge at hips.</b> Pull DBs to lower ribs — elbows back, not out. Squeeze shoulder blades together at top. Lower slowly.</div>
     <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">Lat Pulldown<span>▼</span></div>
     <div class="tech-sub-body"><b>Wide grip.</b> Pull to upper chest, elbows drive down and back. Don't let shoulders shrug on the return — lower with full control.</div>
-    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">DB Shoulder Press<span>▼</span></div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">Shoulder Press<span>▼</span></div>
     <div class="tech-sub-body"><b>Forearms directly vertical and in line with the trunk</b> throughout — not angled forward or back. Press to full lockout overhead.</div>
     <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">Push-Ups<span>▼</span></div>
     <div class="tech-sub-body"><b>Chest within 2cm of floor.</b> Body straight throughout — no sagging or piking. Go to failure on the last set.</div>
@@ -1218,28 +1250,16 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
 }
-const paleLookup={dayA:'var(--pale-blue)',dayB:'var(--pale-grn)',dayC:'var(--pale-ocean)'};
-const colorLookup={dayA:'var(--pool)',dayB:'var(--gym)',dayC:'var(--ocean)'};
+const paleLookup={dayA:'var(--pale-blue)',dayB:'var(--pale-grn)',dayC:'var(--pale-ocean)',dayD:'var(--pale-org)'};
+const colorLookup={dayA:'var(--pool)',dayB:'var(--gym)',dayC:'var(--ocean)',dayD:'var(--orange)'};
 function showSession(id,btn){
-  ['dayA','dayB','dayC'].forEach(s=>{
+  ['dayA','dayB','dayC','dayD'].forEach(s=>{
     document.getElementById('session-'+s).style.display='none';
     const t=document.getElementById('stab-'+s);
     t.style.background=paleLookup[s]; t.style.color=colorLookup[s];
   });
   document.getElementById('session-'+id).style.display='block';
   btn.style.background=colorLookup[id]; btn.style.color='#fff';
-}
-function showDC(mode,btn){
-  ['ocean','gym'].forEach(m=>{
-    document.getElementById('dc-content-'+m).style.display='none';
-    const b=document.getElementById('dc-'+m);
-    if(m==='ocean'){b.style.background='var(--pale-ocean)';b.style.color='var(--ocean)';b.style.borderColor='var(--ocean)';}
-    else{b.style.background='var(--pale-grn)';b.style.color='var(--gym)';b.style.borderColor='var(--gym)';}
-  });
-  document.getElementById('dc-content-'+mode).style.display='block';
-  if(mode==='ocean'){btn.style.background='var(--ocean)';btn.style.borderColor='var(--ocean)';}
-  else{btn.style.background='var(--gym)';btn.style.borderColor='var(--gym)';}
-  btn.style.color='#fff';
 }
 function toggleGear(btn){
   const note=btn.parentElement.nextElementSibling;
@@ -1466,24 +1486,36 @@ function editStat(card,key){
 }
 
 // ── Weight logging ────────────────────────────────────────────────────────
-// ── Equipment (barbell / dumbbell / machine) ────────────────────────────────
-// Each weighted exercise logs which equipment was used. The three are tracked
-// separately because the numbers aren't comparable (a 40kg bar vs 15kg DBs).
-const EQUIP={bb:'Barbell',db:'Dumbbell',mc:'Machine'};
-// Default per exercise. Entries logged before equipment tracking get this type.
-const EQUIP_DEFAULT={'step-ups':'db','calf-raises':'mc','rdl':'bb','split-squat':'db','cable-ext-rot':'mc','cable-ext-90':'mc','ytw':'db','serratus':'db','chest-press':'db','db-rows':'db','lat-pulldown':'mc','shoulder-press':'db','pallof':'mc','dc-step-ups':'db','dc-hip-thrusts':'bb','dc-bench':'bb','dc-ytw':'db'};
-function entryEquip(key,e){return e.equip||EQUIP_DEFAULT[key]||null;}
-// Last chosen type for this exercise, else the type of its latest entry, else the default
+// ── Weight keys and equipment ─────────────────────────────────────────────────
+// Day D (Heli gym) repeats Day B's lifts. Its rows have their own element ids
+// (prefix dd-) but share Day B's history, so each lift has one progression line.
+const DAYB_KEYS=['step-ups','calf-raises','rdl','split-squat','cable-ext-rot','cable-ext-90','ytw','serratus','chest-press','db-rows','lat-pulldown','shoulder-press','pushups-b','pallof','side-plank'];
+const DAYD_SHARED=['step-ups','calf-raises','rdl','split-squat','ytw','serratus','chest-press','db-rows','shoulder-press','pushups-b','pallof','side-plank'];
+const WEIGHT_ROWS=DAYB_KEYS.concat(DAYD_SHARED.map(k=>'dd-'+k),['dd-db-ext-rot','dd-db-ext-90']);
+// Storage key for a row: Day D's shared rows store under the Day B key
+function sk(key){return key.startsWith('dd-')&&DAYD_SHARED.includes(key.slice(3))?key.slice(3):key;}
+function refreshWeights(key){const k=sk(key);WEIGHT_ROWS.filter(r=>sk(r)===k).forEach(r=>{_renderEquipSeg(r);updateWeightDisplay(r);});}
+
+// Equipment is tracked separately where the numbers aren't comparable
+// (a 40kg bar vs 15kg dumbbells). Only these lifts get a choice.
+const EQUIP={bb:'Barbell',db:'Dumbbell',mc:'Machine',ot:'Other weight'};
+const EQUIP_OPTIONS={'calf-raises':['mc','ot'],'chest-press':['bb','db'],'db-rows':['bb','db'],'shoulder-press':['db','mc'],'lat-pulldown':['bb','db','mc']};
+// Default per lift. Entries logged before equipment tracking get this type.
+const EQUIP_DEFAULT={'calf-raises':'mc','chest-press':'db','db-rows':'db','shoulder-press':'db','lat-pulldown':'mc'};
+function hasEquip(key){return !!EQUIP_OPTIONS[sk(key)];}
+function entryEquip(key,e){if(!hasEquip(key))return null;const eq=e.equip||EQUIP_DEFAULT[sk(key)];return EQUIP_OPTIONS[sk(key)].includes(eq)?eq:EQUIP_DEFAULT[sk(key)];}
+// Last chosen type for this lift, else the type of its latest entry, else the default
 function currentEquip(key){
+  const k=sk(key),opts=EQUIP_OPTIONS[k];
   const pref=LS.get('equip_pref')||{};
-  if(pref[key])return pref[key];
-  const h=LS.get('weights_'+key)||[];
-  return h.length?entryEquip(key,h[0]):EQUIP_DEFAULT[key];
+  if(pref[k]&&opts.includes(pref[k]))return pref[k];
+  const h=LS.get('weights_'+k)||[];
+  return h.length?entryEquip(key,h[0]):EQUIP_DEFAULT[k];
 }
 function setEquip(key,eq){
   const pref=LS.get('equip_pref')||{};
-  pref[key]=eq;LS.set('equip_pref',pref);
-  _renderEquipSeg(key);updateWeightDisplay(key);
+  pref[sk(key)]=eq;LS.set('equip_pref',pref);
+  refreshWeights(key);
 }
 function _renderEquipSeg(key){
   const seg=document.getElementById('eq-'+key);if(!seg)return;
@@ -1491,11 +1523,12 @@ function _renderEquipSeg(key){
   seg.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.eq===cur));
 }
 function _addEquipSeg(key){
+  if(!hasEquip(key))return;
   const inp=document.getElementById('wt-'+key);
   if(!inp||document.getElementById('eq-'+key))return;
   const seg=document.createElement('div');
   seg.className='eq-seg';seg.id='eq-'+key;
-  seg.innerHTML=Object.keys(EQUIP).map(eq=>`<button type="button" data-eq="${eq}" onclick="setEquip('${key}','${eq}')">${EQUIP[eq]}</button>`).join('');
+  seg.innerHTML=EQUIP_OPTIONS[sk(key)].map(eq=>`<button type="button" data-eq="${eq}" onclick="setEquip('${key}','${eq}')">${EQUIP[eq]}</button>`).join('');
   inp.closest('.wt-row').before(seg);
   _renderEquipSeg(key);
 }
@@ -1507,22 +1540,22 @@ function logWeight(key,unit){
   const kg=parseFloat(inp.value);
   if(isNaN(kg))return;
   const entry={date:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}),kg:kg,unit:unit};
-  const eq=EQUIP_DEFAULT[key]?currentEquip(key):null;
+  const eq=hasEquip(key)?currentEquip(key):null;
   if(eq)entry.equip=eq;
-  const history=LS.get('weights_'+key)||[];
+  const history=LS.get('weights_'+sk(key))||[];
   history.unshift(entry);
-  LS.set('weights_'+key,history.slice(0,60));
+  LS.set('weights_'+sk(key),history.slice(0,60));
   inp.value='';
-  updateWeightDisplay(key);
+  refreshWeights(key);
   showToast('✓ '+(eq?EQUIP[eq]+' ':'')+kg+unit+' logged');
 }
 function updateWeightDisplay(key){
   const el=document.getElementById('wtp-'+key);
   if(!el)return;
-  const history=LS.get('weights_'+key)||[];
+  const history=LS.get('weights_'+sk(key))||[];
   if(history.length===0){el.innerHTML='No previous entry';return;}
   const dateSpan=d=>' <span style="color:#bbb;font-size:10px;">'+d+'</span>';
-  if(!EQUIP_DEFAULT[key]){
+  if(!hasEquip(key)){
     const last=history[0];
     el.innerHTML='Last: <b>'+last.kg+(last.unit||'kg')+'</b>'+dateSpan(last.date);
   }else{
@@ -1530,7 +1563,7 @@ function updateWeightDisplay(key){
     const cur=currentEquip(key);
     const lastBy={};
     history.forEach(e=>{const eq=entryEquip(key,e);if(!lastBy[eq])lastBy[eq]=e;});
-    const order=[cur].concat(Object.keys(EQUIP).filter(eq=>eq!==cur)).filter(eq=>lastBy[eq]);
+    const order=[cur].concat(EQUIP_OPTIONS[sk(key)].filter(eq=>eq!==cur)).filter(eq=>lastBy[eq]);
     el.innerHTML=lastBy[cur]?'':'No '+EQUIP[cur].toLowerCase()+' entry yet<br>';
     el.innerHTML+=order.map(eq=>{const e=lastBy[eq];
       return (eq===cur?'Last ':'<span style="opacity:0.7">')+EQUIP[eq].toLowerCase()+': <b>'+e.kg+(e.unit||'kg')+'</b>'+dateSpan(e.date)+(eq===cur?'':'</span>');
@@ -1555,17 +1588,17 @@ function showWtHist(key){
   const modal=document.getElementById('wtHistModal');
   const title=document.getElementById('wtHistTitle');
   modal.style.display='flex';
-  title.textContent=key.replace(/^dc-/,'').replace(/-/g,' ');
+  title.textContent=key.replace(/^dd-/,'').replace(/-/g,' ');
   _renderWtHist();
 }
 function closeWtHist(){
   document.getElementById('wtHistModal').style.display='none';
-  updateWeightDisplay(_wtHistKey);
+  refreshWeights(_wtHistKey);
 }
 function _renderWtHist(){
   const content=document.getElementById('wtHistContent');
   if(!content)return;
-  const history=LS.get('weights_'+_wtHistKey)||[];
+  const history=LS.get('weights_'+sk(_wtHistKey))||[];
   if(!history.length){content.innerHTML='<p style="color:#94A3B8;font-size:12px;text-align:center;padding:20px 0">No entries yet</p>';return;}
   content.innerHTML=history.map((e,i)=>{
     const eq=entryEquip(_wtHistKey,e);
@@ -1579,20 +1612,20 @@ function _renderWtHist(){
     </div>`;}).join('');
 }
 function delWtEntry(idx){
-  const history=LS.get('weights_'+_wtHistKey)||[];
+  const history=LS.get('weights_'+sk(_wtHistKey))||[];
   history.splice(idx,1);
-  LS.set('weights_'+_wtHistKey,history);
+  LS.set('weights_'+sk(_wtHistKey),history);
   _renderWtHist();
-  updateWeightDisplay(_wtHistKey);
+  refreshWeights(_wtHistKey);
 }
 function startWtEdit(idx){
-  const history=LS.get('weights_'+_wtHistKey)||[];
+  const history=LS.get('weights_'+sk(_wtHistKey))||[];
   const e=history[idx];if(!e)return;
   let isoDate='';
   try{const d=new Date(e.date+' 12:00');if(!isNaN(d))isoDate=d.toISOString().split('T')[0];}catch(er){}
   const el=document.getElementById('whe-'+idx);if(!el)return;
   const eq=entryEquip(_wtHistKey,e);
-  const eqSel=eq?`<select id="we-e-${idx}" style="border:1.5px solid #CBD5E1;border-radius:7px;padding:4px 2px;font-size:11px;outline:none;flex-shrink:0;">${Object.keys(EQUIP).map(k=>`<option value="${k}"${k===eq?' selected':''}>${EQUIP[k]}</option>`).join('')}</select>`:'';
+  const eqSel=eq?`<select id="we-e-${idx}" style="border:1.5px solid #CBD5E1;border-radius:7px;padding:4px 2px;font-size:11px;outline:none;flex-shrink:0;">${EQUIP_OPTIONS[sk(_wtHistKey)].map(k=>`<option value="${k}"${k===eq?' selected':''}>${EQUIP[k]}</option>`).join('')}</select>`:'';
   el.style.flexWrap='wrap';
   el.innerHTML=`<input type="number" id="we-v-${idx}" value="${e.kg}" step="0.5" style="width:72px;border:1.5px solid var(--teal);border-radius:7px;padding:5px 7px;font-size:13px;outline:none;font-family:'Barlow',sans-serif;">
     <span style="font-size:11px;color:#94A3B8;flex-shrink:0;">${e.unit||'kg'}</span>
@@ -1607,7 +1640,7 @@ function saveWtEdit(idx){
   const eqEl=document.getElementById('we-e-'+idx);
   if(!valEl||!dateEl)return;
   const kg=parseFloat(valEl.value);if(isNaN(kg))return;
-  const history=LS.get('weights_'+_wtHistKey)||[];
+  const history=LS.get('weights_'+sk(_wtHistKey))||[];
   if(history[idx]){
     history[idx].kg=kg;
     if(dateEl.value){
@@ -1616,16 +1649,15 @@ function saveWtEdit(idx){
       history[idx].date=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
     }
     if(eqEl)history[idx].equip=eqEl.value;
-    LS.set('weights_'+_wtHistKey,history);
+    LS.set('weights_'+sk(_wtHistKey),history);
   }
   _renderWtHist();
-  updateWeightDisplay(_wtHistKey);
+  refreshWeights(_wtHistKey);
 }
 
 function loadAllWeights(){
-  const keys=['step-ups','calf-raises','rdl','split-squat','cable-ext-rot','cable-ext-90','ytw','serratus','chest-press','db-rows','lat-pulldown','shoulder-press','pushups-b','pallof','side-plank','dc-step-ups','dc-hip-thrusts','dc-bench','dc-ytw','dc-pushup-plus'];
-  Object.keys(EQUIP_DEFAULT).forEach(_addEquipSeg);
-  keys.forEach(updateWeightDisplay);
+  WEIGHT_ROWS.forEach(_addEquipSeg);
+  WEIGHT_ROWS.forEach(updateWeightDisplay);
 }
 
 // ── Distance logging ─────────────────────────────────────────────────────────
