@@ -1,400 +1,1939 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="Session" />
-<meta name="theme-color" content="#eef1f4" />
-<title>Session</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Training Plan">
+<title>Training Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.js"></script>
 <style>
-  :root{
-    --bg:#edf0f3; --card:#ffffff; --line:#e2e8ee; --line2:#eef2f6;
-    --ink:#0f1b26; --ink2:#586878; --ink3:#8b99a6;
-    --green:#0a9a60; --green-fill:#10b981; --green-bg:#ecfdf5; --green-line:#9fe9c8;
-    --amber:#a4620b; --amber-bg:#fdf3de; --amber-line:#f1cd84;
-    --accent:#2f6f8f;
-    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    --shadow:0 1px 2px rgba(15,27,38,.05),0 1px 3px rgba(15,27,38,.04);
-    --maxw:560px;
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);}
-  body{-webkit-font-smoothing:antialiased;}
-  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
-  button:active{transform:translateY(1px);}
-  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+:root{--navy:#1A2B4A;--navy2:#0e2240;--teal:#0E7C7B;--orange:#E8590C;--pool:#1D7DB3;--gym:#2D7D46;--rehab:#7B3FA0;--run:#C0392B;--ocean:#0a6e6e;--grey:#555;--light:#F0F4F8;--pale-teal:#D6EEEE;--pale-blue:#D6EAF8;--pale-grn:#D5ECD9;--pale-pur:#EAD5F5;--pale-org:#FDE8DC;--pale-red:#FADBD8;--pale-ocean:#d0f0f0;--gear-blue:#0077b6;--gear-dk:#023e8a;--gear-red:#e63946;--gear-pur:#6a0572;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Barlow',sans-serif;background:#f5f7fa;color:var(--grey);}
 
-  /* header */
-  .hdr{position:sticky;top:0;z-index:20;background:rgba(237,240,243,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
-  .hdr-inner{max-width:var(--maxw);margin:0 auto;padding:14px 16px 12px;}
-  .hdr-top{display:flex;align-items:flex-start;justify-content:space-between;}
-  .eyebrow{display:flex;align-items:center;gap:7px;color:var(--green);font-size:11px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;}
-  .eyebrow svg{display:block;}
-  .sub{color:var(--ink3);font-size:12px;margin-top:3px;}
-  .reset-btn{display:flex;align-items:center;gap:5px;color:var(--ink2);font-size:11px;border:1px solid var(--line);background:var(--card);border-radius:7px;padding:5px 9px;}
-  .meter{margin-top:13px;display:flex;align-items:center;gap:12px;}
-  .meter-track{flex:1;height:6px;background:#dde4ea;border-radius:99px;overflow:hidden;}
-  .meter-fill{height:100%;background:var(--green-fill);border-radius:99px;transition:width .28s ease;}
-  .meter-num{font-size:13px;color:var(--ink2);min-width:46px;text-align:right;}
-  .flash{background:var(--green-bg);border-top:1px solid var(--green-line);color:#0a7048;font-size:13px;text-align:center;padding:6px 12px;font-weight:600;}
+/* HERO */
+.hero{background:linear-gradient(135deg,#2d5fa8 0%,#1e4a8a 60%,#163872 100%);padding:28px 20px 24px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.015) 40px,rgba(255,255,255,0.015) 80px);}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(14,124,123,0.25);border:1px solid rgba(14,124,123,0.5);border-radius:20px;padding:4px 14px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7ecbcc;margin-bottom:12px;}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,6vw,42px);font-weight:800;color:#fff;letter-spacing:1px;line-height:1.05;margin-bottom:6px;}
+.hero h1 span{color:#7ecbcc;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:18px;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
+@media(max-width:540px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:9px 10px;text-align:center;cursor:pointer;transition:border-color 0.2s;}
+.stat-card:hover{border-color:rgba(126,203,204,0.5);}
+.stat-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7ecbcc;margin-bottom:3px;}
+.stat-value{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.stat-edit-hint{font-size:9px;color:rgba(126,203,204,0.5);margin-top:2px;}
+.stat-input{background:transparent;border:none;border-bottom:1px solid #7ecbcc;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;width:100%;text-align:center;outline:none;}
+#wakeLockBtn{display:inline-block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:rgba(255,255,255,0.55);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.2s;position:relative;z-index:1;margin-top:6px;}
+#wakeLockBtn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
 
-  /* layout */
-  .main{max-width:var(--maxw);margin:0 auto;padding:16px 16px 132px;}
-  .block{margin-bottom:26px;}
-  .block-head{display:flex;align-items:baseline;gap:11px;}
-  .block-n{font-family:var(--mono);font-size:12px;color:#9fb0bd;font-weight:700;}
-  .block-title{font-size:17px;font-weight:700;letter-spacing:-.01em;margin:0;}
-  .block-meta{font-size:12px;color:var(--ink3);font-style:italic;}
-  .block-body{margin-top:12px;}
+/* NAV */
+.nav{background:var(--navy);border-bottom:3px solid var(--teal);position:sticky;top:0;z-index:100;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-inner{max-width:860px;margin:0 auto;display:flex;}
+.nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;color:rgba(255,255,255,0.5);background:transparent;border:none;padding:11px 13px;cursor:pointer;white-space:nowrap;transition:all 0.2s;border-bottom:3px solid transparent;margin-bottom:-3px;}
+.nav-btn.active{color:#fff;background:var(--teal);border-bottom-color:var(--teal);}
 
-  /* superset group */
-  .group{position:relative;padding-left:14px;margin-bottom:12px;}
-  .group-rule{position:absolute;left:0;top:6px;bottom:6px;width:2px;background:#bcd3df;border-radius:2px;}
-  .group-tag{font-size:10px;letter-spacing:.16em;color:var(--accent);font-weight:700;text-transform:uppercase;margin-bottom:8px;}
-  .group-items{display:flex;flex-direction:column;gap:8px;}
-  .solo{margin-bottom:12px;}
+/* CONTENT */
+.content{max-width:860px;margin:0 auto;padding:18px 14px 80px;}
+.tab-panel{display:none;animation:fadeIn 0.22s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
 
-  /* check row */
-  .row{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px;box-shadow:var(--shadow);}
-  .row.done{background:var(--green-bg);border-color:var(--green-line);box-shadow:none;}
-  .checkbox{margin-top:1px;width:22px;height:22px;border-radius:6px;flex:0 0 auto;border:1.5px solid #c4d0da;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:900;}
-  .row.done .checkbox{background:var(--green-fill);border-color:var(--green-fill);}
-  .row-main{flex:1;min-width:0;}
-  .row-line{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
-  .row-name{font-size:14.5px;font-weight:600;}
-  .row.done .row-name{color:#6f9183;text-decoration:line-through;}
-  .row-scheme{font-family:var(--mono);font-size:12.5px;color:var(--ink2);white-space:nowrap;}
-  .row-note{font-size:12px;color:var(--ink2);line-height:1.45;margin-top:4px;}
+/* SECTION HEADS */
+.sh{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;color:#fff;padding:9px 16px;border-radius:8px;margin:20px 0 10px;}
 
-  /* load card */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 14px;box-shadow:var(--shadow);}
-  .card.done{border-color:var(--green-line);}
-  .card.flag{border-color:var(--amber-line);}
-  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-  .card-name{font-size:15px;font-weight:700;}
-  .opt-tag{font-size:9px;letter-spacing:.1em;font-weight:700;color:var(--ink2);border:1px solid var(--line);border-radius:4px;padding:1px 5px;text-transform:uppercase;margin-left:7px;vertical-align:middle;}
-  .card-scheme{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:2px;}
-  .status{font-size:10px;letter-spacing:.1em;font-weight:800;border-radius:6px;padding:3px 8px;text-transform:uppercase;white-space:nowrap;}
-  .status-done{color:var(--green);background:var(--green-bg);border:1px solid var(--green-line);}
-  .status-flag{color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);}
-  .status-idle{display:inline-block;width:8px;height:8px;border-radius:99px;background:#d3dde4;margin-top:6px;}
-  .last{font-family:var(--mono);font-size:11.5px;color:var(--ink3);margin-top:6px;}
+/* GOALS */
+.goals-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:18px;}
+@media(max-width:480px){.goals-grid{grid-template-columns:1fr;}}
+.goal-pill{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#fff;padding:8px 13px;border-radius:8px;}
 
-  .load-box{margin-top:11px;display:flex;align-items:center;justify-content:space-between;background:#f6f9fb;border:1px solid var(--line2);border-radius:10px;padding:7px 11px;}
-  .load-label{font-size:10px;letter-spacing:.16em;color:var(--ink3);font-weight:700;text-transform:uppercase;}
-  .load-controls{display:flex;align-items:center;gap:12px;}
-  .load-num{font-family:var(--mono);font-size:26px;font-weight:700;min-width:64px;text-align:center;}
-  .load-unit{font-size:13px;color:var(--ink3);margin-left:3px;}
+/* STRUCTURE */
+.structure-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px;}
+.struct-card{border-radius:10px;overflow:hidden;border-width:1.5px;border-style:solid;}
+.struct-head{padding:7px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.struct-body{padding:8px;text-align:center;}
+.struct-type{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;margin-bottom:2px;}
+.struct-desc{font-size:11px;color:var(--grey);}
 
-  .stepper{width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #cfd9e1;color:#46586a;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:20px;line-height:1;font-weight:500;}
-  .stepper.sm{width:32px;height:32px;font-size:17px;}
-  .stepper:active{background:#eef2f6;}
+/* SHIFT NOTE */
 
-  .sets{margin-top:11px;display:flex;flex-direction:column;gap:8px;}
-  .set{display:flex;align-items:center;gap:8px;}
-  .set-label{font-family:var(--mono);font-size:11px;color:var(--ink3);width:26px;}
-  .set-reps{font-family:var(--mono);font-size:16px;font-weight:600;width:30px;text-align:center;}
-  .set-reps.done{color:var(--green);}
-  .set-spacer{flex:1;}
-  .set-toggle{width:88px;height:38px;border-radius:10px;border:1.5px solid #c4d0da;background:#fff;color:var(--ink2);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px;}
-  .set-toggle.done{background:var(--green-fill);border-color:var(--green-fill);color:#fff;}
 
-  .flagbox{margin-top:11px;display:flex;gap:8px;align-items:flex-start;background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:10px;padding:9px 11px;color:var(--amber);}
-  .flagbox .tri{font-size:13px;line-height:1.4;}
-  .flagbox .txt{font-size:12.5px;font-weight:600;line-height:1.4;}
+/* SESSION TABS */
+.session-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;}
+.stab{border-radius:10px;border-width:2px;border-style:solid;padding:9px 4px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;transition:all 0.18s;text-align:center;line-height:1.2;}
+.stab .s-sub{font-size:9px;font-weight:400;opacity:0.8;margin-top:3px;}
 
-  /* reference */
-  .ref-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 16px;color:var(--ink2);box-shadow:var(--shadow);}
-  .ref-btn span{font-size:11px;letter-spacing:.18em;font-weight:700;text-transform:uppercase;}
-  .chev{transition:transform .2s;font-size:12px;}
-  .chev.open{transform:rotate(180deg);}
-  .ref-panel{margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:4px 16px;box-shadow:var(--shadow);}
-  .ref-item{padding:11px 0;border-top:1px solid var(--line2);}
-  .ref-item:first-child{border-top:none;}
-  .ref-t{font-size:13px;font-weight:700;color:var(--ink);}
-  .ref-d{font-size:12.5px;color:var(--ink2);line-height:1.5;margin-top:3px;}
+/* SESSION CARD */
+.session-card{border-radius:12px;overflow:hidden;border-width:2px;border-style:solid;}
+.sc-head{padding:12px 16px;}
+.sc-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:3px;}
+.sc-sub{font-size:11px;color:rgba(255,255,255,0.7);}
 
-  /* bottom bar */
-  .bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(237,240,243,.95);backdrop-filter:blur(8px);border-top:1px solid var(--line);}
-  .bar-inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));}
-  .rest{display:flex;align-items:center;gap:8px;flex:1;}
-  .rest svg{color:var(--ink3);flex:0 0 auto;}
-  .rest-chip{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #cfd9e1;border-radius:7px;padding:7px 9px;}
-  .rest-time{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--green);min-width:58px;}
-  .rest-time.zero{color:var(--amber);}
-  .rest-mini{font-size:12px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #cfd9e1;border-radius:7px;padding:7px 9px;}
-  .rest-mini.ghost{background:transparent;}
-  .finish-btn{background:var(--green-fill);color:#fff;font-size:14px;font-weight:700;border-radius:10px;padding:12px 18px;white-space:nowrap;box-shadow:0 1px 2px rgba(16,185,129,.4);}
+/* BLOCK HEADS */
+.bh{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.8px;color:#fff;padding:5px 14px;margin:0;}
 
-  .loading{min-height:100vh;display:flex;align-items:center;justify-content:center;color:#9fb0bd;}
+/* SESSION ITEMS */
+.si{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:9px 14px;border-top:1px solid rgba(0,0,0,0.07);align-items:start;}
+@media(max-width:440px){.si{grid-template-columns:1fr;}}
+.si-phase{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding-top:1px;line-height:1.4;}
+.si-detail{font-size:12px;line-height:1.6;color:var(--grey);}
+
+/* GEAR TAGS */
+.gear-tags{display:flex;flex-wrap:wrap;gap:4px;margin:5px 0 4px;}
+.gear-tag{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:#fff;border-radius:12px;padding:2px 8px;white-space:nowrap;}
+.gear-toggle{display:inline-flex;align-items:center;background:none;border:1px solid currentColor;border-radius:10px;padding:2px 8px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;cursor:pointer;}
+.gear-note{display:none;background:rgba(255,255,255,0.65);border-radius:7px;padding:7px 10px;font-size:11px;color:var(--grey);line-height:1.55;margin-top:5px;border-left:3px solid currentColor;}
+.gear-note.open{display:block;}
+
+/* POOL DISTANCE INPUTS */
+.pool-set{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:7px 14px;border-top:1px solid rgba(0,0,0,0.06);}
+.pool-set-name{font-size:12px;color:var(--grey);line-height:1.4;}
+.pool-set-name b{font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--pool);display:block;margin-bottom:1px;}
+.dist-wrap{display:flex;align-items:center;gap:4px;}
+.dist-input{width:62px;border:1.5px solid #BBD6F0;border-radius:7px;padding:5px 6px;font-size:13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--pool);text-align:center;background:#fff;outline:none;}
+.dist-input:focus{border-color:var(--pool);}
+.dist-log-btn{background:var(--pool);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+.dist-log-btn.ocean{background:var(--ocean);}
+.dist-log-prev{font-size:10px;color:#888;padding:1px 14px 5px;font-style:italic;}
+.dist-log-prev b{color:var(--pool);font-style:normal;}
+.dist-log-prev.ocean b{color:var(--ocean);}
+.dist-unit{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:#888;font-weight:700;}
+
+/* WEIGHT TRACKER */
+.wt-row{margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.wt-prev{font-size:11px;color:#888;font-style:italic;flex:1;min-width:100px;}
+.wt-prev b{color:var(--gym);font-style:normal;}
+.wt-input{width:64px;border:1.5px solid #c8e6c9;border-radius:7px;padding:5px 6px;font-size:13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--gym);text-align:center;background:#fff;outline:none;}
+.wt-input:focus{border-color:var(--gym);}
+.wt-btn{background:var(--gym);color:#fff;border:none;border-radius:7px;padding:6px 11px;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.wt-label{font-size:10px;color:#888;font-family:'Barlow Condensed',sans-serif;}
+.eq-seg{display:flex;width:max-content;margin-top:8px;border:1.5px solid #c8e6c9;border-radius:8px;overflow:hidden;background:#fff;}
+.eq-seg button{border:none;background:transparent;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#6B7280;padding:7px 11px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.eq-seg button+button{border-left:1px solid #e5e7eb;}
+.eq-seg button.on{background:var(--navy);color:#fff;}
+.eq-tag{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.3px;border-radius:10px;padding:2px 7px;color:#fff;flex-shrink:0;}
+.eq-bb{background:#1A2B4A;}.eq-db{background:#2D7D46;}.eq-mc{background:#7B3FA0;}
+
+/* DAY C TOGGLE */
+.dc-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.dc-btn{border-radius:10px;border:2px solid;padding:12px 8px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;text-align:center;transition:all 0.18s;line-height:1.2;}
+.dc-btn .s-sub{font-size:10px;font-weight:400;opacity:0.8;margin-top:3px;}
+
+/* TECHNIQUE TABLES */
+.tip-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;}
+.tip-table td{padding:8px 11px;font-size:12px;border-top:1px solid #BBD6F0;vertical-align:top;}
+.tip-table tr:nth-child(odd) td{background:var(--pale-blue);}
+.tip-table tr:nth-child(even) td{background:#fff;}
+.tip-table td:first-child{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--pool);width:140px;}
+
+.ex-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;margin-bottom:14px;}
+.ex-table th{background:var(--gym);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:8px 10px;text-align:left;}
+.ex-table td{padding:8px 10px;font-size:12px;border-top:1px solid #c8e6c9;vertical-align:top;line-height:1.5;}
+.ex-table tr:nth-child(odd) td{background:var(--pale-grn);}
+.ex-table tr:nth-child(even) td{background:#fff;}
+.ex-table td:first-child{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--gym);font-size:12px;width:130px;}
+
+.scapula-box{background:var(--pale-pur);border:1.5px solid var(--rehab);border-radius:10px;padding:13px 16px;margin-bottom:14px;}
+.scapula-box p{font-size:12px;line-height:1.65;margin-bottom:10px;}
+.scapula-row{display:grid;grid-template-columns:155px 1fr;gap:10px;padding:6px 0;border-top:1px solid rgba(123,63,160,0.15);font-size:12px;line-height:1.5;}
+.ex-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:var(--rehab);}
+.scapula-warn{margin-top:11px;font-size:11px;font-weight:700;font-style:italic;color:var(--orange);}
+
+.gear-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;margin-bottom:14px;}
+.gear-table th{background:var(--navy);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:8px 10px;text-align:left;}
+.gear-table td{padding:8px 9px;font-size:11px;line-height:1.5;border-top:1px solid rgba(0,0,0,0.06);vertical-align:top;}
+.gear-table td:first-child{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;}
+.gear-caution{color:#8B0000!important;}
+
+.stretch-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;}
+.stretch-table th{background:var(--teal);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:8px 11px;text-align:left;}
+.stretch-table td{padding:7px 11px;font-size:12px;border-top:1px solid #AADDDD;vertical-align:top;line-height:1.5;}
+.stretch-table tr:nth-child(odd) td{background:var(--pale-teal);}
+.stretch-table tr:nth-child(even) td{background:#fff;}
+.stretch-table td:first-child{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--teal);font-size:12px;}
+
+/* NUTRITION */
+.nutr-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;margin-bottom:14px;}
+.nutr-table td{padding:9px 11px;font-size:12px;border-top:1px solid #AADDDD;vertical-align:top;line-height:1.6;}
+.nutr-table tr:nth-child(odd) td{background:var(--pale-teal);}
+.nutr-table tr:nth-child(even) td{background:#fff;}
+.nutr-table td:first-child{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--teal);font-size:12px;width:100px;}
+.nutr-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+@media(max-width:460px){.nutr-cards{grid-template-columns:1fr;}}
+.nutr-card{border-radius:10px;padding:13px;border-width:1.5px;border-style:solid;}
+.nutr-card h4{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;margin-bottom:7px;}
+.nutr-card ul{padding-left:16px;font-size:12px;line-height:2;}
+.night-box{background:var(--pale-pur);border:1.5px solid var(--rehab);border-radius:10px;padding:13px 16px;}
+.night-box h4{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--rehab);margin-bottom:7px;}
+.night-box p{font-size:12px;line-height:1.65;}
+
+/* PROGRESS */
+.prog-header-row{display:grid;gap:6px;margin-bottom:6px;}
+.prog-date-input{border:1.5px solid var(--orange);border-radius:6px;padding:5px 7px;font-size:11px;font-family:'Barlow',sans-serif;color:var(--grey);text-align:center;outline:none;width:100%;}
+.prog-test-card{background:#fff;border-radius:12px;overflow:hidden;margin-bottom:10px;box-shadow:0 1px 6px rgba(0,0,0,0.08);}
+.prog-test-head{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:1.5px;color:#fff;background:var(--navy);padding:9px 14px;text-transform:uppercase;}
+.prog-no-entry{font-size:11px;color:#94A3B8;padding:9px 14px;font-style:italic;}
+.prog-entry{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid #F3F4F6;gap:10px;}
+.prog-entry-val{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--navy);min-width:60px;}
+.prog-entry-date{flex:1;font-size:11px;color:#94A3B8;}
+.prog-entry-del{background:#FEE2E2;border:none;border-radius:8px;color:#EF4444;font-size:16px;font-weight:700;cursor:pointer;padding:8px 12px;-webkit-tap-highlight-color:transparent;min-width:40px;min-height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.prog-add-form{padding:8px 14px;border-top:1px solid #F3F4F6;background:#F8FAFC;display:none;}
+.prog-add-row{display:flex;gap:6px;align-items:center;}
+.prog-val-input{flex:1;border:1.5px solid var(--teal);border-radius:7px;padding:6px 8px;font-size:13px;font-family:'Barlow',sans-serif;outline:none;color:var(--grey);min-width:0;}
+.prog-date-input{border:1.5px solid #CBD5E1;border-radius:7px;padding:6px 6px;font-size:11px;font-family:'Barlow',sans-serif;outline:none;color:var(--grey);max-width:120px;}
+.prog-add-btn{background:var(--teal);color:#fff;border:none;border-radius:7px;padding:6px 11px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}
+.prog-cancel-btn{background:none;border:1px solid #ddd;border-radius:7px;padding:6px 8px;font-size:13px;cursor:pointer;color:#aaa;flex-shrink:0;}
+.prog-add-trigger{display:block;width:100%;background:none;border:none;border-top:1px solid #F3F4F6;padding:9px 14px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--teal);cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;}
+.safety-note{background:var(--light);border:1px solid #ccc;border-radius:8px;padding:11px 14px;font-size:11.5px;line-height:1.7;color:var(--grey);margin-top:14px;}
+
+/* OCEAN */
+.ocean-safety{background:#e8f7f7;border:1.5px solid var(--ocean);border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.ocean-safety h4{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--ocean);margin-bottom:7px;}
+.ocean-safety ul{padding-left:16px;font-size:12px;line-height:1.9;}
+
+.opt-note{background:var(--pale-red);border:1px solid var(--run);border-radius:8px;padding:9px 13px;margin-top:10px;font-size:12px;color:var(--run);font-style:italic;}
+.run-box{background:var(--pale-red);border:1.5px solid var(--run);border-radius:10px;padding:13px 16px;margin-top:14px;}
+.run-box h4{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--run);margin-bottom:7px;}
+.run-box p{font-size:12px;line-height:1.65;}
+.wake-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:20px;border:1px solid var(--teal);opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+b{font-weight:600;}
+.goals-card{background:#fff;border:1px solid #ddd;border-radius:10px;overflow:hidden;margin-bottom:4px;}
+.goal-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,0.07);}
+.goal-item:last-child{border-bottom:none;}
+.goal-tick{background:none;border:2px solid var(--teal);border-radius:50%;width:26px;height:26px;min-width:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--teal);-webkit-tap-highlight-color:transparent;transition:all 0.15s;flex-shrink:0;}
+.goal-tick:active{background:var(--teal);color:#fff;}
+.goal-text{flex:1;font-size:13px;color:var(--grey);line-height:1.4;cursor:pointer;}
+.goal-del{background:none;border:none;color:#ccc;font-size:20px;cursor:pointer;padding:0 4px;-webkit-tap-highlight-color:transparent;flex-shrink:0;}
+.add-goal-btn{display:flex;align-items:center;gap:8px;padding:11px 14px;color:var(--teal);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;background:none;border:none;cursor:pointer;width:100%;border-top:1px solid rgba(0,0,0,0.07);-webkit-tap-highlight-color:transparent;}
+.achieved-card{background:#fff;border:1px solid #ddd;border-radius:10px;overflow:hidden;}
+.achieved-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid rgba(0,0,0,0.07);}
+.achieved-item:last-child{border-bottom:none;}
+.achieved-tick{color:#fff;background:var(--teal);border-radius:50%;width:24px;height:24px;min-width:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px;}
+.achieved-text{font-size:13px;color:var(--grey);line-height:1.4;font-weight:600;}
+.achieved-date{font-size:11px;color:#999;margin-top:2px;}
+.nutr-blurb{background:var(--pale-teal);border:1px solid var(--teal);border-radius:8px;padding:10px 14px;margin-bottom:18px;}
+.nutr-blurb-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.8px;color:var(--teal);margin-bottom:6px;}
+.nutr-blurb-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;}
+@media(max-width:480px){.nutr-blurb-grid{grid-template-columns:1fr;}}
+.nutr-blurb-item{font-size:11px;color:var(--grey);line-height:1.5;padding:2px 0;border-bottom:1px solid rgba(14,124,123,0.1);}
+.nutr-blurb-item b{color:var(--teal);}
+
+/* ─── DASHBOARD REDESIGN ─────────────────────────────── */
+body{background:#EAECF0;}
+
+/* App Header */
+.app-header{position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,0.25);}
+.app-bar{background:linear-gradient(160deg,#1e5aa8 0%,#163b78 60%,#0f2d62 100%);padding:14px 16px 10px;position:relative;overflow:hidden;}
+.app-bar::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(255,255,255,0.07) 0%,transparent 60%);pointer-events:none;}
+.app-bar-content{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;position:relative;z-index:1;}
+.app-bar-left{}
+.app-bar-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:1.5px;line-height:1;}
+.app-bar-sub{font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
+.app-bar-right{text-align:right;}
+.app-bar-time{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1;letter-spacing:1px;}
+.app-bar-date{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.5px;text-align:right;margin-top:3px;line-height:1;}
+.app-bar-meta{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:rgba(255,255,255,0.5);margin-top:3px;display:flex;align-items:center;gap:4px;justify-content:flex-end;}
+.app-bar-weather{font-size:18px;color:rgba(255,255,255,0.9);}
+#wakeLockBtn{display:inline-block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:rgba(255,255,255,0.55);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.2s;position:relative;z-index:1;margin-top:6px;}
+#wakeLockBtn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
+
+/* Tab Nav */
+.tab-nav{background:rgba(15,42,88,0.95);backdrop-filter:blur(4px);overflow-x:auto;scrollbar-width:none;display:flex;border-top:1px solid rgba(255,255,255,0.08);}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav-inner{display:flex;padding:0 4px;}
+.tnav-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;color:rgba(255,255,255,0.4);background:transparent;border:none;border-bottom:2px solid transparent;padding:10px 12px 8px;cursor:pointer;white-space:nowrap;transition:all 0.18s;-webkit-tap-highlight-color:transparent;}
+.tnav-btn.active{color:#fff;border-bottom-color:#7ecbcc;}
+
+/* Content */
+.content{max-width:860px;margin:0 auto;padding:14px 12px 80px;}
+
+/* Stats strip in dashboard */
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:20px;}
+@media(max-width:480px){.dash-stats{grid-template-columns:repeat(2,1fr);}}
+.dash-stat{background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.08);-webkit-tap-highlight-color:transparent;}
+.dash-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94A3B8;margin-bottom:4px;}
+.dash-stat-value{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#0E1B35;line-height:1;}
+.dash-stat-input{background:transparent;border:none;border-bottom:1.5px solid var(--teal);color:#0E1B35;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;width:100%;text-align:center;outline:none;}
+
+/* Dashboard section labels */
+.dash-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
+
+/* Dashboard cards */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.dash-card{border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.1);transition:transform 0.12s,box-shadow 0.12s;-webkit-tap-highlight-color:transparent;border:none;}
+.dash-card:active{transform:scale(0.97);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
+.dash-card-h{padding:14px 14px 10px;}
+.dash-card-icon{font-size:26px;line-height:1;margin-bottom:6px;}
+.dash-card-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:#fff;letter-spacing:0.5px;line-height:1.1;}
+.dash-card-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+.dash-card-b{padding:8px 14px 13px;background:#fff;}
+.dash-card-desc{font-size:11px;color:#6B7280;line-height:1.4;}
+
+/* Goals section */
+.dash-goals-head{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
+
+/* Section heads — subtle improvement */
+.sh{border-radius:0;margin-left:0;margin-right:0;}
+
+/* Cards get shadows throughout */
+.session-card{box-shadow:0 2px 12px rgba(0,0,0,0.09);}
+.acc-section{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
+.ncard{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
+.goals-card,.nutr-blurb{box-shadow:0 1px 6px rgba(0,0,0,0.08);}
+
+/* ─── SECTION NAVIGATION ─────────────────────────────── */
+#backBtn{display:none;align-items:center;gap:6px;background:none;border:none;color:rgba(255,255,255,0.9);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.5px;padding:2px 0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+#backBtn:before{content:'←';font-size:18px;}
+#sectionNameArea{display:none;}
+.section-group-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;color:#94A3B8;text-transform:uppercase;margin:16px 0 6px;padding:0 2px;}
+.section-group-label:first-child{margin-top:0;}
+.nav-card{background:#fff;border-radius:13px;display:flex;align-items:center;margin-bottom:8px;overflow:hidden;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,0.08);-webkit-tap-highlight-color:transparent;transition:opacity 0.1s,transform 0.1s;}
+.nav-card:active{opacity:0.85;transform:scale(0.99);}
+.nav-card-icon{min-width:68px;min-height:72px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.nav-card-body{flex:1;padding:13px 12px;}
+.nav-card-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#1E293B;letter-spacing:0.5px;line-height:1;}
+.nav-card-desc{font-size:11px;color:#94A3B8;margin-top:4px;line-height:1.4;}
+.nav-card-chev{font-size:18px;color:#CBD5E1;padding:0 16px;flex-shrink:0;font-family:'Barlow Condensed',sans-serif;}
+
+.data-bar{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid #E8EBF0;}
+.data-btn{flex:1;padding:10px 12px;border-radius:10px;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.data-btn-export{background:#E3F2FD;color:#1565C0;}
+.data-btn-import{background:#E8F5E9;color:#2E7D32;}
+.dist-hist-btn{background:rgba(29,125,179,0.12);color:var(--pool);border:1px solid rgba(29,125,179,0.25);border-radius:6px;padding:4px 7px;font-family:"Barlow Condensed",sans-serif;font-size:10px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap;letter-spacing:0.3px;}
+/* Prevent iOS auto-zoom on input focus */
+input,select,textarea{font-size:16px !important;}
 </style>
 </head>
 <body>
-<div id="root"><div class="loading">Loading…</div></div>
+
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay" style="display:flex;position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#1e5aa8,#163b78,#0f2d62);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:20px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#1A2B4A;letter-spacing:1px;margin-bottom:4px;">LANE'S TRAINING PLAN</div>
+    <div style="font-family:'Barlow',sans-serif;font-size:13px;color:#888;margin-bottom:28px;">Sign in to access your training data</div>
+    <input id="authEmail" type="email" placeholder="Email address" autocomplete="email" style="width:100%;padding:13px 14px;border:1.5px solid #dde3ea;border-radius:10px;font-size:16px;font-family:'Barlow',sans-serif;margin-bottom:12px;outline:none;box-sizing:border-box;">
+    <input id="authPassword" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;padding:13px 14px;border:1.5px solid #dde3ea;border-radius:10px;font-size:16px;font-family:'Barlow',sans-serif;margin-bottom:8px;outline:none;box-sizing:border-box;">
+    <div id="authError" style="color:#e63946;font-size:13px;font-family:'Barlow',sans-serif;min-height:20px;margin-bottom:12px;"></div>
+    <button onclick="authSignIn()" style="width:100%;background:linear-gradient(135deg,#1e5aa8,#0f2d62);color:#fff;border:none;border-radius:10px;padding:14px;font-size:16px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:1px;cursor:pointer;margin-bottom:10px;">SIGN IN</button>
+    <div id="authMsg" style="text-align:center;color:#2D7D46;font-size:13px;font-family:'Barlow',sans-serif;min-height:20px;margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- APP HEADER -->
+<header class="app-header">
+  <div class="app-bar">
+    <div class="app-bar-content">
+      <div class="app-bar-left">
+        <div class="app-bar-title">LANE'S TRAINING PLAN</div>
+        <div class="app-bar-sub">Pool · Gym · Ocean</div>
+      </div>
+      <div class="app-bar-right">
+        <div class="app-bar-time" id="live-time">--:--</div>
+        <div class="app-bar-date" id="live-date">--- -- ---</div>
+        <div class="app-bar-meta">
+          <span id="live-weather" class="app-bar-weather"></span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;">
+      <button id="wakeLockBtn" onclick="toggleWakeLock()">☀️ Screen on</button>
+      <button id="signOutBtn" onclick="authSignOut()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:20px;color:rgba(255,255,255,0.55);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;cursor:pointer;margin-top:6px;">SIGN OUT</button>
+      <span id="syncState" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.5px;color:rgba(126,203,204,0.8);margin-top:6px;"></span>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <div class="tab-nav-inner">
+      <button class="tnav-btn active" onclick="showTab('overview',this)">Home</button>
+      <button class="tnav-btn" onclick="showTab('sessions',this)">Sessions</button>
+      <button class="tnav-btn" onclick="showTab('technique',this)">Technique</button>
+      <button class="tnav-btn" onclick="showTab('cognitive',this)">Cognitive</button>
+      <button class="tnav-btn" onclick="showTab('nutrition',this)">Nutrition</button>
+      <button class="tnav-btn" onclick="showTab('goals',this)">Goals</button>
+      <button class="tnav-btn" onclick="showTab('progress',this)">Progress</button>
+      <button class="tnav-btn" onclick="showTab('achieved',this)">Achieved</button>
+    </div>
+  </nav>
+</header>
+
+<div class="content">
+
+<!-- ══ OVERVIEW / DASHBOARD ══ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <!-- Stats -->
+  <div class="dash-stats" style="margin-top:0">
+    <div class="dash-stat" onclick="editStat(this,'pressups')"><div class="dash-stat-label">Press-ups PB</div><div class="dash-stat-value" id="sv-pressups">—</div></div>
+    <div class="dash-stat" onclick="editStat(this,'deadlift')"><div class="dash-stat-label">Deadlift PB</div><div class="dash-stat-value" id="sv-deadlift">60 kg</div></div>
+    <div class="dash-stat" onclick="editStat(this,'swimmax')"><div class="dash-stat-label">Swim PB (no fins)</div><div class="dash-stat-value" id="sv-swimmax">100m</div></div>
+    <div class="dash-stat" onclick="editStat(this,'swimfins')"><div class="dash-stat-label">Swim PB (fins)</div><div class="dash-stat-value" id="sv-swimfins">—</div></div>
+  </div>
+
+  <!-- 8-day cycle targets — compact -->
+  <div class="dash-label">8-DAY CYCLE — TRAINING TARGETS</div>
+  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08);margin-bottom:20px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;">
+      <div style="padding:10px 14px;border-right:1px solid #F3F4F6;display:flex;align-items:center;gap:10px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--pool);line-height:1;">2</div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--pool);letter-spacing:0.5px;">🏊 SWIMS</div>
+          <div style="font-size:10px;color:#94A3B8;margin-top:1px;">per cycle · aim</div>
+        </div>
+      </div>
+      <div style="padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--gym);line-height:1;">1–2</div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--gym);letter-spacing:0.5px;">🏋 GYM</div>
+          <div style="font-size:10px;color:#94A3B8;margin-top:1px;">per cycle · aim</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cognitive conditioning quick ref -->
+  <div class="dash-label">COGNITIVE CONDITIONING</div>
+  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08);margin-bottom:20px;">
+    <div style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
+      <span style="font-size:22px;width:32px;text-align:center;">🚿</span>
+      <div style="flex:1;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#00838F;">COLD SHOWERS</div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">3 min cold at end of shower · Daily</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
+      <span style="font-size:22px;width:32px;text-align:center;">💨</span>
+      <div style="flex:1;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#3949AB;">BOX BREATHING</div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">Inhale 4 · Hold 4 · Exhale 4 · Hold 4 · Repeat 4–6 times · Daily</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;padding:12px 14px;gap:12px;">
+      <span style="font-size:22px;width:32px;text-align:center;">🔥</span>
+      <div style="flex:1;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#BF360C;">SAUNA</div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">15–20 min · Twice per week · 500ml water before and after</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nutrition quick ref -->
+  <div class="dash-label">NUTRITION</div>
+  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08);">
+    <div style="display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
+      <span style="font-size:20px;width:32px;text-align:center;">💧</span>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#1565C0;flex:1;">DAILY WATER</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#1565C0;">2–3L</div>
+    </div>
+    <div style="display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
+      <span style="font-size:20px;width:32px;text-align:center;">🥩</span>
+      <div style="flex:1;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#C62828;">PROTEIN</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#C62828;">30–40g <span style="font-size:10px;font-weight:700;color:#94A3B8;">meal</span></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#C62828;">15–20g <span style="font-size:10px;font-weight:700;color:#94A3B8;">snack</span></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;padding:11px 14px;gap:12px;">
+      <span style="font-size:20px;width:32px;text-align:center;">🍬</span>
+      <div style="flex:1;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#F57F17;">ADDED SUGAR</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#F57F17;">&lt;10g <span style="font-size:10px;font-weight:700;color:#94A3B8;">per 100g</span></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#F57F17;">&lt;5g <span style="font-size:10px;font-weight:700;color:#94A3B8;">per snack</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="data-bar">
+    <button class="data-btn data-btn-export" onclick="exportData()">⬆ Export my data</button>
+    <button class="data-btn data-btn-import" onclick="importData()">⬇ Import data</button>
+  </div>
+</div>
+<!-- ══ SESSIONS ══ -->
+<div id="tab-sessions" class="tab-panel">
+  <div class="sh" style="background:var(--teal);margin-top:0">SELECT A SESSION</div>
+  <div class="session-tabs">
+    <button class="stab" id="stab-dayA" style="border-color:var(--pool);background:var(--pool);color:#fff" onclick="showSession('dayA',this)">Day A<div class="s-sub">Pool</div></button>
+    <button class="stab" id="stab-dayB" style="border-color:var(--gym);background:var(--pale-grn);color:var(--gym)" onclick="showSession('dayB',this)">Day B<div class="s-sub">Gym</div></button>
+    <button class="stab" id="stab-dayC" style="border-color:var(--ocean);background:var(--pale-ocean);color:var(--ocean)" onclick="showSession('dayC',this)">Day C<div class="s-sub">Ocean / Gym</div></button>
+  </div>
+
+  <!-- ═ DAY A — POOL ═ -->
+  <div id="session-dayA" class="session-card" style="border-color:var(--pool)">
+    <div class="sc-head" style="background:var(--pool)">
+      <div class="sc-title">Day A · POOL — Technique &amp; Freestyle</div>
+      <div class="sc-sub">Set your own distances · tap any distance to edit · saves automatically</div>
+    </div>
+    <div style="background:var(--pale-blue)">
+
+      <div class="bh" style="background:rgba(29,125,179,0.2)">WARM-UP</div>
+      <div class="pool-set"><div class="pool-set-name"><b>Kickboard kick</b>Ankles floppy, kick from hip, short fast kicks. Keep hips at surface.</div><div class="dist-wrap"><input class="dist-input" data-key="wu-kick" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="wu-kick-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('wu-kick')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('wu-kick')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-wu-kick"></div>
+      <div class="pool-set"><div class="pool-set-name"><b>Easy freestyle</b>Bilateral breathing every 3 strokes. Relaxed long stroke. Easy effort.</div><div class="dist-wrap"><input class="dist-input" data-key="wu-free" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="wu-free-reps" value="2" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('wu-free')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('wu-free')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-wu-free"></div>
+
+      <div class="bh" style="background:rgba(29,125,179,0.2)">DRILL BLOCK</div>
+      <div class="pool-set"><div class="pool-set-name"><b>Catch-up drill</b>Pause lead hand at extension until trailing hand arrives. Long stroke timing.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-dk)">🤿 Snorkel optional</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db-catchup" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db-catchup-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db-catchup')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db-catchup')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-db-catchup"></div>
+      <div class="pool-set"><div class="pool-set-name"><b>Fingertip drag</b>Drag fingertips along surface on recovery — builds high elbow habit.</div><div class="dist-wrap"><input class="dist-input" data-key="db-drag" value="25" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db-drag-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db-drag')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db-drag')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-db-drag"></div>
+
+
+      <div class="bh" style="background:rgba(29,125,179,0.2)">LEG STRENGTH DRILL</div>
+      <div class="pool-set"><div class="pool-set-name"><b>Vertical kick</b>Treading water with arms crossed on chest — kick only. Builds pure leg power without forward movement. Intense.</div><div class="dist-wrap"><input class="dist-input" data-key="leg-vert" value="60" type="number" step="15" min="15"><span class="dist-unit">sec × </span><input class="dist-input" data-key="leg-vert-reps" value="3" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('leg-vert')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('leg-vert')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-leg-vert"></div>
+      <div class="pool-set"><div class="pool-set-name"><b>Kickboard sprint</b>Hard kicking effort — max speed for distance. Full recovery before next rep.</div><div class="dist-wrap"><input class="dist-input" data-key="leg-sprint" value="25" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="leg-sprint-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('leg-sprint')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('leg-sprint')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-leg-sprint"></div>
+
+      <div class="bh" style="background:rgba(29,125,179,0.2)">FREESTYLE SET</div>
+      <div class="pool-set"><div class="pool-set-name"><b>Freestyle intervals</b>Moderate effort. Bilateral breathing throughout. 20-30s rest between reps. Hold consistent stroke rate — not race effort.</div><div class="dist-wrap"><input class="dist-input" data-key="fs-interval" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="fs-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('fs-interval')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('fs-interval')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-fs-interval"></div>
+      <div class="pool-set"><div class="pool-set-name"><b>Continuous freestyle</b>Single effort at comfortable pace. Bilateral breathing. Hold same stroke rhythm as intervals.</div><div class="dist-wrap"><input class="dist-input" data-key="fs-cont" value="100" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="fs-cont-reps" value="1" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('fs-cont')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('fs-cont')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-fs-cont"></div>
+
+      <div onclick="toggleDB2()" style="background:rgba(29,125,179,0.2);display:flex;justify-content:space-between;align-items:center;padding:7px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--navy);">DRILL BLOCK 2 <span style="font-size:10px;font-weight:400;opacity:0.6;">Snorkel · Paddles · Pull Buoy</span></span>
+        <div id="db2-pill" style="border-radius:20px;padding:5px 14px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:0.5px;background:#94A3B8;transition:background 0.2s;flex-shrink:0;">SKIP</div>
+      </div>
+      <div id="db2-body" style="display:none;">
+      <div class="pool-set"><div class="pool-set-name"><b>Snorkel freestyle</b>Focus on body rotation and high elbow catch — breathing removed.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-dk)">🤿 Snorkel</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db2-snorkel" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db2-snorkel-reps" value="2" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db2-snorkel')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db2-snorkel')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-db2-snorkel"></div>
+      <div class="pool-set"><div class="pool-set-name"><b>Hand paddles</b>Slow deliberate strokes. Feel water pressure through full pull phase.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-pur)">🏓 Paddles</span><span class="gear-tag" style="background:var(--gear-red)">🔴 + Pull Buoy</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db2-paddles" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db2-paddles-reps" value="2" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db2-paddles')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db2-paddles')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-db2-paddles"></div>
+      <div class="pool-set"><div class="pool-set-name"><b>Pull buoy</b>Legs passive, arms only. Focus entirely on catch, pull and push phases.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-red)">🔴 Pull Buoy</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db2-buoy" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db2-buoy-reps" value="2" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db2-buoy')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db2-buoy')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-db2-buoy"></div>
+      </div>
+
+      <div class="bh" style="background:rgba(29,125,179,0.2)">FINS BLOCK</div>
+      <div class="pool-set"><div class="pool-set-name"><b>Continuous freestyle with fins</b>Maintain stroke quality across full distance. Bilateral breathing. Don't let technique drop in the second half.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-blue)">🦈 Fins</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="fins-2" value="200" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="fins-2-reps" value="1" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('fins-2')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('fins-2')">History</button></div></div>
+      <div class="dist-log-prev" id="dl-fins-2"></div>
+
+      <div style="background:var(--pool);padding:11px 14px;display:flex;justify-content:space-between;align-items:center;border-top:2px solid rgba(255,255,255,0.15);">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px;">📏 TOTAL SESSION DISTANCE</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:0.5px;" id="pool-total">—</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═ DAY B — GYM ═ -->
+  <div id="session-dayB" class="session-card" style="border-color:var(--gym);display:none">
+    <div class="sc-head" style="background:var(--gym)">
+      <div class="sc-title">Day B · GYM — Full Body Strength</div>
+      <div class="sc-sub">Log your weights — tap Log after each set · previous weight shown automatically</div>
+    </div>
+    <div style="background:var(--pale-grn)">
+
+      <div class="bh" style="background:rgba(45,125,70,0.2)">WARM-UP · ~5 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">BIKE RIDE<br>3–5 min</div><div class="si-detail">Easy to moderate effort on stationary bike. Gets heart rate up and joints warm before loading. No intensity — this is prep.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">THORACIC ROTATIONS<br>2×10 each</div><div class="si-detail">Seated or kneeling, hands behind head. Rotate upper back left and right. Unlocks thoracic stiffness from shift work. Essential pre-lift.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">BODYWEIGHT SQUATS<br>2×10</div><div class="si-detail">Slow controlled descent, pause at bottom. Primes quads, glutes and hip flexors before loading.</div></div>
+
+      <div class="bh" style="background:rgba(45,125,70,0.2)">LEGS · ~15 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">WEIGHTED STEP-UPS<br>25 reps × 2</div><div class="si-detail">50 cm step up onto box. Drive through heel of leading foot and stand tall at the top with a controlled descent. Alternate legs.<div class="wt-row"><span class="wt-prev" id="wtp-step-ups">No previous entry</span><input type="number" class="wt-input" id="wt-step-ups" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('step-ups')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">STANDING CALF RAISES<br>3×15</div><div class="si-detail">Feet shoulder-width on edge of step. Full range — heel below step at bottom, full rise on toes at top. Controlled descent. Add weight when 3×15 feels easy.<div class="wt-row"><span class="wt-prev" id="wtp-calf-raises">No previous entry</span><input type="number" class="wt-input" id="wt-calf-raises" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('calf-raises')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">ROMANIAN DEADLIFT<br>3×10</div><div class="si-detail">Barbell or DBs. Hinge at the hips — soft knee, back flat, send hips back. Lower the weight down the front of your legs until you feel a strong hamstring stretch, then drive hips forward to stand. Slow controlled descent — 3 sec down. Builds the hamstrings and hip hinge pattern that drives kick recovery and posterior chain strength. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-rdl">No previous entry</span><input type="number" class="wt-input" id="wt-rdl" placeholder="kg" step="2.5" min="0"><button class="wt-btn" onclick="logWeight('rdl')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">BULGARIAN SPLIT SQUAT<br>3×6 each</div><div class="si-detail">Rear foot elevated on bench. Front knee tracks over toe — long stride. Controlled descent, drive through front heel to stand. 60 sec rest between sets. Unilateral loading prevents compensation, hip flexor stretch under load directly improves kick range of motion.<div class="wt-row"><span class="wt-prev" id="wtp-split-squat">No previous entry</span><input type="number" class="wt-input" id="wt-split-squat" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('split-squat')">Log ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(123,63,160,0.2)">SHOULDER REHABILITATION · ~12 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">CABLE EXT. ROTATION<br>2×12 each</div><div class="si-detail">Cable at waist height. Upper arm pinned to torso, elbow bent 90°. Rotate forearm away from body. Low or no weight — precision exercise. Targets infraspinatus and teres minor. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-cable-ext-rot">No previous entry</span><input type="number" class="wt-input" id="wt-cable-ext-rot" placeholder="kg" step="0.25" min="0"><button class="wt-btn" onclick="logWeight('cable-ext-rot')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">CABLE EXT. ROT. 90°<br>2×12 each</div><div class="si-detail">Cable at shoulder height. Upper arm abducted 90° from body, elbow bent 90°. Rotate forearm upward toward ceiling. Trains the rotator cuff in an elevated position — directly relevant to the swimming catch. Low weight, controlled. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-cable-ext-90">No previous entry</span><input type="number" class="wt-input" id="wt-cable-ext-90" placeholder="kg" step="0.25" min="0"><button class="wt-btn" onclick="logWeight('cable-ext-90')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">YTW RAISES<br>2×8 each</div><div class="si-detail">Face-down on incline bench, light plates or no weight.<br><b>Y</b> — arms overhead in Y, thumbs up, 2-sec hold.<br><b>T</b> — arms out to sides, 2-sec hold.<br><b>W</b> — elbows 90°, pull back as in double-bicep, 2-sec hold.<br>Complete all 3 shapes before resting. Targets all trapezius fibres. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-ytw">No previous entry</span><input type="number" class="wt-input" id="wt-ytw" placeholder="kg" step="0.25" min="0" style="border-color:#d8b4f8"><button class="wt-btn" onclick="logWeight('ytw')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--rehab)">SERRATUS PUNCH<br>2×10 each</div><div class="si-detail">Lying on back, DB in one hand, arm vertical. Press DB toward ceiling past neutral — fully protract scapula at top. Slow and controlled. Primary serratus anterior isolation drill.<div class="wt-row"><span class="wt-prev" id="wtp-serratus">No previous entry</span><input type="number" class="wt-input" id="wt-serratus" placeholder="kg" step="0.25" min="0" style="border-color:#d8b4f8"><button class="wt-btn" onclick="logWeight('serratus')" style="background:var(--rehab)">Log ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(45,125,70,0.2)">UPPER BODY · ~16 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">SUPERSET A<br>3 rounds</div><div class="si-detail"><b>Do chest press immediately followed by DB rows — no rest between. Rest 60 sec after both.</b><br><br><b>DB Chest Press × 10</b> — lying on bench, controlled descent, elbows no more than 45° flare, pause at chest, press explosively.<br><br><b>DB Bent-Over Rows × 10 each</b> — hinge at hips, back flat. Pull to lower ribs, elbows drive back, squeeze shoulder blades at top. Slow descent. Core braced.<div class="wt-row"><span class="wt-label">Chest press (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-chest-press">No previous entry</span><input type="number" class="wt-input" id="wt-chest-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('chest-press')">Log ✓</button></div><div class="wt-row"><span class="wt-label">DB rows (kg):</span></div><div class="wt-row"><span class="wt-prev" id="wtp-db-rows">No previous entry</span><input type="number" class="wt-input" id="wt-db-rows" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('db-rows')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">LAT PULLDOWN<br>3×10</div><div class="si-detail">Wide overhand grip. Pull bar to upper chest — elbows drive down and back. Don't let shoulders shrug on the return. Rest 60 sec.<div class="wt-row"><span class="wt-prev" id="wtp-lat-pulldown">No previous entry</span><input type="number" class="wt-input" id="wt-lat-pulldown" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('lat-pulldown')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">DB SHOULDER PRESS<br>3×10</div><div class="si-detail">Seated or standing. Forearms directly vertical and in line with trunk throughout — don't let elbows flare forward or drift back. Full lockout at top. Rest 60 sec.<div class="wt-row"><span class="wt-prev" id="wtp-shoulder-press">No previous entry</span><input type="number" class="wt-input" id="wt-shoulder-press" placeholder="kg" step="0.5" min="0"><button class="wt-btn" onclick="logWeight('shoulder-press')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">PUSH-UPS<br>2×max</div><div class="si-detail">Controlled descent, chest to within 2 cm of floor, body in straight line throughout. Go to failure or near-failure on each set — this is where the bulk stimulus comes from. Note your reps each set. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-pushups-b">No previous entry</span><input type="number" class="wt-input" id="wt-pushups-b" placeholder="reps" step="1" min="0"><button class="wt-btn" onclick="logWeight('pushups-b','reps')">Log reps ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(45,125,70,0.2)">CORE · ~7 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">PALLOF PRESS<br>2×10 each</div><div class="si-detail">Cable or band at chest height. Stand sideways to the stack. Hold handle at chest, brace core hard, feet shoulder width. Press handle straight out — hold 2 sec — return to chest. The cable tries to pull you into rotation; your core resists it. This is anti-rotation — the most swimming-specific core pattern. Complete all reps one side then turn and repeat. 45 sec rest between sides.<div class="wt-row"><span class="wt-prev" id="wtp-pallof">No previous entry</span><input type="number" class="wt-input" id="wt-pallof" placeholder="kg" step="2.5" min="0"><button class="wt-btn" onclick="logWeight('pallof')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">DEAD BUG<br>2×10 each</div><div class="si-detail">Lying on back, arms vertical, knees 90°. Lower opposite arm and leg toward floor simultaneously — lower back stays flat to floor throughout. 30 sec rest between sets.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">SIDE PLANK<br>2×30 sec each</div><div class="si-detail">Side-lying, forearm on floor, hips stacked. Body in straight line. Fires lateral core and hip abductors — transfers to swim body rotation stability. 20 sec rest between sides. Log your hold time.<div class="wt-row"><span class="wt-prev" id="wtp-side-plank">No previous entry</span><input type="number" class="wt-input" id="wt-side-plank" placeholder="sec" step="5" min="0"><button class="wt-btn" onclick="logWeight('side-plank','sec')">Log sec ✓</button></div></div></div>
+
+      <div class="bh" style="background:rgba(45,125,70,0.2)">STRETCHING · ~4 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--gym)">ESSENTIAL 3</div><div class="si-detail"><b>Hip flexor lunge</b> — 45s each side. Non-negotiable: tight hip flexors directly cap your kick range of motion.<br><b>Pec doorway stretch</b> — 45s. Swimmers are chronically internally rotated — this counteracts it.<br><b>Child's pose</b> — 45s. Thoracic extension and lat release. Counteracts shift work rounding.<br><br>Everything else — hamstring, glute, lat, neck — do at home or poolside on swim days.</div></div>
+
+    </div>
+  </div>
+
+
+  <!-- ═ DAY C — OCEAN / GYM ═ -->
+  <div id="session-dayC" class="session-card" style="border-color:var(--ocean);display:none">
+    <div class="sc-head" style="background:var(--ocean)">
+      <div class="sc-title">Day C · OCEAN SWIM or GYM</div>
+      <div class="sc-sub">Choose on the day based on conditions, energy and what you need</div>
+    </div>
+    <div style="background:var(--pale-ocean);padding:12px 14px">
+      <div class="dc-toggle">
+        <button class="dc-btn active-dc" id="dc-ocean" style="border-color:var(--ocean);background:var(--ocean);color:#fff" onclick="showDC('ocean',this)">🌊 Ocean Swim<div class="s-sub">Open water session</div></button>
+        <button class="dc-btn" id="dc-gym" style="border-color:var(--gym);background:var(--pale-grn);color:var(--gym)" onclick="showDC('gym',this)">🏋 Gym Session<div class="s-sub">Optional strength</div></button>
+      </div>
+    </div>
+
+    <!-- OCEAN CONTENT -->
+    <div id="dc-content-ocean" style="background:var(--pale-ocean)">
+      <div class="ocean-safety" style="margin:12px 14px 0">
+        <h4>⚠️ SAFETY FIRST — CHECK BEFORE EVERY OCEAN SWIM</h4>
+        <ul>
+          <li>Check surf report — avoid conditions above your current ability</li>
+          <li>Always swim with a buddy or tell someone your plan and return time</li>
+          <li>Wear a brightly coloured swim cap — visibility matters</li>
+          <li>Attach an inflatable tow float for open water</li>
+          <li>Know the rip current escape — swim parallel to shore, not against it</li>
+          <li>Check for marine stingers in your area before entering</li>
+        </ul>
+      </div>
+      <div class="bh" style="background:rgba(10,110,110,0.2);margin-top:10px">WARM-UP</div>
+      <div class="si"><div class="si-phase" style="color:var(--ocean)">BEACH ENTRY</div><div class="si-detail">Easy entry — wade in, start swimming once waist deep. First section is easy effort only. Focus on settling breathing and getting comfortable in the conditions. Sight every 8–10 strokes to a landmark.<div class="dist-wrap" style="margin-top:6px"><input class="dist-input" data-key="ocean-beach" value="300" type="number" step="50" min="50" style="border-color:#4db6ac;color:var(--ocean)"><span class="dist-unit">m</span><button class="dist-log-btn ocean" onclick="logDist('ocean-beach')">Log</button></div>
+      <div class="dist-log-prev ocean" id="dl-ocean-beach"></div></div></div>
+      <div class="bh" style="background:rgba(10,110,110,0.2)">SIGHTING DRILL</div>
+      <div class="si"><div class="si-phase" style="color:var(--ocean)">LANDMARK SIGHT</div><div class="si-detail">Pick a fixed landmark (rock, buoy, headland). Sight every 6 strokes — lift head slightly forward (not side) to sight, then return to normal head position. Builds open water navigation skill. Rest 30s between reps.<div class="dist-wrap" style="margin-top:6px"><input class="dist-input" data-key="ocean-sight" value="200" type="number" step="25" min="25" style="border-color:#4db6ac;color:var(--ocean)"><span class="dist-unit">m total</span><button class="dist-log-btn ocean" onclick="logDist('ocean-sight')">Log</button></div>
+      <div class="dist-log-prev ocean" id="dl-ocean-sight"></div></div></div>
+      <div class="bh" style="background:rgba(10,110,110,0.2)">MAIN SET — CHOOSE ONE</div>
+      <div class="si"><div class="si-phase" style="color:var(--ocean)">OPTION A<br>Continuous</div><div class="si-detail"><b>Distance swim:</b> Swim a set course continuously. Build distance over weeks. Bilateral breathing. Focus on maintaining technique in open water chop.<div class="dist-wrap" style="margin-top:6px"><input class="dist-input" data-key="ocean-optA" value="400" type="number" step="50" min="50" style="border-color:#4db6ac;color:var(--ocean)"><span class="dist-unit">m</span><button class="dist-log-btn ocean" onclick="logDist('ocean-optA')">Log</button></div>
+      <div class="dist-log-prev ocean" id="dl-ocean-optA"></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--ocean)">OPTION B<br>Buoy intervals</div><div class="si-detail"><b>Buoy circuit:</b> If buoys are present, swim circuits at moderate-hard effort. 3–5 laps of a course with 60–90s rest between. Simulates race conditions and navigation challenges.<div class="dist-wrap" style="margin-top:6px"><input class="dist-input" data-key="ocean-optB" value="400" type="number" step="50" min="50" style="border-color:#4db6ac;color:var(--ocean)"><span class="dist-unit">m total</span><button class="dist-log-btn ocean" onclick="logDist('ocean-optB')">Log</button></div>
+      <div class="dist-log-prev ocean" id="dl-ocean-optB"></div></div></div>
+      <div class="bh" style="background:rgba(10,110,110,0.2)">COOL-DOWN</div>
+      <div class="si"><div class="si-phase" style="color:var(--ocean)">EASY SWIM<br>200m</div><div class="si-detail">Slow easy swimming back to the exit point. Let heart rate return to normal. Pool edge: shoulder cross-body 30s each + neck tilt 30s each after exiting.</div></div>
+
+      <div style="background:var(--ocean);padding:10px 14px;border-top:2px solid rgba(255,255,255,0.15);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.8);letter-spacing:1px;">📏 TOTAL — OPTION A</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff;" id="ocean-total-a">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.8);letter-spacing:1px;">📏 TOTAL — OPTION B</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff;" id="ocean-total-b">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GYM CONTENT -->
+    <div id="dc-content-gym" style="background:var(--pale-org);display:none">
+      <div class="bh" style="background:rgba(232,89,12,0.15)">CARDIO · ~20 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">RUN<br>20–25 min</div><div class="si-detail">Easy to moderate. Conversational for first 10 min, then push to where talking is difficult. Log your pace each time to track improvement.</div></div>
+      <div class="bh" style="background:rgba(232,89,12,0.15)">LEGS · ~10 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">WEIGHTED STEP-UPS<br>25 reps</div><div class="si-detail">10kg vest + 8kg kettlebell each hand. Drive through heel, stand tall, controlled descent. Alternate legs.<div class="wt-row"><span class="wt-prev" id="wtp-dc-step-ups">No previous entry</span><input type="number" class="wt-input" id="wt-dc-step-ups" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-step-ups')" style="background:var(--orange)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">HIP THRUSTS<br>3×12</div><div class="si-detail">Upper back on bench, barbell or DB across hips. Drive hips up — full glute squeeze at top, hold 1 sec. Lower controlled. Posterior chain power that transfers directly to swim kick drive. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dc-hip-thrusts">No previous entry</span><input type="number" class="wt-input" id="wt-dc-hip-thrusts" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-hip-thrusts')" style="background:var(--orange)">Log ✓</button></div></div></div>
+      <div class="bh" style="background:rgba(232,89,12,0.15)">UPPER BODY · ~12 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">BENCH PRESS<br>3×10</div><div class="si-detail">Barbell or dumbbells — pick which below. Controlled descent. Elbows 45° flare max. Pause at chest, press explosively.<div class="wt-row"><span class="wt-prev" id="wtp-dc-bench">No previous entry</span><input type="number" class="wt-input" id="wt-dc-bench" placeholder="kg" step="0.5" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-bench')" style="background:var(--orange)">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">PUSH-UP PLUS<br>3×10</div><div class="si-detail">At top of push-up, 'punch' ceiling to protract scapula. Slow 3-sec eccentric.<div class="wt-row"><span class="wt-prev" id="wtp-dc-pushup-plus">No previous entry</span><input type="number" class="wt-input" id="wt-dc-pushup-plus" placeholder="reps" step="1" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-pushup-plus')" style="background:var(--orange)">Log reps ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">PRONE Y-T-W<br>3×8 each</div><div class="si-detail">Incline bench. Y = arms overhead, T = arms wide, W = elbows 90°. 2-sec hold each shape.<div class="wt-row"><span class="wt-prev" id="wtp-dc-ytw">No previous entry</span><input type="number" class="wt-input" id="wt-dc-ytw" placeholder="kg" step="0.25" min="0" style="border-color:#F5B89A"><button class="wt-btn" onclick="logWeight('dc-ytw')" style="background:var(--orange)">Log ✓</button></div></div></div>
+      <div class="bh" style="background:rgba(232,89,12,0.15)">CORE · ~7 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">DEAD BUG<br>3×10 each</div><div class="si-detail">Lower back flat throughout. Opposite arm and leg lower simultaneously.</div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">SIDE PLANK<br>3×30 sec each</div><div class="si-detail">Side-lying, forearm on floor, hips stacked. Body in straight line. 20 sec rest between sides.</div></div>
+      <div class="bh" style="background:rgba(232,89,12,0.15)">STRETCHING · ~6 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)">STRETCHES</div><div class="si-detail">Pec doorway 45s · Lat side-bend 30s each · Shoulder cross-body 30s each · Child's pose 45s · Thoracic roller 45s</div></div>
+      <div class="opt-note">★ Optional day — only when genuinely recovered. Do not run on swim days.</div>
+    </div>
+  </div>
+</div><!-- /sessions tab -->
+
+<!-- ══ TECHNIQUE ══ -->
+<div id="tab-technique" class="tab-panel">
+<style>
+  .tech-sub{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.3px;color:#fff;padding:9px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.15);-webkit-tap-highlight-color:transparent;user-select:none;}
+  .tech-sub-body{display:none;padding:9px 16px 11px;font-size:12px;color:var(--grey);line-height:1.6;background:rgba(255,255,255,0.6);}
+  .tech-sub-body.open{display:block;}
+  .tech-sub-body b{color:#333;}
+  .tech-cat{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;padding:7px 16px 5px;background:rgba(0,0,0,0.25);border-top:1px solid rgba(255,255,255,0.1);}
+
+</style>
+
+  <!-- FREESTYLE SWIMMING TECHNIQUE -->
+  <div class="sh" style="background:var(--pool);margin-top:0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleTech(this)">FREESTYLE SWIMMING TECHNIQUE<span class="tech-arr">▼</span></div>
+  <div class="tech-body" style="display:none;background:var(--pool);">
+    <div class="tech-sub" style="background:rgba(29,125,179,0.75)" onclick="toggleSub(this)">Bilateral breathing<span>▼</span></div>
+    <div class="tech-sub-body">Every 3 strokes, alternate sides. Rotate your head only — not your body. Exhale fully through nose and mouth underwater between breaths.</div>
+    <div class="tech-sub" style="background:rgba(29,125,179,0.75)" onclick="toggleSub(this)">Body rotation<span>▼</span></div>
+    <div class="tech-sub-body">Rotate hips and torso as each arm pulls — this is where power comes from. Aim for 30–45° rotation each stroke. Swimming flat loses significant propulsive force.</div>
+    <div class="tech-sub" style="background:rgba(29,125,179,0.75)" onclick="toggleSub(this)">High elbow catch (EVF)<span>▼</span></div>
+    <div class="tech-sub-body">As lead hand extends forward, bend the elbow so the forearm points down while elbow stays near the surface. Creates a vertical forearm to pull against — not slice through. Fingertip drag drill builds this.</div>
+    <div class="tech-sub" style="background:rgba(29,125,179,0.75)" onclick="toggleSub(this)">Kick from the hip<span>▼</span></div>
+    <div class="tech-sub-body">Drive from the hip — not the knee. Ankles loose, knees soft. Short, fast kicks. Wide bicycle kicks waste energy. Vertical kick drill builds this directly.</div>
+    <div class="tech-sub" style="background:rgba(29,125,179,0.75)" onclick="toggleSub(this)">Long stroke and glide<span>▼</span></div>
+    <div class="tech-sub-body">Reach fully forward on entry. Let hand glide before catching. Catch-up drill trains this — pause the trailing hand until the lead hand has fully extended.</div>
+    <div class="tech-sub" style="background:rgba(29,125,179,0.75)" onclick="toggleSub(this)">Fingertip drag recovery<span>▼</span></div>
+    <div class="tech-sub-body">During arm recovery, drag fingertips along the surface to keep the elbow high. High elbow recovery sets up the correct entry angle for the EVF catch.</div>
+    <div class="tech-sub" style="background:rgba(29,125,179,0.75)" onclick="toggleSub(this)">Snorkel training<span>▼</span></div>
+    <div class="tech-sub-body">Removes breathing so you focus entirely on rotation, head position and arm mechanics. Drill blocks only — main sets need breathing practice.</div>
+  </div>
+
+  <!-- OPEN WATER SWIMMING TECHNIQUE -->
+  <div class="sh" style="background:#1450A0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleTech(this)">OPEN WATER SWIMMING TECHNIQUE<span class="tech-arr">▼</span></div>
+  <div class="tech-body" style="display:none;background:#1450A0;">
+    <div class="tech-sub" style="background:rgba(20,80,160,0.75)" onclick="toggleSub(this)">Sighting<span>▼</span></div>
+    <div class="tech-sub-body">Every 6–10 strokes, lift eyes just above waterline — spot landmark — face back down immediately. Never lift the full head — hips sink. Two strokes between sights.</div>
+    <div class="tech-sub" style="background:rgba(20,80,160,0.75)" onclick="toggleSub(this)">Swimming straight<span>▼</span></div>
+    <div class="tech-sub-body">Without lane lines, drift of 20–30° is common. Sight a fixed landmark every 6 strokes. Aim slightly upshore of your target to compensate for any current. Bilateral breathing prevents one-sided drift.</div>
+    <div class="tech-sub" style="background:rgba(20,80,160,0.75)" onclick="toggleSub(this)">Managing chop and swell<span>▼</span></div>
+    <div class="tech-sub-body">Shorten stroke, increase rate. Breathe away from the swell direction. Sight every 4 strokes in heavy chop. Stay calm if you swallow water — it passes.</div>
+    <div class="tech-sub" style="background:rgba(20,80,160,0.75)" onclick="toggleSub(this)">Current awareness<span>▼</span></div>
+    <div class="tech-sub-body">Observe the water for 2 minutes before entering. Swim across a rip — never against it. In a current, aim upshore so it carries you to your target.</div>
+    <div class="tech-sub" style="background:rgba(20,80,160,0.75)" onclick="toggleSub(this)">Beach entry and exit<span>▼</span></div>
+    <div class="tech-sub-body">Time your entry between sets. Duck-dive through wave bases — not over them. To exit, bodysurf the last wave in then stand as soon as it's shallow. Don't swim through shallow breaking surf.</div>
+    <div class="tech-sub" style="background:rgba(20,80,160,0.75)" onclick="toggleSub(this)">Pacing<span>▼</span></div>
+    <div class="tech-sub-body">Start slower than you think. Second half should match first half effort. If you are working harder to maintain pace, you started too fast.</div>
+    <div class="tech-sub" style="background:rgba(20,80,160,0.75)" onclick="toggleSub(this)">Key differences from pool<span>▼</span></div>
+    <div class="tech-sub-body">Same stroke mechanics, no reference points. Disorientation is normal — it reduces with exposure. Regular ocean sessions build the confidence needed for the Heli PCA test.</div>
+  </div>
+
+  <!-- GYM EXERCISE GUIDE -->
+  <div class="sh" style="background:var(--gym);cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleTech(this)">GYM EXERCISE GUIDE — DAYS B &amp; C<span class="tech-arr">▼</span></div>
+  <div class="tech-body" style="display:none;background:var(--gym);">
+
+    <div class="tech-cat">LEGS</div>
+    <div class="tech-sub" style="background:rgba(45,125,70,0.75)" onclick="toggleSub(this)">Weighted Step-Ups<span>▼</span></div>
+    <div class="tech-sub-body"><b>Full foot on box.</b> Drive through the heel — not the toe. Stand tall at the top. Controlled descent. Don't push off the trailing foot.</div>
+    <div class="tech-sub" style="background:rgba(45,125,70,0.75)" onclick="toggleSub(this)">Romanian Deadlift<span>▼</span></div>
+    <div class="tech-sub-body"><b>Soft knee, back flat.</b> Hinge from the hip — send hips back as weight lowers down the front of your legs. Stop at strong hamstring stretch. Drive hips forward to stand. 3-sec descent.</div>
+    <div class="tech-sub" style="background:rgba(45,125,70,0.75)" onclick="toggleSub(this)">Bulgarian Split Squat<span>▼</span></div>
+    <div class="tech-sub-body"><b>Rear foot elevated.</b> Lower rear knee toward floor. Drive through the front heel. Front knee tracks over second toe — don't let it cave inward.</div>
+    <div class="tech-sub" style="background:rgba(45,125,70,0.75)" onclick="toggleSub(this)">Hip Thrusts<span>▼</span></div>
+    <div class="tech-sub-body"><b>Drive with glutes — not your lower back.</b> Hold 1 sec at the top. Lower slowly. Upper back stays on the bench edge throughout.</div>
+
+    <div class="tech-cat">SHOULDER REHABILITATION</div>
+    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">Serratus Punch<span>▼</span></div>
+    <div class="tech-sub-body"><b>One arm vertical, light DB.</b> Press past vertical — scapula should lift off the floor at the top. Slow. This is the primary serratus anterior exercise.</div>
+    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">Cable Ext. Rotation (arm at side)<span>▼</span></div>
+    <div class="tech-sub-body"><b>Upper arm pinned to torso, elbow 90°.</b> Only the forearm rotates outward. Low or no weight. If the upper arm lifts away, you're compensating — reduce weight.</div>
+    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">Cable Ext. Rotation at 90°<span>▼</span></div>
+    <div class="tech-sub-body"><b>Upper arm parallel to floor, elbow 90°.</b> Rotate forearm upward toward the ceiling — only the forearm moves. Low weight, precision only.</div>
+    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">YTW Raises<span>▼</span></div>
+    <div class="tech-sub-body"><b>Face-down on incline bench.</b> Y — arms overhead, thumbs up, 2-sec hold. T — arms wide, 2-sec hold. W — elbows 90° pulled back, 2-sec hold. All three shapes before resting.</div>
+    <div class="tech-sub" style="background:rgba(123,63,160,0.75)" onclick="toggleSub(this)">Push-Up Plus<span>▼</span></div>
+    <div class="tech-sub-body"><b>Standard push-up, then at the top:</b> push further — round the upper back as the scapula protracts fully forward. Hold 1 sec. 3-sec eccentric down.</div>
+
+    <div class="tech-cat">UPPER BODY</div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">DB Chest Press<span>▼</span></div>
+    <div class="tech-sub-body"><b>Elbows max 45° from torso.</b> Pause at chest. Press explosively. Core braced — don't arch off the bench. Move straight to rows in the superset.</div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">DB Bent-Over Rows<span>▼</span></div>
+    <div class="tech-sub-body"><b>Back flat, hinge at hips.</b> Pull DBs to lower ribs — elbows back, not out. Squeeze shoulder blades together at top. Lower slowly.</div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">Lat Pulldown<span>▼</span></div>
+    <div class="tech-sub-body"><b>Wide grip.</b> Pull to upper chest, elbows drive down and back. Don't let shoulders shrug on the return — lower with full control.</div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">DB Shoulder Press<span>▼</span></div>
+    <div class="tech-sub-body"><b>Forearms directly vertical and in line with the trunk</b> throughout — not angled forward or back. Press to full lockout overhead.</div>
+    <div class="tech-sub" style="background:rgba(26,58,92,0.85)" onclick="toggleSub(this)">Push-Ups<span>▼</span></div>
+    <div class="tech-sub-body"><b>Chest within 2cm of floor.</b> Body straight throughout — no sagging or piking. Go to failure on the last set.</div>
+
+    <div class="tech-cat">CORE</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.85)" onclick="toggleSub(this)">Pallof Press<span>▼</span></div>
+    <div class="tech-sub-body"><b>Stand sideways to cable.</b> Hold handle at chest, brace hard. Press straight out — hold 2 sec — return. The core resists rotation. Bracing is the exercise, not the pressing.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.85)" onclick="toggleSub(this)">Dead Bug<span>▼</span></div>
+    <div class="tech-sub-body"><b>Lower back flat to the floor throughout.</b> Opposite arm and leg lower simultaneously. If the back lifts, you've gone too far — reduce range.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.85)" onclick="toggleSub(this)">Side Plank<span>▼</span></div>
+    <div class="tech-sub-body"><b>Hips don't sag.</b> Body straight from head to feet. Squeeze glutes. Hold for time and log it each session.</div>
+  </div>
+
+  <!-- STRETCHING -->
+  <div class="sh" style="background:var(--teal);cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleTech(this)">STRETCHING — After every gym session<span class="tech-arr">▼</span></div>
+  <div class="tech-body" style="display:none;background:var(--teal);">
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Hip flexor lunge · 45s each<span>▼</span></div>
+    <div class="tech-sub-body">Kneel, other foot forward. Shift weight forward until hip stretch felt. Trunk upright. Squeeze rear glute to deepen. Switch sides.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Pec doorway stretch · 45s<span>▼</span></div>
+    <div class="tech-sub-body">Forearms on door frame at shoulder height, elbows 90°. Step forward until chest stretch felt. Chin tucked — don't let head push forward.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Child's pose · 45s<span>▼</span></div>
+    <div class="tech-sub-body">Sit back toward heels, reach arms forward along the floor. Forehead down. Feel the stretch through lats, thoracic spine and shoulders.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Hamstring stretch · 45s each<span>▼</span></div>
+    <div class="tech-sub-body">Seated, one leg straight. Hinge forward from the hip — not the lower back — until hamstring stretch felt. Reach toward foot. Switch sides.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Pigeon pose / glute · 60s each<span>▼</span></div>
+    <div class="tech-sub-body">Bring knee forward toward wrist, shin angled across body. Lower hips. Rear leg straight behind. Hold and breathe. Switch sides.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Lat side-bend · 30s each<span>▼</span></div>
+    <div class="tech-sub-body">One arm overhead, lean to the opposite side. Feet planted. Feel stretch along the side of the torso into the armpit. Switch sides.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Shoulder cross-body · 30s each<span>▼</span></div>
+    <div class="tech-sub-body">Arm straight across chest, other hand pulls it in. Feel stretch in the back of the shoulder. Keep shoulder down — don't shrug. Switch sides.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Neck side tilt · 30s each<span>▼</span></div>
+    <div class="tech-sub-body">Ear toward shoulder. Face stays forward — don't rotate. Light hand pressure on head to deepen. Switch sides.</div>
+    <div class="tech-sub" style="background:rgba(14,124,123,0.75)" onclick="toggleSub(this)">Thoracic extension on roller · 45s<span>▼</span></div>
+    <div class="tech-sub-body">Roller at mid-back. Lower upper back over it. Move up and down to find tight spots. Hold on tender areas 5–10 sec each.</div>
+  </div>
+
+</div>
+
+<!-- ══ NUTRITION ══ -->
+<div id="tab-nutrition" class="tab-panel">
+<style>
+  .ncard{border-radius:10px;overflow:hidden;margin-bottom:10px;}
+  .ncard-head{padding:10px 16px;display:flex;justify-content:space-between;align-items:center;}
+  .ncard-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;letter-spacing:0.5px;}
+  .ncard-target{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.8);}
+  .ncard-body{padding:10px 14px 12px;}
+  .ncard-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+  .ncard-num{background:#fff;border-radius:8px;padding:8px;text-align:center;}
+  .ncard-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;line-height:1;}
+  .ncard-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:#888;margin-top:3px;}
+  .ncard-tips{font-size:11px;color:var(--grey);line-height:1.7;}
+  .ncard-tip{padding:3px 0;border-bottom:1px solid rgba(0,0,0,0.06);}
+  .ncard-tip:last-child{border-bottom:none;}
+  .ncard-tip b{font-weight:600;}
+  .ntab-note{background:var(--pale-teal);border:1px solid var(--teal);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--grey);line-height:1.65;margin-bottom:10px;}
+
+</style>
+
+  <!-- HYDRATION -->
+  <div class="ncard" style="border:1.5px solid #1565C0">
+    <div class="ncard-head" style="background:#1565C0">
+      <span class="ncard-name">HYDRATION</span>
+      <span class="ncard-target">2–3L daily minimum</span>
+    </div>
+    <div class="ncard-body" style="background:#E3F2FD">
+      <div class="ncard-nums">
+        <div class="ncard-num"><div class="ncard-val" style="color:#1565C0">2–3L</div><div class="ncard-lbl">DAILY MINIMUM</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#1565C0">500ml</div><div class="ncard-lbl">PRE-SESSION</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#1565C0">500ml</div><div class="ncard-lbl">POST-SESSION</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROTEIN -->
+  <div class="ncard" style="border:1.5px solid #C62828">
+    <div class="ncard-head" style="background:#C62828">
+      <span class="ncard-name">PROTEIN</span>
+      <span class="ncard-target">107–121g daily</span>
+    </div>
+    <div class="ncard-body" style="background:#FFEBEE">
+      <div class="ncard-nums">
+        <div class="ncard-num"><div class="ncard-val" style="color:#C62828">30–40g</div><div class="ncard-lbl">PER MEAL</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#C62828">15–20g</div><div class="ncard-lbl">PER SNACK</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#C62828">≥20g</div><div class="ncard-lbl">PER 100G (LABEL)</div></div>
+      </div>
+      <div class="ncard-tips">
+        <div class="ncard-tip"><b>Best sources:</b> Chicken breast ~31g/100g · Tuna ~25g/100g · Eggs ~6g each · Greek yoghurt ~9g/100g · Turkey breast ~29g/100g · Whey protein ~25g/scoop</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAT -->
+  <div class="ncard" style="border:1.5px solid #795548">
+    <div class="ncard-head" style="background:#795548">
+      <span class="ncard-name">FAT</span>
+      <span class="ncard-target">54–67g daily · 0.8–1g/kg</span>
+    </div>
+    <div class="ncard-body" style="background:#EFEBE9">
+      <div class="ncard-nums">
+        <div class="ncard-num"><div class="ncard-val" style="color:#795548">&lt;5g</div><div class="ncard-lbl">SAT FAT/SERVING</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#795548">0g</div><div class="ncard-lbl">TRANS FAT (AVOID)</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#795548">&lt;8g</div><div class="ncard-lbl">PER SNACK</div></div>
+      </div>
+      <div class="ncard-tips">
+        <div class="ncard-tip"><b>Best sources:</b> Avocado, nuts, olive oil, salmon — unsaturated fats that support hormone production and joint health.</div>
+        <div class="ncard-tip"><b>Limit:</b> Butter, fatty processed meat, deep fried food — saturated fat. Under 5g per serving is the check.</div>
+        <div class="ncard-tip"><b>Avoid entirely:</b> "Partially hydrogenated" oil in the ingredients list — this is trans fat. No health benefit, measurable harm.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUGAR -->
+  <div class="ncard" style="border:1.5px solid #F57F17">
+    <div class="ncard-head" style="background:#F57F17">
+      <span class="ncard-name">ADDED SUGAR</span>
+      <span class="ncard-target">&lt;25g added sugar daily</span>
+    </div>
+    <div class="ncard-body" style="background:#FFF8E1">
+      <div class="ncard-nums">
+        <div class="ncard-num"><div class="ncard-val" style="color:#F57F17">&lt;10g</div><div class="ncard-lbl">PER 100G (LABEL)</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#F57F17">&lt;5g</div><div class="ncard-lbl">PER SNACK</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#F57F17">&lt;25g</div><div class="ncard-lbl">DAILY ADDED TOTAL</div></div>
+      </div>
+      <div class="ncard-tips">
+        <div class="ncard-tip"><b>Natural vs added:</b> Sugar in fruit, milk and plain yoghurt is fine — these come packaged with fibre, protein and micronutrients. Only added sugar (in processed food) needs limiting.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SALT / SODIUM -->
+  <div class="ncard" style="border:1.5px solid #546E7A">
+    <div class="ncard-head" style="background:#546E7A">
+      <span class="ncard-name">SALT / SODIUM</span>
+      <span class="ncard-target">1500–2300mg sodium daily</span>
+    </div>
+    <div class="ncard-body" style="background:#ECEFF1">
+      <div class="ncard-nums">
+        <div class="ncard-num"><div class="ncard-val" style="color:#546E7A">&lt;600mg</div><div class="ncard-lbl">SODIUM/MEAL</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#546E7A">&lt;1.5g</div><div class="ncard-lbl">SALT/SERVING (LABEL)</div></div>
+        <div class="ncard-num"><div class="ncard-val" style="color:#546E7A">&lt;2300mg</div><div class="ncard-lbl">DAILY MAX</div></div>
+      </div>
+      <div class="ncard-tips">
+        <div class="ncard-tip"><b>Salt vs Sodium on labels:</b> These are not the same number. Salt is sodium chloride — it is 40% sodium by weight. So 1g of salt = 400mg sodium. If a label shows "sodium 600mg" that equals about 1.5g of salt. Most NZ and Australian labels list sodium — multiply by 2.5 to convert to salt equivalent. Under 600mg sodium (1.5g salt) per serving is the guide.</div>
+        <div class="ncard-tip"><b>Hidden sources:</b> Processed foods are the main culprit — bread, sauces, soups, deli meats. Cook from scratch where you can and you automatically reduce sodium significantly.</div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+<!-- ══ GOALS ══ -->
+<div id="tab-goals" class="tab-panel">
+  <div class="sh" style="background:var(--teal);margin-top:0">YOUR GOALS <span style="font-size:11px;font-weight:400;opacity:0.7;letter-spacing:0">— tap to edit · ○ to achieve</span></div>
+  <div class="goals-card">
+    <div id="goalsContainer"></div>
+    <div id="goalInputArea" style="display:none;padding:10px 14px;border-top:1px solid rgba(0,0,0,0.07);">
+      <div style="display:flex;gap:7px;align-items:center;">
+        <input id="goalInputField" type="text" placeholder="Type your goal here…" style="flex:1;border:1.5px solid var(--teal);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Barlow',sans-serif;outline:none;color:var(--grey);">
+        <button onclick="submitGoal()" style="background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;">Add</button>
+        <button onclick="cancelGoal()" style="background:none;border:1px solid #ddd;border-radius:8px;padding:8px 10px;font-size:14px;cursor:pointer;color:#aaa;line-height:1;">✕</button>
+      </div>
+    </div>
+    <button class="add-goal-btn" onclick="addGoal()">＋ Add goal</button>
+  </div>
+</div>
+
+
+<!-- ══ PROGRESS ══ -->
+<div id="tab-progress" class="tab-panel">
+  <div class="sh" style="background:var(--orange);margin-top:0">PROGRESS TRACKER</div>
+  <div id="progressContainer"></div>
+</div>
+
+
+<!-- ══ COGNITIVE CONDITIONING ══ -->
+<div id="tab-cognitive" class="tab-panel">
+  <div class="sh" style="background:#1a3a5c;margin-top:0">COGNITIVE CONDITIONING &amp; STRESS MANAGEMENT</div>
+  <style>
+    .cog-card2{border-radius:10px;overflow:hidden;margin-bottom:12px;}
+    .cog-head2{padding:11px 16px;display:flex;align-items:center;gap:10px;}
+    .cog-title2{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;}
+    .cog-sub2{font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;}
+    .cog-always{padding:12px 16px 0;}
+    .cog-how-lbl{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;margin-bottom:6px;}
+    .cog-how2{border-radius:8px;padding:10px 13px;margin-bottom:10px;}
+    .cog-how-row2{display:flex;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.2);font-size:12px;color:#fff;line-height:1.5;}
+    .cog-how-row2:last-child{border-bottom:none;}
+    .cog-key2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;min-width:80px;opacity:0.85;}
+    .cog-expand-hdr{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;cursor:pointer;border-top:1px solid rgba(0,0,0,0.08);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;-webkit-tap-highlight-color:transparent;user-select:none;}
+    .cog-expand-arr{font-size:10px;color:#999;}
+    .cog-expand-body{display:none;padding:0 16px 12px;font-size:12px;color:var(--grey);line-height:1.7;}
+    .cog-expand-body.open{display:block;}
+    .cog-expand-hdr.open .cog-expand-arr{transform:rotate(180deg);}
+  
+</style>
+
+  <!-- ICE BATH -->
+  <div class="cog-card2" style="border:1.5px solid #2196F3;">
+    <div class="cog-head2" style="background:#1565C0;">
+      <span style="font-size:22px;">❄️</span>
+      <div><div class="cog-title2">ICE BATH</div><div class="cog-sub2">Once per week · After pool sessions</div></div>
+    </div>
+    <div style="background:#E3F2FD;">
+      <div class="cog-always">
+        <div class="cog-how-lbl" style="color:#1565C0;">HOW TO USE IT</div>
+        <div class="cog-how2" style="background:#1565C0;">
+          <div class="cog-how-row2"><span class="cog-key2">Temperature</span><span>10–12°C</span></div>
+          <div class="cog-how-row2"><span class="cog-key2">Duration</span><span>3–5 minutes per session</span></div>
+          <div class="cog-how-row2"><span class="cog-key2">Frequency</span><span>11 min combined total per week — 2 × 5–6 min sessions</span></div>
+        </div>
+      </div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">BENEFITS <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body"><b>Noradrenaline surge (up to 300%)</b> — the primary driver of improved mood, focus and stress resilience. Comparable in magnitude to some antidepressant medications in its neurochemical effect.<br><br><b>Vagus nerve activation</b> — shifts the nervous system toward parasympathetic (recovery) state. Accelerates recovery from the cortisol load of night shifts.<br><br><b>Inflammation and DOMS reduction</b> — reduces systemic inflammatory markers. Useful for recovery between training sessions.<br><br><b>Psychological hardening</b> — repeated voluntary exposure to controlled discomfort retrains the stress response threshold over time.</div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">STRESS MANAGEMENT <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body">The ice bath is a controlled, predictable stressor. Learning to breathe steadily and remain calm while your body demands you get out is identical to the cognitive skill required in high-pressure situations — a trauma call, the Heli PCA test under fatigue. Every session where you stay in and regulate your breathing is a direct training rep for stress management. The confidence this builds transfers.</div>
+    </div>
+  </div>
+
+  <!-- COLD SHOWERS -->
+  <div class="cog-card2" style="border:1.5px solid #0097A7;">
+    <div class="cog-head2" style="background:#00838F;">
+      <span style="font-size:22px;">🚿</span>
+      <div><div class="cog-title2">COLD SHOWERS</div><div class="cog-sub2">Daily · Low barrier, sustainable, high return</div></div>
+    </div>
+    <div style="background:#E0F7FA;">
+      <div class="cog-always">
+        <div class="cog-how-lbl" style="color:#00838F;">HOW TO USE IT</div>
+        <div class="cog-how2" style="background:#00838F;">
+          <div class="cog-how-row2"><span class="cog-key2">Temperature</span><span>As cold as your shower goes</span></div>
+          <div class="cog-how-row2"><span class="cog-key2">Duration</span><span>3 minutes of cold at the end of your normal shower</span></div>
+        </div>
+      </div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">BENEFITS <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body"><b>Sustained dopamine elevation (up to 250%)</b> — unlike caffeine, cold-induced dopamine is a prolonged stable rise, not a spike and crash. Powerful for motivation and mood on the back end of night shifts.<br><br><b>Sympathetic then parasympathetic rebound</b> — the calm, alert state that follows cold is why a cold shower before an early shift outperforms coffee alone.<br><br><b>Habituates the stress response</b> — daily practice gradually raises your threshold for anxiety reactivity. Things that triggered stress increasingly do not.</div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">STRESS MANAGEMENT <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body">Every time cold hits and you override the urge to gasp with slow breathing, you are practising the identical cognitive skill required to stay composed under pressure. Done daily, the gap between stimulus and response grows wider. Use before every shift and before every training session.</div>
+    </div>
+  </div>
+
+  <!-- SAUNA -->
+  <div class="cog-card2" style="border:1.5px solid #E65100;">
+    <div class="cog-head2" style="background:#BF360C;">
+      <span style="font-size:22px;">🔥</span>
+      <div><div class="cog-title2">SAUNA</div><div class="cog-sub2">Once per week · Powerful recovery and cardiovascular tool</div></div>
+    </div>
+    <div style="background:#FBE9E7;">
+      <div class="cog-always">
+        <div class="cog-how-lbl" style="color:#BF360C;">HOW TO USE IT</div>
+        <div class="cog-how2" style="background:#BF360C;">
+          <div class="cog-how-row2"><span class="cog-key2">Duration</span><span>15–20 min per session</span></div>
+          <div class="cog-how-row2"><span class="cog-key2">Frequency</span><span>Twice per week</span></div>
+          <div class="cog-how-row2"><span class="cog-key2">Hydration</span><span>500ml water before, 500ml after — non-negotiable</span></div>
+          <div class="cog-how-row2"><span class="cog-key2">Best protocol</span><span>Sauna 15–20 min → cold shower 1–2 min → rest 10 min → repeat 2–3 cycles</span></div>
+        </div>
+      </div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">BENEFITS <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body"><b>Cardiovascular conditioning</b> — heart rate during sauna sits at 120–150 bpm, equivalent to moderate aerobic exercise. Directly supports swimming endurance with no physical loading cost.<br><br><b>Plasma volume expansion</b> — increases blood plasma volume, improving oxygen delivery to working muscles and swimming performance.<br><br><b>Growth hormone release</b> — increases up to 16× with repeated sauna/cool cycles. Supports muscle growth relevant to your strength goals.<br><br><b>Resting cortisol reduction</b> — regular sauna measurably lowers baseline cortisol. For a shift worker carrying chronic stress load this compounds significantly over weeks.</div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">STRESS MANAGEMENT <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body">Sauna after a stressful shift accelerates recovery in a way passive rest does not. The post-sauna parasympathetic rebound resets the nervous system. The hot/cold contrast protocol trains rapid switching between activation and recovery states — which over weeks builds a nervous system that is more responsive when needed and faster to return to baseline when the threat has passed.</div>
+    </div>
+  </div>
+
+  <!-- BOX BREATHING -->
+  <div class="cog-card2" style="border:1.5px solid #5C6BC0;">
+    <div class="cog-head2" style="background:#3949AB;">
+      <span style="font-size:22px;">💨</span>
+      <div><div class="cog-title2">BOX BREATHING</div><div class="cog-sub2">Daily · Immediate acute stress control · No equipment</div></div>
+    </div>
+    <div style="background:#E8EAF6;">
+      <div class="cog-always">
+        <div class="cog-how-lbl" style="color:#3949AB;">HOW TO USE IT</div>
+        <div class="cog-how2" style="background:#3949AB;">
+          <div class="cog-how-row2"><span class="cog-key2">Pattern</span><span>Inhale 4 sec → hold 4 sec → exhale 4 sec → hold 4 sec. Repeat 4–6 cycles</span></div>
+          <div class="cog-how-row2"><span class="cog-key2">Duration</span><span>2–3 minutes is enough for measurable effect</span></div>
+        </div>
+      </div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">BENEFITS <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body"><b>Immediate parasympathetic activation</b> — the extended exhale and breath hold lower heart rate and cortisol within 2 minutes. This is a direct physiological override of the stress response via the vagus nerve.<br><br><b>Used by military and emergency services</b> — tactical breathing is standard training for Navy SEALs, paramedics and firefighters because it works under extreme acute stress without equipment or preparation.<br><br><b>Improves CO2 tolerance</b> — extended holds raise your threshold for the discomfort of breath-holding, which directly transfers to swimming and reduces the urge to breathe prematurely.</div>
+      <div class="cog-expand-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">STRESS MANAGEMENT <span class="cog-expand-arr">▼</span></div>
+      <div class="cog-expand-body">Box breathing is the most immediately applicable tool in this section. Use it in the car before a difficult shift, in the water before the start of the Heli PCA swim, or in bed after a traumatic job. The ability to deliberately slow your physiology under acute stress is a learnable skill — this is the most direct way to practise it.</div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<!-- ══ ACHIEVED ══ -->
+<div id="tab-achieved" class="tab-panel">
+  <div class="sh" style="background:var(--teal);margin-top:0">YOUR ACHIEVEMENTS</div>
+  <p style="font-size:12px;margin-bottom:12px;color:var(--grey)">Goals you have ticked off. Tap the ○ circle next to any active goal to move it here.</p>
+  <div class="achieved-card" id="achievedContainer"></div>
+</div>
+
+</div><!-- /content -->
+
+<div class="wake-toast" id="wakeToast"></div>
 
 <script>
-/* ============================================================ *
- *  THE SESSION — fixed full-body, 2x / week. Self-contained.    *
- *  Persists to localStorage so double-progression self-runs.    *
- * ============================================================ */
-
-/* ---------- persistence (graceful if storage blocked) ---------- */
-var HAS_LS = (function(){ try{ var k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } })();
-var KH="lane.session.history", KW="lane.session.weights", KC="lane.session.current";
-function load(key, fb){ if(!HAS_LS) return fb; try{ var v=localStorage.getItem(key); return v!=null?JSON.parse(v):fb; }catch(e){ return fb; } }
-function save(key,val){ if(!HAS_LS) return; try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
-
-/* ---------- the session ---------- */
-var BLOCKS=[
- {n:"00",title:"Warm-up",meta:"~8 min",items:[
-   {id:"wu1",type:"check",name:"Row, bike or walk",scheme:"2 min"},
-   {id:"wu2",type:"check",name:"Foam-roller thoracic ext + open-book",scheme:"\u00d78 \u00b7 \u00d76 / side"},
-   {id:"wu3",type:"check",name:"Wall slides",scheme:"\u00d710"},
-   {id:"wu4",type:"check",name:"Bodyweight squats + hip hinges",scheme:"\u00d710 + a few"},
- ]},
- {n:"01",title:"Scapular / cuff",meta:"done fresh",items:[
-   {id:"c1",type:"check",group:"g1",name:"Push-up-plus / serratus punch",scheme:"10\u201312"},
-   {id:"c2",type:"check",group:"g1",name:"Prone YTW",scheme:"8 / letter"},
-   {id:"c3",type:"check",group:"g1",name:"DB external rotation",scheme:"12\u201315 \u00b7 light",
-     note:"Default side-lying (mid-range, safe). Progress to prone 90/90 only when the posterior shoulder is quiet \u2014 light, pain-free. One variation per session."},
- ]},
- {n:"02",title:"Lower",meta:"",items:[
-   {id:"bulg",type:"load",group:"g2",name:"Bulgarian split squat",scheme:"3 \u00d7 6\u20138 / leg",sets:3,lo:6,hi:8,weight:20,step:2.5,unit:"kg"},
-   {id:"calf",type:"load",group:"g2",name:"Single-leg calf raise",scheme:"3 \u00d7 12\u201315 / leg",sets:3,lo:12,hi:15,weight:0,step:2.5,unit:"kg",note:"Bodyweight, or hold a DB."},
-   {id:"thrust",type:"load",name:"Hip thrust",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:30,step:5,unit:"kg",note:"Progress load aggressively \u2014 glutes tolerate it. End-range hip extension for the kick and body-line."},
-   {id:"rdl",type:"load",optional:true,name:"Romanian deadlift",scheme:"4 \u00d7 5\u20136",sets:4,lo:5,hi:6,weight:40,step:2.5,unit:"kg",note:"Optional but highly recommended \u2014 your only lengthened-hamstring eccentric and true hinge. Do it here while fresh. Skip only when genuinely time-crunched."},
- ]},
- {n:"03",title:"Push / pull",meta:"",items:[
-   {id:"press",type:"load",group:"g3",name:"DB chest press",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:12,step:2,unit:"kg"},
-   {id:"row",type:"load",group:"g3",name:"DB row",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:12,step:2,unit:"kg"},
- ]},
- {n:"04",title:"Vertical pull",meta:"",items:[
-   {id:"pull",type:"load",group:"g4",name:"Lat pulldown",scheme:"3 \u00d7 8\u201310",sets:3,lo:8,hi:10,weight:9.5,step:1,unit:""},
-   {id:"over",type:"load",group:"g4",name:"DB pullover",scheme:"3 \u00d7 10",sets:3,lo:10,hi:10,weight:10,step:2,unit:"kg",note:"Keep controlled and light \u2014 overlaps the pulldown by design."},
- ]},
- {n:"05",title:"Core finisher",meta:"tri-set",items:[
-   {id:"f1",type:"check",group:"g5",name:"Push-ups",scheme:"2\u00d7 near failure",note:"Protract hard at the top \u2014 push the floor away. Closed-chain serratus, not extra pressing."},
-   {id:"f2",type:"check",group:"g5",name:"Dead-bug",scheme:"10 / side"},
-   {id:"f3",type:"check",group:"g5",name:"Side plank",scheme:"2 \u00d7 30\u201345 s / side"},
- ]},
-];
-var GROUP_TAG={g1:"Superset \u00b7 2 rounds \u00b7 minimal rest",g2:"Superset",g3:"Superset",g4:"Superset",g5:"Tri-set"};
-var REFERENCE=[
- {t:"Double progression",d:"Work the top of each rep range. When every set hits the top number, the card flags amber \u2014 add the smallest load next session and drop back to the bottom."},
- {t:"Block 01 stays light",d:"The cuff / serratus work is endurance for small muscles \u2014 chase clean reps, not load. It runs every session on purpose; winging is a motor-control problem and rewards frequency."},
- {t:"Shoulder ER",d:"Default side-lying \u2014 mid-range, out of the provocative position. Move to prone 90/90 only when the posterior shoulder is reliably quiet, kept light and pain-free."},
- {t:"Push-ups",d:"Near failure, protract hard at the top. This is your closed-chain serratus dose, not extra pressing \u2014 two sets is enough."},
- {t:"RDL",d:"Optional but highly recommended. It's your only lengthened-hamstring eccentric and your only true hinge \u2014 the swing factor for the hour."},
-];
-var LOAD_ITEMS=[]; BLOCKS.forEach(function(b){ b.items.forEach(function(i){ if(i.type==="load") LOAD_ITEMS.push(i); }); });
-var ITEM_BY_ID={}; BLOCKS.forEach(function(b){ b.items.forEach(function(i){ ITEM_BY_ID[i.id]=i; }); });
-
-/* ---------- state ---------- */
-function freshLog(weights){
-  var log={};
-  LOAD_ITEMS.forEach(function(ex){
-    var w=(weights&&weights[ex.id]!=null)?weights[ex.id]:ex.weight;
-    var sets=[]; for(var i=0;i<ex.sets;i++) sets.push({reps:ex.hi,done:false});
-    log[ex.id]={weight:w,sets:sets};
-  });
-  var checks={};
-  BLOCKS.forEach(function(b){ b.items.forEach(function(i){ if(i.type==="check") checks[i.id]=false; }); });
-  return {log:log,checks:checks};
+// ── Accordion ────────────────────────────────────────────────────────────────
+function toggleSub(hdr){
+  const body=hdr.nextElementSibling;
+  const open=body.classList.toggle('open');
+  const arr=hdr.querySelector('span:last-child');
+  if(arr) arr.textContent=open?'▲':'▼';
 }
-var weights=load(KW,{}), history=load(KH,[]), current=load(KC,null);
-var state=(current&&current.log)?current:freshLog(weights);
-var restTarget=null, showRef=false, flash="", flashTimer=null, saveTimer=null;
-
-function loadDone(e){ return e&&e.sets.length>0&&e.sets.every(function(s){return s.done;}); }
-function thresholdMet(ex,e){ return loadDone(e)&&e.sets.every(function(s){return s.reps>=ex.hi;}); }
-function lastOf(id){ for(var i=history.length-1;i>=0;i--){ if(history[i].log[id]) return history[i].log[id]; } return null; }
-
-function scheduleSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(function(){ save(KC,state); },400); }
-function setFlash(msg,ms){ flash=msg; render(); clearTimeout(flashTimer); flashTimer=setTimeout(function(){ flash=""; render(); },ms||2400); }
-
-/* ---------- mutations ---------- */
-function changeWeight(id,dir){ var ex=ITEM_BY_ID[id],e=state.log[id]; e.weight=Math.max(0,Math.round((e.weight+dir*ex.step)*2)/2); scheduleSave(); render(); }
-function changeReps(id,idx,dir){ var e=state.log[id]; e.sets[idx].reps=Math.max(1,e.sets[idx].reps+dir); scheduleSave(); render(); }
-function toggleSet(id,idx){ var e=state.log[id]; e.sets[idx].done=!e.sets[idx].done; scheduleSave(); render(); }
-function toggleCheck(id){ state.checks[id]=!state.checks[id]; scheduleSave(); render(); }
-
-function finish(){
-  var session={date:Date.now(),log:{}}, w={};
-  LOAD_ITEMS.forEach(function(ex){
-    var e=state.log[ex.id]; w[ex.id]=e.weight;
-    var dr=e.sets.filter(function(s){return s.done;}).map(function(s){return s.reps;});
-    if(dr.length) session.log[ex.id]={weight:e.weight,reps:dr};
-  });
-  history=history.concat([session]).slice(-30);
-  save(KH,history); save(KW,w); save(KC,null);
-  weights=w; state=freshLog(w);
-  window.scrollTo({top:0,behavior:"smooth"});
-  setFlash("Session logged \u00b7 "+fmtDate(session.date),2600);
+function toggleTech(hdr){
+  const body=hdr.nextElementSibling;
+  const open=body.style.display==='block';
+  body.style.display=open?'none':'block';
+  const arr=hdr.querySelector('.tech-arr');
+  if(arr) arr.textContent=open?'▼':'▲';
 }
-function resetSession(){
-  var w={}; LOAD_ITEMS.forEach(function(ex){ w[ex.id]=state.log[ex.id].weight; });
-  save(KC,null); weights=w; state=freshLog(w);
-  setFlash("Session cleared",1800);
+function toggleAcc(hdr){
+  const body=hdr.nextElementSibling;
+  const open=body.classList.toggle('open');
+  hdr.classList.toggle('open',open);
+}
+function toggleEx(hdr){
+  const body=hdr.nextElementSibling;
+  const open=body.classList.toggle('open');
+  const arr=hdr.querySelector('.earr');
+  if(arr) arr.textContent=open?'▲':'▼';
 }
 
-/* ---------- rest timer ---------- */
-function startRest(sec){ restTarget=Date.now()+sec*1000; render(); }
-function addRest(){ restTarget=(restTarget||Date.now())+30000; render(); }
-function stopRest(){ restTarget=null; render(); }
-function vibrate(){ try{ if(navigator.vibrate) navigator.vibrate([180,90,180]); }catch(e){} }
-setInterval(function(){
-  if(restTarget==null) return;
-  var rem=Math.max(0,restTarget-Date.now()), sec=Math.ceil(rem/1000);
-  var el=document.getElementById("rest-time");
-  if(el){ el.textContent=mmss(sec); if(sec<=0) el.className="rest-time zero"; }
-  if(rem<=0){ vibrate(); restTarget=null; setTimeout(render,1200); }
-},250);
-
-/* ---------- format ---------- */
-function fmtNum(n){ return (n%1===0)?String(n):n.toFixed(1); }
-function fmtW(n,u){ return u?fmtNum(n)+" "+u:fmtNum(n); }
-function fmtDate(ts){ return new Date(ts).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"}); }
-function mmss(sec){ sec=Math.max(0,sec); return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0"); }
-function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
-
-/* ---------- view ---------- */
-function progress(){
-  var total=0,done=0;
-  BLOCKS.forEach(function(b){ b.items.forEach(function(it){
-    var d=it.type==="load"?loadDone(state.log[it.id]):state.checks[it.id];
-    if(!it.optional||d) total++; if(d) done++;
-  });});
-  return {total:total,done:done,pct:total?Math.round(done/total*100):0};
+// ── Live clock ────────────────────────────────────────────────────────────────
+function updateClock(){
+  const now=new Date();
+  const timeEl=document.getElementById('live-time');
+  const dateEl=document.getElementById('live-date');
+  if(timeEl){
+    const h=String(now.getHours()).padStart(2,'0');
+    const m=String(now.getMinutes()).padStart(2,'0');
+    timeEl.textContent=h+':'+m;
+  }
+  if(dateEl){
+    const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    dateEl.textContent=days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()];
+  }
 }
 
-function checkRowHTML(it){
-  var done=state.checks[it.id];
-  return '<button class="row'+(done?' done':'')+'" data-act="check" data-id="'+it.id+'">'
-    +'<span class="checkbox">'+(done?'\u2713':'')+'</span>'
-    +'<span class="row-main"><span class="row-line">'
-    +'<span class="row-name">'+esc(it.name)+'</span>'
-    +'<span class="row-scheme">'+esc(it.scheme)+'</span></span>'
-    +(it.note?'<span class="row-note">'+esc(it.note)+'</span>':'')
-    +'</span></button>';
+// ── Live weather ──────────────────────────────────────────────────────────────
+function wxEmoji(code){
+  if(code===0)return'☀️';
+  if(code<=2)return'🌤️';
+  if(code<=3)return'⛅';
+  if(code<=48)return'🌫️';
+  if(code<=55)return'🌦️';
+  if(code<=67)return'🌧️';
+  if(code<=77)return'❄️';
+  if(code<=82)return'🌧️';
+  return'⛈️';
 }
-function statusHTML(flag,done){
-  if(flag) return '<span class="status status-flag">\u25b2 Add load</span>';
-  if(done) return '<span class="status status-done">Done</span>';
-  return '<span class="status-idle"></span>';
-}
-function loadCardHTML(it){
-  var e=state.log[it.id], last=lastOf(it.id), done=loadDone(e), flag=thresholdMet(it,e);
-  var sets=e.sets.map(function(s,idx){
-    return '<div class="set">'
-      +'<span class="set-label">S'+(idx+1)+'</span>'
-      +'<button class="stepper sm" data-act="rep-" data-id="'+it.id+'" data-idx="'+idx+'">\u2212</button>'
-      +'<span class="set-reps'+(s.done?' done':'')+'">'+s.reps+'</span>'
-      +'<button class="stepper sm" data-act="rep+" data-id="'+it.id+'" data-idx="'+idx+'">+</button>'
-      +'<span class="set-spacer"></span>'
-      +'<button class="set-toggle'+(s.done?' done':'')+'" data-act="set" data-id="'+it.id+'" data-idx="'+idx+'">'
-      +(s.done?'\u2713 Done':'Log set')+'</button>'
-      +'</div>';
-  }).join("");
-  return '<div class="card'+(flag?' flag':done?' done':'')+'">'
-    +'<div class="card-top"><div>'
-    +'<div class="card-name">'+esc(it.name)+(it.optional?'<span class="opt-tag">optional</span>':'')+'</div>'
-    +'<div class="card-scheme">'+esc(it.scheme)+'</div></div>'
-    +statusHTML(flag,done)+'</div>'
-    +(last?'<div class="last">Last \u00b7 '+esc(fmtW(last.weight,it.unit))+' \u00b7 '+last.reps.join(" \u00b7 ")+'</div>':'')
-    +'<div class="load-box"><span class="load-label">Load</span><div class="load-controls">'
-    +'<button class="stepper" data-act="w-" data-id="'+it.id+'">\u2212</button>'
-    +'<span class="load-num">'+fmtNum(e.weight)+(it.unit?'<span class="load-unit">'+it.unit+'</span>':'')+'</span>'
-    +'<button class="stepper" data-act="w+" data-id="'+it.id+'">+</button>'
-    +'</div></div>'
-    +'<div class="sets">'+sets+'</div>'
-    +(flag?'<div class="flagbox"><span class="tri">\u25b2</span><span class="txt">Threshold met \u2014 add the smallest load next session, drop back to '+it.lo+'.</span></div>':'')
-    +'</div>';
-}
-function itemHTML(it){ return it.type==="load"?loadCardHTML(it):checkRowHTML(it); }
-
-function blockHTML(b){
-  var body="", i=0, items=b.items;
-  while(i<items.length){
-    var g=items[i].group;
-    if(g){
-      var inner="";
-      while(i<items.length&&items[i].group===g){ inner+=itemHTML(items[i]); i++; }
-      body+='<div class="group"><div class="group-rule"></div>'
-        +'<div class="group-tag">'+GROUP_TAG[g]+'</div>'
-        +'<div class="group-items">'+inner+'</div></div>';
-    } else {
-      body+='<div class="solo">'+itemHTML(items[i])+'</div>'; i++;
+async function loadWeather(){
+  const el=document.getElementById('live-weather');
+  if(!el)return;
+  let lat=-36.8485,lon=174.7633;
+  try{
+    if(navigator.geolocation){
+      const pos=await new Promise((res,rej)=>
+        navigator.geolocation.getCurrentPosition(res,rej,{timeout:5000,maximumAge:300000})
+      );
+      lat=pos.coords.latitude;lon=pos.coords.longitude;
     }
+  }catch(e){/* use Auckland default */}
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=auto');
+    const d=await r.json();
+    const temp=Math.round(d.current_weather.temperature);
+    const code=d.current_weather.weathercode;
+    const maxT=Math.round(d.daily.temperature_2m_max[0]);
+    const minT=Math.round(d.daily.temperature_2m_min[0]);
+    el.innerHTML=wxEmoji(code)+'&thinsp;<span style="font-size:16px;font-weight:700;">'+temp+'°</span>&nbsp;<span style="font-size:10px;opacity:0.7;letter-spacing:0.3px;">↓'+minT+'° ↑'+maxT+'°</span>';
+  }catch(e){
+    el.textContent='';
   }
-  return '<section class="block">'
-    +'<div class="block-head"><span class="block-n">'+b.n+'</span>'
-    +'<h2 class="block-title">'+esc(b.title)+'</h2>'
-    +(b.meta?'<span class="block-meta">\u00b7 '+esc(b.meta)+'</span>':'')+'</div>'
-    +'<div class="block-body">'+body+'</div></section>';
 }
 
-function restHTML(){
-  if(restTarget==null){
-    var pulse='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>';
-    return '<div class="rest">'+pulse
-      +'<button class="rest-chip" data-act="rest" data-sec="60">1:00</button>'
-      +'<button class="rest-chip" data-act="rest" data-sec="90">1:30</button>'
-      +'<button class="rest-chip" data-act="rest" data-sec="120">2:00</button></div>';
-  }
-  var sec=Math.ceil(Math.max(0,restTarget-Date.now())/1000);
-  return '<div class="rest"><span id="rest-time" class="rest-time'+(sec<=0?' zero':'')+'">'+mmss(sec)+'</span>'
-    +'<button class="rest-mini" data-act="rest-add">+30s</button>'
-    +'<button class="rest-mini ghost" data-act="rest-stop">Stop</button></div>';
+
+// ── Data export / import ─────────────────────────────────────────────────────
+function exportData(){
+  const blob=new Blob([JSON.stringify(_cache,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const d=new Date();
+  const dd=String(d.getDate()).padStart(2,'0');
+  const mm=String(d.getMonth()+1).padStart(2,'0');
+  a.download='training_data_'+dd+'-'+mm+'-'+d.getFullYear()+'.json';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+  showToast('✓ Data exported — save that file somewhere safe');
+}
+// App keys (without the tp_ prefix). Anything else in a backup file is ignored.
+const _APP_KEY=/^(stats|goals|achieved_goals|pool_distances|progress_v2|db2-active|equip_pref|dist_log_.+|weights_.+)$/;
+function importData(){
+  if(!_uid){showToast('Sign in before importing');return;}
+  const inp=document.createElement('input');
+  inp.type='file';inp.accept='.json,application/json';
+  inp.onchange=(e)=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=async (ev)=>{
+      let data;
+      try{data=JSON.parse(ev.target.result);}catch(err){showToast('⚠️ Import failed — not a valid backup file',3500);return;}
+      if(!data||typeof data!=='object'||Array.isArray(data)){showToast('⚠️ Import failed — not a valid backup file',3500);return;}
+      let n=0;
+      Object.keys(data).forEach(k=>{
+        const base=k.startsWith('tp_')?k.slice(3):k;
+        if(!_APP_KEY.test(base)||data[k]===null||data[k]===undefined)return;
+        LS.set(base,data[k]);n++;
+      });
+      if(!n){showToast('⚠️ No training data found in that file',3500);return;}
+      await _flush();
+      showToast(Object.keys(_pending).length
+        ?'Imported '+n+' items — saved on this device, will sync when online'
+        :'✓ Imported '+n+' items — reloading…',3500);
+      setTimeout(()=>location.reload(),1500);
+    };
+    reader.readAsText(file);
+  };
+  document.body.appendChild(inp);inp.click();document.body.removeChild(inp);
 }
 
-function render(){
-  var p=progress();
-  var heart='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg>';
-  var html=''
-    +'<header class="hdr"><div class="hdr-inner">'
-      +'<div class="hdr-top"><div>'
-        +'<div class="eyebrow">'+heart+'Today\u2019s session</div>'
-        +'<div class="sub">Full-body \u00b7 2\u00d7 / week \u00b7 '+fmtDate(Date.now())+'</div></div>'
-        +'<button class="reset-btn" data-act="reset">\u21ba Reset</button></div>'
-      +'<div class="meter"><div class="meter-track"><div class="meter-fill" style="width:'+p.pct+'%"></div></div>'
-        +'<span class="meter-num mono">'+p.done+' / '+p.total+'</span></div>'
-    +'</div>'+(flash?'<div class="flash">'+esc(flash)+'</div>':'')+'</header>'
-    +'<main class="main">'
-      +BLOCKS.map(blockHTML).join("")
-      +'<button class="ref-btn" data-act="ref"><span>How this runs</span><span class="chev'+(showRef?' open':'')+'">\u25be</span></button>'
-      +(showRef?'<div class="ref-panel">'+REFERENCE.map(function(r){return '<div class="ref-item"><div class="ref-t">'+esc(r.t)+'</div><div class="ref-d">'+esc(r.d)+'</div></div>';}).join("")+'</div>':'')
-    +'</main>'
-    +'<div class="bar"><div class="bar-inner">'+restHTML()
-      +'<button class="finish-btn" data-act="finish">Finish session</button>'
-    +'</div></div>';
-  document.getElementById("root").innerHTML=html;
+
+// ── Swim distance history modal ───────────────────────────────────────────────
+let _swHistKey='';
+function showSwimHist(key){
+  _swHistKey=key;
+  const modal=document.getElementById('swHistModal');
+  const title=document.getElementById('swHistTitle');
+  modal.style.display='flex';
+  const labels={'wu-kick':'Kickboard kick','wu-free':'Easy freestyle','db-catchup':'Catch-up drill','db-drag':'Fingertip drag drill','leg-vert':'Vertical kick','leg-sprint':'Kickboard sprint','fs-interval':'Freestyle intervals','fs-cont':'Continuous freestyle','db2-snorkel':'Snorkel freestyle','db2-paddles':'Hand paddles','db2-buoy':'Pull buoy','fins-2':'Freestyle with fins'};
+  title.textContent=labels[key]||key;
+  _renderSwimHist();
+}
+function closeSwimHist(){document.getElementById('swHistModal').style.display='none';}
+function _renderSwimHist(){
+  const content=document.getElementById('swHistContent');
+  const history=LS.get('dist_log_'+_swHistKey)||[];
+  if(!history.length){content.innerHTML='<p style="color:#94A3B8;font-size:12px;text-align:center;padding:20px 0">No entries yet — tap Log after each set to record</p>';return;}
+  content.innerHTML=history.map((e,i)=>{
+    const unit=e.unit||'m';
+    const hasReps=e.reps&&e.reps>1;
+    const valStr=hasReps
+      ?`<span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--pool);">${e.val}${unit}</span><span style="font-size:12px;color:#94A3B8;"> × ${e.reps}</span><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--navy);"> = ${e.total}${unit}</span>`
+      :`<span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--pool);">${e.val}${unit}</span>`;
+    return `<div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #F3F4F6;gap:10px;" id="swhe-${i}">
+      <div style="flex:1;display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;">${valStr}</div>
+      <div style="font-size:11px;color:#94A3B8;white-space:nowrap;">${e.date}</div>
+      <button onclick="delSwimEntry(${i})" style="background:#FEE2E2;border:none;border-radius:8px;color:#EF4444;font-size:14px;font-weight:700;padding:8px 10px;min-width:38px;min-height:38px;cursor:pointer;-webkit-tap-highlight-color:transparent;">×</button>
+    </div>`;
+  }).join('');
+}
+function delSwimEntry(idx){
+  const history=LS.get('dist_log_'+_swHistKey)||[];
+  history.splice(idx,1);
+  LS.set('dist_log_'+_swHistKey,history);
+  _renderSwimHist();
+  updateDistLog(_swHistKey);
+  showToast('Entry deleted');
 }
 
-/* ---------- one delegated listener ---------- */
-document.getElementById("root").addEventListener("click",function(ev){
-  var b=ev.target.closest("[data-act]"); if(!b) return;
-  var act=b.getAttribute("data-act"), id=b.getAttribute("data-id"),
-      idx=parseInt(b.getAttribute("data-idx"),10), sec=parseInt(b.getAttribute("data-sec"),10);
-  switch(act){
-    case "check": toggleCheck(id); break;
-    case "set": toggleSet(id,idx); break;
-    case "rep-": changeReps(id,idx,-1); break;
-    case "rep+": changeReps(id,idx,1); break;
-    case "w-": changeWeight(id,-1); break;
-    case "w+": changeWeight(id,1); break;
-    case "rest": startRest(sec); break;
-    case "rest-add": addRest(); break;
-    case "rest-stop": stopRest(); break;
-    case "reset": resetSession(); break;
-    case "finish": finish(); break;
-    case "ref": showRef=!showRef; render(); break;
+// ── Tab / Session switching ───────────────────────────────────────────────
+function showTabById(id){
+  const map={overview:'Home',sessions:'Sessions',technique:'Technique',cognitive:'Cognitive',nutrition:'Nutrition',goals:'Goals',progress:'Progress',achieved:'Achieved'};
+  const btn=Array.from(document.querySelectorAll('.tnav-btn')).find(b=>b.textContent.trim()===map[id]);
+  if(btn) showTab(id,btn);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goToSession(dayId){
+  const sessionsBtn=Array.from(document.querySelectorAll('.tnav-btn')).find(b=>b.textContent.trim()==='Sessions');
+  if(sessionsBtn) showTab('sessions',sessionsBtn);
+  const stabBtn=document.getElementById('stab-'+dayId);
+  if(stabBtn) showSession(dayId,stabBtn);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+const paleLookup={dayA:'var(--pale-blue)',dayB:'var(--pale-grn)',dayC:'var(--pale-ocean)'};
+const colorLookup={dayA:'var(--pool)',dayB:'var(--gym)',dayC:'var(--ocean)'};
+function showSession(id,btn){
+  ['dayA','dayB','dayC'].forEach(s=>{
+    document.getElementById('session-'+s).style.display='none';
+    const t=document.getElementById('stab-'+s);
+    t.style.background=paleLookup[s]; t.style.color=colorLookup[s];
+  });
+  document.getElementById('session-'+id).style.display='block';
+  btn.style.background=colorLookup[id]; btn.style.color='#fff';
+}
+function showDC(mode,btn){
+  ['ocean','gym'].forEach(m=>{
+    document.getElementById('dc-content-'+m).style.display='none';
+    const b=document.getElementById('dc-'+m);
+    if(m==='ocean'){b.style.background='var(--pale-ocean)';b.style.color='var(--ocean)';b.style.borderColor='var(--ocean)';}
+    else{b.style.background='var(--pale-grn)';b.style.color='var(--gym)';b.style.borderColor='var(--gym)';}
+  });
+  document.getElementById('dc-content-'+mode).style.display='block';
+  if(mode==='ocean'){btn.style.background='var(--ocean)';btn.style.borderColor='var(--ocean)';}
+  else{btn.style.background='var(--gym)';btn.style.borderColor='var(--gym)';}
+  btn.style.color='#fff';
+}
+function toggleGear(btn){
+  const note=btn.parentElement.nextElementSibling;
+  const open=note.classList.toggle('open');
+  btn.textContent=open?'▲ hide':'▼ why?';
+}
+
+// ── Wake Lock ─────────────────────────────────────────────────────────────
+let wakeLock=null;
+const wakeBtn=document.getElementById('wakeLockBtn');
+const wakeToast=document.getElementById('wakeToast');
+function showToast(msg,dur=2500){wakeToast.textContent=msg;wakeToast.style.opacity='1';setTimeout(()=>{wakeToast.style.opacity='0';},dur);}
+async function toggleWakeLock(){
+  if(wakeLock){await wakeLock.release();wakeLock=null;wakeBtn.textContent='☀️ Screen on';wakeBtn.classList.remove('active');showToast('Screen lock re-enabled');return;}
+  if(!('wakeLock' in navigator)){showToast('⚠️ Not supported — try Chrome',3500);return;}
+  try{
+    wakeLock=await navigator.wakeLock.request('screen');
+    wakeBtn.textContent='🔆 Locked on';wakeBtn.classList.add('active');showToast('✓ Screen will stay on');
+    document.addEventListener('visibilitychange',async()=>{if(wakeLock!==null&&document.visibilityState==='visible'){try{wakeLock=await navigator.wakeLock.request('screen');}catch(e){}}});
+    wakeLock.addEventListener('release',()=>{if(wakeLock){wakeBtn.textContent='☀️ Screen on';wakeBtn.classList.remove('active');wakeLock=null;}});
+  }catch(err){showToast('⚠️ Could not lock screen — try Chrome',3500);}
+}
+
+// ── Supabase data layer ───────────────────────────────────────────────────
+// Reads come from _cache. Writes go to _cache, a copy in localStorage, and a
+// queue of unsynced keys that is pushed to Supabase and retried until it lands,
+// so a dropped connection at the pool never loses a logged set.
+const _SURL = 'https://fjcqujatwlcikhmisvqy.supabase.co';
+const _SKEY = 'sb_publishable_TuiRxBROZqHBlTV4WRjgmw_ETza0LmH';
+const _sb = supabase.createClient(_SURL, _SKEY);
+const _TABLE = 'training_user_data';
+let _cache = {};    // key -> value, mirror of this user's rows
+let _pending = {};  // key -> write number, for writes Supabase hasn't confirmed
+let _uid = null;    // current user id
+let _seq = Date.now();
+
+function _lsRead(k,fb){try{const v=localStorage.getItem(k);return v==null?fb:JSON.parse(v);}catch(e){return fb;}}
+function _lsWrite(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function _mirrorKey(){return 'tp_mirror_'+_uid;}
+function _pendingKey(){return 'tp_pending_'+_uid;}
+function _saveMirror(){if(_uid){_lsWrite(_mirrorKey(),_cache);_lsWrite(_pendingKey(),_pending);}}
+
+// Load this user's rows. Unsynced local edits win over the server copy.
+// Returns false if Supabase couldn't be reached (the local copy is used instead).
+async function _loadAllData() {
+  const local = _lsRead(_mirrorKey(), {});
+  _pending = _lsRead(_pendingKey(), {});
+  const { data, error } = await _sb.from(_TABLE).select('key,value');
+  if (error) { _cache = local; return false; }
+  const server = {};
+  data.forEach(r => { server[r.key] = r.value; });
+  Object.keys(_pending).forEach(k => { if (k in local) server[k] = local[k]; else delete _pending[k]; });
+  _cache = server;
+  _saveMirror();
+  return true;
+}
+
+let _flushing = false, _flushQueued = false, _flushTimer = null, _syncFailed = false;
+function _scheduleFlush(){clearTimeout(_flushTimer);_flushTimer=setTimeout(_flush,400);}
+async function _flush() {
+  if (!_uid) return;
+  if (_flushing) { _flushQueued = true; return; }
+  const keys = Object.keys(_pending).filter(k => {
+    if (_cache[k] === undefined || _cache[k] === null) { delete _pending[k]; return false; }
+    return true;
+  });
+  if (!keys.length) { _setSync(); return; }
+  _flushing = true;
+  const sent = {};
+  const rows = keys.map(k => { sent[k] = _pending[k]; return { user_id: _uid, key: k, value: _cache[k] }; });
+  let error;
+  try { ({ error } = await _sb.from(_TABLE).upsert(rows, { onConflict: 'user_id,key' })); }
+  catch (e) { error = e; }
+  _flushing = false;
+  if (error) {
+    console.warn('Supabase write error:', error.message || error);
+    if (!_syncFailed) showToast('⚠️ Not saved to cloud yet — kept on this device, will retry', 3500);
+    _syncFailed = true;
+  } else {
+    // Keys changed again while this request was in flight stay queued
+    keys.forEach(k => { if (_pending[k] === sent[k]) delete _pending[k]; });
+    if (_syncFailed) showToast('✓ Synced');
+    _syncFailed = false;
   }
+  _saveMirror();
+  _setSync();
+  if (_flushQueued) { _flushQueued = false; _scheduleFlush(); }
+}
+function _setSync(){
+  const el=document.getElementById('syncState');if(!el)return;
+  const n=Object.keys(_pending).length;
+  el.textContent=n?'● '+n+' unsynced':'● synced';
+  el.style.color=n?'#fbbf24':'rgba(126,203,204,0.8)';
+}
+window.addEventListener('online', _flush);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') _flush(); });
+setInterval(() => { if (Object.keys(_pending).length) _flush(); }, 30000);
+
+const LS = {
+  get(k) {
+    const v = _cache['tp_' + k];
+    return (v === undefined || v === null) ? null : v;
+  },
+  set(k, v) {
+    const key = 'tp_' + k;
+    _cache[key] = v;
+    _pending[key] = ++_seq;
+    _saveMirror();
+    _setSync();
+    _scheduleFlush();
+  }
+};
+
+// ── Auth functions ────────────────────────────────────────────────────────
+function _setAuthError(msg) { const el=document.getElementById('authError'); if(el) el.textContent=msg; }
+function _setAuthMsg(msg)   { const el=document.getElementById('authMsg');   if(el) el.textContent=msg; }
+
+async function authSignIn() {
+  const email    = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  _setAuthError(''); _setAuthMsg('Signing in…');
+  const { error } = await _sb.auth.signInWithPassword({ email, password });
+  if (error) { _setAuthMsg(''); _setAuthError(error.message); }
+}
+
+async function authSignOut() {
+  await _flush();
+  if (Object.keys(_pending).length) {
+    showToast('⚠️ Unsynced changes — reconnect before signing out', 3500);
+    return;
+  }
+  try { localStorage.removeItem(_mirrorKey()); localStorage.removeItem(_pendingKey()); } catch (e) {}
+  await _sb.auth.signOut();
+}
+
+// Runs on every auth event. Only the first sign-in (or a change of user) sets the app up;
+// token refreshes are ignored.
+async function _onAuth(session) {
+  const overlay = document.getElementById('loginOverlay');
+  if (!session) {
+    if (_uid) { location.reload(); return; }
+    if (overlay) overlay.style.display = 'flex';
+    return;
+  }
+  if (_uid === session.user.id) return;
+  if (_uid) { location.reload(); return; }
+  _uid = session.user.id;
+  _setAuthMsg('Loading your data…');
+  const ok = await _loadAllData();
+  if (!ok && !Object.keys(_cache).length) {
+    // Nothing to show and the server is unreachable. Don't start with empty data,
+    // or the defaults would be saved over the real data once back online.
+    _uid = null;
+    _setAuthMsg('');
+    _setAuthError("Can't reach the server — retrying…");
+    setTimeout(() => _onAuth(session), 5000);
+    return;
+  }
+  _setAuthError(''); _setAuthMsg('');
+  if (overlay) overlay.style.display = 'none';
+  _initApp();
+  if (!ok) showToast('Offline — showing data saved on this device', 3500);
+  _setSync();
+  _flush();
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────
+const statDefaults={pressups:'—',deadlift:'60 kg',swimmax:'100m',swimfins:'—'};
+function loadStats(){
+  const saved=LS.get('stats')||{};
+  Object.keys(statDefaults).forEach(k=>{
+    const el=document.getElementById('sv-'+k);
+    if(el) el.textContent=saved[k]||statDefaults[k];
+  });
+}
+function saveStats(){
+  const data={};
+  Object.keys(statDefaults).forEach(k=>{const el=document.getElementById('sv-'+k);if(el)data[k]=el.textContent;});
+  LS.set('stats',data);
+}
+function editStat(card,key){
+  const el=document.getElementById('sv-'+key);
+  if(!el)return;
+  const cur=el.textContent;
+  const inp=document.createElement('input');
+  inp.className='dash-stat-input';inp.value=cur;inp.type='text';
+  el.replaceWith(inp);inp.focus();inp.select();
+  function done(){const v=inp.value.trim()||cur;el.textContent=v;inp.replaceWith(el);saveStats();}
+  inp.addEventListener('blur',done);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur();if(e.key==='Escape'){el.textContent=cur;inp.replaceWith(el);}});
+}
+
+// ── Weight logging ────────────────────────────────────────────────────────
+// ── Equipment (barbell / dumbbell / machine) ────────────────────────────────
+// Each weighted exercise logs which equipment was used. The three are tracked
+// separately because the numbers aren't comparable (a 40kg bar vs 15kg DBs).
+const EQUIP={bb:'Barbell',db:'Dumbbell',mc:'Machine'};
+// Default per exercise. Entries logged before equipment tracking get this type.
+const EQUIP_DEFAULT={'step-ups':'db','calf-raises':'mc','rdl':'bb','split-squat':'db','cable-ext-rot':'mc','cable-ext-90':'mc','ytw':'db','serratus':'db','chest-press':'db','db-rows':'db','lat-pulldown':'mc','shoulder-press':'db','pallof':'mc','dc-step-ups':'db','dc-hip-thrusts':'bb','dc-bench':'bb','dc-ytw':'db'};
+function entryEquip(key,e){return e.equip||EQUIP_DEFAULT[key]||null;}
+// Last chosen type for this exercise, else the type of its latest entry, else the default
+function currentEquip(key){
+  const pref=LS.get('equip_pref')||{};
+  if(pref[key])return pref[key];
+  const h=LS.get('weights_'+key)||[];
+  return h.length?entryEquip(key,h[0]):EQUIP_DEFAULT[key];
+}
+function setEquip(key,eq){
+  const pref=LS.get('equip_pref')||{};
+  pref[key]=eq;LS.set('equip_pref',pref);
+  _renderEquipSeg(key);updateWeightDisplay(key);
+}
+function _renderEquipSeg(key){
+  const seg=document.getElementById('eq-'+key);if(!seg)return;
+  const cur=currentEquip(key);
+  seg.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.eq===cur));
+}
+function _addEquipSeg(key){
+  const inp=document.getElementById('wt-'+key);
+  if(!inp||document.getElementById('eq-'+key))return;
+  const seg=document.createElement('div');
+  seg.className='eq-seg';seg.id='eq-'+key;
+  seg.innerHTML=Object.keys(EQUIP).map(eq=>`<button type="button" data-eq="${eq}" onclick="setEquip('${key}','${eq}')">${EQUIP[eq]}</button>`).join('');
+  inp.closest('.wt-row').before(seg);
+  _renderEquipSeg(key);
+}
+
+function logWeight(key,unit){
+  unit=unit||'kg';
+  const inp=document.getElementById('wt-'+key);
+  if(!inp||!inp.value)return;
+  const kg=parseFloat(inp.value);
+  if(isNaN(kg))return;
+  const entry={date:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}),kg:kg,unit:unit};
+  const eq=EQUIP_DEFAULT[key]?currentEquip(key):null;
+  if(eq)entry.equip=eq;
+  const history=LS.get('weights_'+key)||[];
+  history.unshift(entry);
+  LS.set('weights_'+key,history.slice(0,60));
+  inp.value='';
+  updateWeightDisplay(key);
+  showToast('✓ '+(eq?EQUIP[eq]+' ':'')+kg+unit+' logged');
+}
+function updateWeightDisplay(key){
+  const el=document.getElementById('wtp-'+key);
+  if(!el)return;
+  const history=LS.get('weights_'+key)||[];
+  if(history.length===0){el.innerHTML='No previous entry';return;}
+  const dateSpan=d=>' <span style="color:#bbb;font-size:10px;">'+d+'</span>';
+  if(!EQUIP_DEFAULT[key]){
+    const last=history[0];
+    el.innerHTML='Last: <b>'+last.kg+(last.unit||'kg')+'</b>'+dateSpan(last.date);
+  }else{
+    // Most recent entry for each equipment type, selected type first
+    const cur=currentEquip(key);
+    const lastBy={};
+    history.forEach(e=>{const eq=entryEquip(key,e);if(!lastBy[eq])lastBy[eq]=e;});
+    const order=[cur].concat(Object.keys(EQUIP).filter(eq=>eq!==cur)).filter(eq=>lastBy[eq]);
+    el.innerHTML=lastBy[cur]?'':'No '+EQUIP[cur].toLowerCase()+' entry yet<br>';
+    el.innerHTML+=order.map(eq=>{const e=lastBy[eq];
+      return (eq===cur?'Last ':'<span style="opacity:0.7">')+EQUIP[eq].toLowerCase()+': <b>'+e.kg+(e.unit||'kg')+'</b>'+dateSpan(e.date)+(eq===cur?'':'</span>');
+    }).join('<br>');
+  }
+  // Add/update History button
+  let btn=document.getElementById('wthbtn-'+key);
+  if(!btn){
+    btn=document.createElement('button');
+    btn.id='wthbtn-'+key;
+    btn.style.cssText='background:rgba(0,0,0,0.07);border:none;border-radius:6px;padding:4px 9px;font-size:10px;font-family:"Barlow Condensed",sans-serif;font-weight:700;color:#475569;cursor:pointer;letter-spacing:0.3px;-webkit-tap-highlight-color:transparent;';
+    btn.onclick=()=>showWtHist(key);
+    el.parentNode.appendChild(btn);
+  }
+  btn.textContent='History'+(history.length>1?' ('+history.length+')':'');
+}
+
+// ── Weight history modal ──────────────────────────────────────────────────────
+let _wtHistKey='';
+function showWtHist(key){
+  _wtHistKey=key;
+  const modal=document.getElementById('wtHistModal');
+  const title=document.getElementById('wtHistTitle');
+  modal.style.display='flex';
+  title.textContent=key.replace(/^dc-/,'').replace(/-/g,' ');
+  _renderWtHist();
+}
+function closeWtHist(){
+  document.getElementById('wtHistModal').style.display='none';
+  updateWeightDisplay(_wtHistKey);
+}
+function _renderWtHist(){
+  const content=document.getElementById('wtHistContent');
+  if(!content)return;
+  const history=LS.get('weights_'+_wtHistKey)||[];
+  if(!history.length){content.innerHTML='<p style="color:#94A3B8;font-size:12px;text-align:center;padding:20px 0">No entries yet</p>';return;}
+  content.innerHTML=history.map((e,i)=>{
+    const eq=entryEquip(_wtHistKey,e);
+    return `
+    <div style="display:flex;align-items:center;padding:9px 0;border-bottom:1px solid #F3F4F6;gap:8px;" id="whe-${i}">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--navy);min-width:68px;">${e.kg}${e.unit||'kg'}</div>
+      ${eq?`<span class="eq-tag eq-${eq}">${EQUIP[eq]}</span>`:''}
+      <div style="flex:1;font-size:11px;color:#94A3B8;">${e.date}</div>
+      <button onclick="startWtEdit(${i})" style="background:none;border:1px solid #CBD5E1;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;color:#64748B;font-family:'Barlow Condensed',sans-serif;font-weight:700;">✎</button>
+      <button onclick="delWtEntry(${i})" style="background:#FEE2E2;border:none;border-radius:8px;color:#EF4444;font-size:14px;font-weight:700;cursor:pointer;padding:8px 10px;min-width:38px;min-height:38px;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>`;}).join('');
+}
+function delWtEntry(idx){
+  const history=LS.get('weights_'+_wtHistKey)||[];
+  history.splice(idx,1);
+  LS.set('weights_'+_wtHistKey,history);
+  _renderWtHist();
+  updateWeightDisplay(_wtHistKey);
+}
+function startWtEdit(idx){
+  const history=LS.get('weights_'+_wtHistKey)||[];
+  const e=history[idx];if(!e)return;
+  let isoDate='';
+  try{const d=new Date(e.date+' 12:00');if(!isNaN(d))isoDate=d.toISOString().split('T')[0];}catch(er){}
+  const el=document.getElementById('whe-'+idx);if(!el)return;
+  const eq=entryEquip(_wtHistKey,e);
+  const eqSel=eq?`<select id="we-e-${idx}" style="border:1.5px solid #CBD5E1;border-radius:7px;padding:4px 2px;font-size:11px;outline:none;flex-shrink:0;">${Object.keys(EQUIP).map(k=>`<option value="${k}"${k===eq?' selected':''}>${EQUIP[k]}</option>`).join('')}</select>`:'';
+  el.style.flexWrap='wrap';
+  el.innerHTML=`<input type="number" id="we-v-${idx}" value="${e.kg}" step="0.5" style="width:72px;border:1.5px solid var(--teal);border-radius:7px;padding:5px 7px;font-size:13px;outline:none;font-family:'Barlow',sans-serif;">
+    <span style="font-size:11px;color:#94A3B8;flex-shrink:0;">${e.unit||'kg'}</span>
+    ${eqSel}
+    <input type="date" id="we-d-${idx}" value="${isoDate}" style="flex:1;border:1.5px solid #CBD5E1;border-radius:7px;padding:5px 5px;font-size:11px;outline:none;min-width:110px;">
+    <button onclick="saveWtEdit(${idx})" style="background:var(--teal);color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;cursor:pointer;flex-shrink:0;">Save</button>
+    <button onclick="_renderWtHist()" style="background:none;border:1px solid #ddd;border-radius:7px;padding:5px 8px;font-size:12px;cursor:pointer;color:#aaa;flex-shrink:0;">✕</button>`;
+}
+function saveWtEdit(idx){
+  const valEl=document.getElementById('we-v-'+idx);
+  const dateEl=document.getElementById('we-d-'+idx);
+  const eqEl=document.getElementById('we-e-'+idx);
+  if(!valEl||!dateEl)return;
+  const kg=parseFloat(valEl.value);if(isNaN(kg))return;
+  const history=LS.get('weights_'+_wtHistKey)||[];
+  if(history[idx]){
+    history[idx].kg=kg;
+    if(dateEl.value){
+      const d=new Date(dateEl.value+'T12:00:00');
+      const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      history[idx].date=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+    }
+    if(eqEl)history[idx].equip=eqEl.value;
+    LS.set('weights_'+_wtHistKey,history);
+  }
+  _renderWtHist();
+  updateWeightDisplay(_wtHistKey);
+}
+
+function loadAllWeights(){
+  const keys=['step-ups','calf-raises','rdl','split-squat','cable-ext-rot','cable-ext-90','ytw','serratus','chest-press','db-rows','lat-pulldown','shoulder-press','pushups-b','pallof','side-plank','dc-step-ups','dc-hip-thrusts','dc-bench','dc-ytw','dc-pushup-plus'];
+  Object.keys(EQUIP_DEFAULT).forEach(_addEquipSeg);
+  keys.forEach(updateWeightDisplay);
+}
+
+// ── Distance logging ─────────────────────────────────────────────────────────
+function logDist(key){
+  const inp=document.querySelector('.dist-input[data-key="'+key+'"]');
+  if(!inp)return;
+  const val=parseFloat(inp.value);
+  if(isNaN(val))return;
+  const unitEl=inp.nextElementSibling;
+  const unit=(unitEl&&unitEl.textContent.includes('sec'))?'sec':'m';
+  const repsInp=document.querySelector('.dist-input[data-key="'+key+'-reps"]');
+  const reps=repsInp?parseInt(repsInp.value)||1:null;
+  const total=(reps&&reps>1)?(val*reps):null;
+  const entry={date:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}),val,unit,reps,total};
+  const history=LS.get('dist_log_'+key)||[];
+  history.unshift(entry);
+  LS.set('dist_log_'+key,history.slice(0,30));
+  updateDistLog(key);
+  const msg=reps&&reps>1?'✓ '+val+unit+' × '+reps+' = '+(val*reps)+unit:'✓ '+val+unit+' logged';
+  showToast(msg);
+}
+function updateDistLog(key){
+  const el=document.getElementById('dl-'+key);
+  if(!el)return;
+  const history=LS.get('dist_log_'+key)||[];
+  if(history.length===0){el.innerHTML='';return;}
+  const last=history[0];
+  const unit=last.unit||'m';
+  const repsStr=(last.reps&&last.reps>1)?' <b>× '+last.reps+'</b> <span style="color:#94A3B8;font-size:10px;">('+last.total+unit+')</span>':'';
+  el.innerHTML='Last: <b>'+last.val+unit+'</b>'+repsStr+' <span style="color:#bbb;font-size:10px;">· '+last.date+'</span>';
+}
+function calcOceanTotal(){
+  const dv=k=>{const e=document.querySelector('.dist-input[data-key="'+k+'"]');return e?(parseFloat(e.value)||0):0;};
+  const base=dv('ocean-beach')+dv('ocean-sight')+200; // beach + sight + 200m cool-down
+  const a=document.getElementById('ocean-total-a');
+  const b=document.getElementById('ocean-total-b');
+  if(a) a.textContent=(base+dv('ocean-optA')).toLocaleString()+'m';
+  if(b) b.textContent=(base+dv('ocean-optB')).toLocaleString()+'m';
+}
+function loadDistLogs(){
+  ['wu-kick','wu-free','db-catchup','db-drag','leg-vert','leg-sprint',
+   'fs-interval','fs-cont','db2-snorkel','db2-paddles','db2-buoy','fins-2',
+   'ocean-beach','ocean-sight','ocean-optA','ocean-optB'].forEach(updateDistLog);
+}
+
+// ── Pool distances ────────────────────────────────────────────────────────
+function distVal(key){
+  const el=document.querySelector('.dist-input[data-key="'+key+'"]');
+  return el ? (parseFloat(el.value)||0) : 0;
+}
+function calcPoolTotal(){
+  const db2On=_db2active;
+  const db2Total=db2On?(
+    (distVal('db2-snorkel')*distVal('db2-snorkel-reps'))+
+    (distVal('db2-paddles')*distVal('db2-paddles-reps'))+
+    (distVal('db2-buoy')*distVal('db2-buoy-reps'))
+  ):0;
+  const total =
+    (distVal('wu-kick')*distVal('wu-kick-reps'))+
+    (distVal('wu-free')*distVal('wu-free-reps'))+
+    (distVal('db-catchup')*distVal('db-catchup-reps'))+
+    (distVal('db-drag')*distVal('db-drag-reps'))+
+    (distVal('leg-sprint')*distVal('leg-sprint-reps'))+
+    (distVal('fs-interval')*distVal('fs-reps'))+
+    (distVal('fs-cont')*distVal('fs-cont-reps'))+
+    db2Total+
+    (distVal('fins-2')*distVal('fins-2-reps'));
+  const el=document.getElementById('pool-total');
+  if(el) el.textContent = total.toLocaleString() + 'm';
+}
+let _db2active=false;
+function toggleDB2(force){
+  if(force===undefined)_db2active=!_db2active;
+  else _db2active=force;
+  LS.set('db2-active',_db2active);
+  const body=document.getElementById('db2-body');
+  const pill=document.getElementById('db2-pill');
+  if(body)body.style.display=_db2active?'block':'none';
+  if(pill){pill.textContent=_db2active?'✓ DOING IT':'SKIP';pill.style.background=_db2active?'var(--pool)':'#94A3B8';}
+  calcPoolTotal();
+}
+function loadPoolDistances(){
+  const saved=LS.get('pool_distances')||{};
+  document.querySelectorAll('.dist-input').forEach(inp=>{
+    const k=inp.dataset.key;
+    if(saved[k]!==undefined)inp.value=saved[k];
+    inp.addEventListener('change',()=>{
+      const d=LS.get('pool_distances')||{};
+      d[inp.dataset.key]=inp.value;
+      LS.set('pool_distances',d);
+      calcPoolTotal();
+      calcOceanTotal();
+    });
+    inp.addEventListener('input',calcPoolTotal);
+  });
+  calcPoolTotal();
+}
+
+// ── Progress tracker ──────────────────────────────────────────────────────
+const progTests=['Deadlift PB','Press-ups PB','Chest press dumbbell PB','Bench press barbell PB','Plank hold PB','Swim PB — no fins','Swim PB — with fins','Treading water time PB','Heli PCA test time'];
+function getProgressData(){return LS.get('progress_v2')||{};}
+function fmtProgDate(ds){
+  const d=new Date(ds+'T12:00:00');
+  const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();
+}
+function renderProgress(){
+  const el=document.getElementById('progressContainer');
+  if(!el)return;
+  const data=getProgressData();
+  el.innerHTML=progTests.map(test=>{
+    const rkey=test.replace(/[^a-z0-9]/gi,'_');
+    const entries=(data[test]||[]).slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+    const today=new Date().toISOString().split('T')[0];
+    return `<div class="prog-test-card">
+      <div class="prog-test-head">${test}</div>
+      ${entries.length===0?'<div class="prog-no-entry">No entries yet</div>':
+        entries.map(e=>`<div class="prog-entry">
+          <div class="prog-entry-val">${_escH(e.value)}</div>
+          <div class="prog-entry-date">${fmtProgDate(e.date)}</div>
+          <button class="prog-entry-del" onclick="delProgEntry('${test.replace(/'/g,"\'")}','${e.id}')">×</button>
+        </div>`).join('')}
+      <div class="prog-add-form" id="pform-${rkey}">
+        <div class="prog-add-row">
+          <input type="text" class="prog-val-input" id="pval-${rkey}" placeholder="Result (e.g. 70kg)">
+          <input type="date" class="prog-date-input" id="pdate-${rkey}" value="${today}">
+          <button class="prog-add-btn" onclick="addProgEntry('${test.replace(/'/g,"\'")}','${rkey}')">Add</button>
+          <button class="prog-cancel-btn" onclick="cancelProgForm('${rkey}')">✕</button>
+        </div>
+      </div>
+      <button class="prog-add-trigger" onclick="showProgForm('${rkey}')">＋ Add result</button>
+    </div>`;
+  }).join('');
+}
+function showProgForm(rkey){
+  const f=document.getElementById('pform-'+rkey);
+  if(f){f.style.display='block';const v=document.getElementById('pval-'+rkey);if(v)v.focus();}
+}
+function cancelProgForm(rkey){
+  const f=document.getElementById('pform-'+rkey);if(f)f.style.display='none';
+}
+function addProgEntry(test,rkey){
+  const valEl=document.getElementById('pval-'+rkey);
+  const dateEl=document.getElementById('pdate-'+rkey);
+  if(!valEl||!dateEl)return;
+  const value=valEl.value.trim();
+  const date=dateEl.value;
+  if(!value||!date)return;
+  const data=getProgressData();
+  if(!data[test])data[test]=[];
+  data[test].push({id:'p'+Date.now(),value,date});
+  LS.set('progress_v2',data);
+  renderProgress();
+}
+function delProgEntry(test,id){
+  const data=getProgressData();
+  if(data[test])data[test]=data[test].filter(e=>e.id!==id);
+  LS.set('progress_v2',data);
+  renderProgress();
+  showToast('Entry deleted');
+}
+
+
+// ── Goals ────────────────────────────────────────────────────────────────────
+const defaultGoals=[
+  'Swim 600m in 15 mins (Heli PCA test)',
+  'Correct winged scapula (bilateral, L>R)',
+  'Correct rotator cuff weakness',
+  'Leg & lower body strength',
+  'Upper body strength and bulk',
+  'Ocean swim fitness',
+  'Swim technique — continuous distance'
+];
+function getGoals(){
+  let g=LS.get('goals');
+  if(!g){
+    g=defaultGoals.map((text,i)=>({id:'g'+Date.now()+i,text,created:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}));
+    LS.set('goals',g);
+  }
+  return g;
+}
+function renderGoals(){
+  const goals=getGoals();
+  const el=document.getElementById('goalsContainer');
+  if(!el)return;
+  if(!goals.length){el.innerHTML='<p style="color:#888;font-size:12px;padding:12px 14px">No active goals — tap + Add Goal below.</p>';return;}
+  el.innerHTML=goals.map(g=>`
+    <div class="goal-item" id="goal-${g.id}">
+      <button class="goal-tick" onclick="tickGoal('${g.id}')" title="Mark as achieved">○</button>
+      <span class="goal-text" onclick="editGoalText('${g.id}')">${_escH(g.text)}</span>
+      <button class="goal-del" onclick="deleteGoal('${g.id}')" title="Delete">×</button>
+    </div>`).join('');
+}
+function addGoal(){
+  const area=document.getElementById('goalInputArea');
+  const inp=document.getElementById('goalInputField');
+  if(area){area.style.display='block';}
+  if(inp){inp.value='';inp.focus();}
+}
+function submitGoal(){
+  const inp=document.getElementById('goalInputField');
+  if(!inp)return;
+  const text=inp.value.trim();
+  if(!text)return;
+  const goals=getGoals();
+  goals.push({id:'g'+Date.now(),text:text,created:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})});
+  LS.set('goals',goals);
+  renderGoals();
+  const area=document.getElementById('goalInputArea');
+  if(area)area.style.display='none';
+  inp.value='';
+}
+function cancelGoal(){
+  const area=document.getElementById('goalInputArea');
+  if(area)area.style.display='none';
+}
+function tickGoal(id){
+  const goals=getGoals();
+  const idx=goals.findIndex(g=>g.id===id);
+  if(idx===-1)return;
+  const goal=goals[idx];
+  const achieved=LS.get('achieved_goals')||[];
+  achieved.unshift({...goal,completedDate:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})});
+  LS.set('achieved_goals',achieved);
+  goals.splice(idx,1);
+  LS.set('goals',goals);
+  renderGoals();
+  renderAchieved();
+  showToast('🎉 Goal achieved!',3000);
+}
+function editGoalText(id){
+  const goals=getGoals();
+  const goal=goals.find(g=>g.id===id);
+  if(!goal)return;
+  const el=document.querySelector(`#goal-${id} .goal-text`);
+  if(!el)return;
+  const inp=document.createElement('input');
+  inp.type='text';inp.value=goal.text;
+  inp.style.cssText='flex:1;border:none;border-bottom:1.5px solid var(--teal);background:transparent;font-size:13px;font-family:inherit;outline:none;color:var(--grey);width:100%;';
+  el.replaceWith(inp);inp.focus();inp.select();
+  const save=()=>{goal.text=inp.value.trim()||goal.text;LS.set('goals',goals);renderGoals();};
+  inp.addEventListener('blur',save);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur();});
+}
+function deleteGoal(id){
+  const goals=getGoals();
+  LS.set('goals',goals.filter(g=>g.id!==id));
+  renderGoals();
+}
+let _achvList=[];
+function _achvISODate(s){
+  try{const d=new Date(s+' 12:00');if(!isNaN(d))return d.toISOString().split('T')[0];}catch(e){}return '';
+}
+function _achvFmtDate(iso){
+  const d=new Date(iso+'T12:00:00');
+  const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();
+}
+function _escH(s){return String(s??'').replace(/&/g,'&amp;')  .replace(/</g,'&lt;')  .replace(/>/g,'&gt;');}
+function saveAchvDate(idx,val){
+  if(!val)return;
+  _achvList[idx].completedDate=_achvFmtDate(val);
+  LS.set('achieved_goals',_achvList);
+}
+function editAchvText(idx){
+  const el=document.getElementById('atxt-'+idx);
+  if(!el)return;
+  const inp=document.createElement('input');
+  inp.type='text';inp.value=_achvList[idx].text;
+  inp.style.cssText='flex:1;border:none;border-bottom:1.5px solid var(--teal);background:transparent;font-size:13px;font-family:inherit;outline:none;color:var(--grey);width:100%;';
+  el.replaceWith(inp);inp.focus();inp.select();
+  const save=()=>{const t=inp.value.trim();if(t)_achvList[idx].text=t;LS.set('achieved_goals',_achvList);renderAchieved();};
+  inp.addEventListener('blur',save);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur();});
+}
+function deleteAchv(idx){
+  _achvList.splice(idx,1);
+  LS.set('achieved_goals',_achvList);
+  renderAchieved();
+  showToast('Removed');
+}
+function renderAchieved(){
+  const el=document.getElementById('achievedContainer');
+  if(!el)return;
+  _achvList=LS.get('achieved_goals')||[];
+  if(!_achvList.length){el.innerHTML='<p style="color:#888;font-size:12px;padding:12px 14px">No achieved goals yet — tick a goal to move it here.</p>';return;}
+  el.innerHTML=_achvList.map((g,i)=>`
+    <div class="achieved-item" id="achv-${i}" style="align-items:flex-start;padding:12px 14px;gap:10px;">
+      <div class="achieved-tick" style="margin-top:2px;">✓</div>
+      <div style="flex:1;min-width:0;">
+        <div id="atxt-${i}" onclick="editAchvText(${i})" style="font-size:13px;font-weight:600;color:var(--grey);cursor:pointer;line-height:1.4;display:flex;align-items:center;gap:5px;">${_escH(g.text)} <span style="font-size:9px;opacity:0.4;flex-shrink:0;">✎</span></div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:5px;">
+          <span style="font-size:10px;color:#94A3B8;">Achieved</span>
+          <input type="date" value="${_achvISODate(g.completedDate)}" onchange="saveAchvDate(${i},this.value)" style="border:none;border-bottom:1px solid #CBD5E1;background:transparent;font-size:10px;color:#64748B;outline:none;font-family:'Barlow',sans-serif;padding:1px 0;">
+        </div>
+      </div>
+      <button onclick="deleteAchv(${i})" style="background:#FEE2E2;border:none;border-radius:8px;color:#EF4444;font-size:14px;font-weight:700;padding:8px 10px;min-width:38px;min-height:38px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;">×</button>
+    </div>`).join('');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+function _initApp(){
+  loadStats();loadAllWeights();loadPoolDistances();loadDistLogs();calcOceanTotal();renderProgress();renderGoals();renderAchieved();
+  const db2saved=LS.get('db2-active');
+  toggleDB2(db2saved===true);
+  const gf=document.getElementById('goalInputField');
+  if(gf){gf.addEventListener('keydown',e=>{if(e.key==='Enter')submitGoal();if(e.key==='Escape')cancelGoal();});}
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // Clock and weather run regardless of auth
+  updateClock();setInterval(updateClock,1000);
+  loadWeather();
+
+  // Listen for auth state. Supabase advises against awaiting its own calls inside
+  // this callback, so the work runs on the next tick.
+  _sb.auth.onAuthStateChange((event, session) => {
+    setTimeout(() => _onAuth(session), 0);
+  });
+
+  // Allow Enter key on login form
+  ['authEmail','authPassword'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter') authSignIn(); });
+  });
 });
-
-render();
 </script>
+
+<!-- Weight History Modal -->
+<div id="wtHistModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;align-items:flex-end;" onclick="if(event.target===this)closeWtHist()">
+  <div style="background:#fff;border-radius:16px 16px 0 0;width:100%;max-height:78vh;overflow-y:auto;">
+    <div style="background:var(--navy);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;border-radius:16px 16px 0 0;position:sticky;top:0;z-index:1;">
+      <div id="wtHistTitle" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase;"></div>
+      <button onclick="closeWtHist()" style="background:rgba(255,255,255,0.15);border:none;border-radius:20px;color:#fff;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:5px 12px;cursor:pointer;letter-spacing:0.5px;">CLOSE</button>
+    </div>
+    <div id="wtHistContent" style="padding:14px;min-height:80px;"></div>
+  </div>
+</div>
+
+<!-- Swim History Modal -->
+<div id="swHistModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;align-items:flex-end;" onclick="if(event.target===this)closeSwimHist()">
+  <div style="background:#fff;border-radius:16px 16px 0 0;width:100%;max-height:78vh;overflow-y:auto;">
+    <div style="background:var(--pool);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;border-radius:16px 16px 0 0;position:sticky;top:0;z-index:1;">
+      <div id="swHistTitle" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase;"></div>
+      <button onclick="closeSwimHist()" style="background:rgba(255,255,255,0.2);border:none;border-radius:20px;color:#fff;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:5px 12px;cursor:pointer;">CLOSE</button>
+    </div>
+    <div id="swHistContent" style="padding:14px;min-height:80px;"></div>
+  </div>
+</div>
 </body>
 </html>
