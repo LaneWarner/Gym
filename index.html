@@ -251,12 +251,6 @@ body{background:#EAECF0;}
 .content{max-width:860px;margin:0 auto;padding:14px 12px 80px;}
 
 /* Stats strip in dashboard */
-.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:20px;}
-@media(max-width:480px){.dash-stats{grid-template-columns:repeat(2,1fr);}}
-.dash-stat{background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.08);-webkit-tap-highlight-color:transparent;}
-.dash-stat-label{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94A3B8;margin-bottom:4px;}
-.dash-stat-value{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#0E1B35;line-height:1;}
-.dash-stat-input{background:transparent;border:none;border-bottom:1.5px solid var(--teal);color:#0E1B35;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;width:100%;text-align:center;outline:none;}
 
 /* Dashboard section labels */
 .dash-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;margin:0 0 8px;}
@@ -306,7 +300,11 @@ body{background:#EAECF0;}
 .pb-vals{text-align:right;}
 .pb-val{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:var(--navy);line-height:1.2;}
 .pb-val .eq-tag{margin-right:5px;vertical-align:2px;}
-.pb-date{font-size:10px;color:#94A3B8;}
+.pb-chev{font-family:'Barlow Condensed',sans-serif;font-size:20px;color:#CBD5E1;margin-left:2px;}
+.pb-row{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.pb-row:active{background:#F1F5F9;}
+.flash-row{animation:flashRow 1.6s ease;}
+@keyframes flashRow{0%,40%{background:rgba(255,214,102,0.55);}100%{background:transparent;}}
 .pb-none{font-size:11px;color:#CBD5E1;font-style:italic;}
 .data-bar{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid #E8EBF0;}
 .data-btn{flex:1;padding:10px 12px;border-radius:10px;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -379,14 +377,6 @@ input,select,textarea{font-size:16px !important;}
 
 <!-- ══ OVERVIEW / DASHBOARD ══ -->
 <div id="tab-overview" class="tab-panel active">
-
-  <!-- Stats -->
-  <div class="dash-stats" style="margin-top:0">
-    <div class="dash-stat" onclick="editStat(this,'pressups')"><div class="dash-stat-label">Press-ups PB</div><div class="dash-stat-value" id="sv-pressups">—</div></div>
-    <div class="dash-stat" onclick="editStat(this,'deadlift')"><div class="dash-stat-label">Deadlift PB</div><div class="dash-stat-value" id="sv-deadlift">60 kg</div></div>
-    <div class="dash-stat" onclick="editStat(this,'swimmax')"><div class="dash-stat-label">Swim PB (no fins)</div><div class="dash-stat-value" id="sv-swimmax">100m</div></div>
-    <div class="dash-stat" onclick="editStat(this,'chestpress')"><div class="dash-stat-label">Chest press PB</div><div class="dash-stat-value" id="sv-chestpress">—</div></div>
-  </div>
 
   <!-- 8-day cycle targets — compact -->
   <div class="dash-label">8-DAY CYCLE — TRAINING TARGETS</div>
@@ -483,6 +473,10 @@ input,select,textarea{font-size:16px !important;}
         <span style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:0.5px;" id="pool-total">—</span>
       </div>
 
+      <div class="bh" style="background:rgba(29,125,179,0.2)">PERSONAL BESTS — CONTINUOUS SWIM</div>
+      <div class="si"><div class="si-phase" style="color:var(--pool)"><span class="si-name">NO FINS</span><br>continuous freestyle</div><div class="si-detail">Longest distance swum without stopping, no fins. Log it whenever you beat it.<div class="wt-row"><span class="wt-prev" id="wtp-swim-pb-nofins">No previous entry</span><input type="number" class="wt-input" id="wt-swim-pb-nofins" placeholder="m" step="25" min="0" style="border-color:#BBD6F0;color:var(--pool)"><button class="wt-btn" style="background:var(--pool)" onclick="logWeight('swim-pb-nofins','m')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--pool)"><span class="si-name">WITH FINS</span><br>continuous freestyle</div><div class="si-detail">Longest distance swum without stopping, with fins.<div class="wt-row"><span class="wt-prev" id="wtp-swim-pb-fins">No previous entry</span><input type="number" class="wt-input" id="wt-swim-pb-fins" placeholder="m" step="25" min="0" style="border-color:#BBD6F0;color:var(--pool)"><button class="wt-btn" style="background:var(--pool)" onclick="logWeight('swim-pb-fins','m')">Log ✓</button></div></div></div>
+
     </div>
   </div>
 
@@ -543,6 +537,7 @@ input,select,textarea{font-size:16px !important;}
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">BODYWEIGHT SQUATS</span><br>2×10</div><div class="si-detail">Slow controlled descent, pause at bottom. Primes quads, glutes and hip flexors before loading.</div></div>
 
       <div class="bh" style="background:rgba(232,89,12,0.15)">LEGS · ~15 min</div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">DEADLIFT</span><br>3×5</div><div class="si-detail">Heaviest lift of the day — do it first while fresh. Bar over mid-foot, shins close. Hinge down and grip just outside the knees, chest up, lats tight. Push the floor away with the bar dragging up your legs, then stand tall without leaning back. Lower under control. 2–3 min rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-deadlift">No previous entry</span><input type="number" class="wt-input" id="wt-dd-deadlift" placeholder="kg" step="2.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-deadlift')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">WEIGHTED STEP-UPS</span><br>25 reps × 2</div><div class="si-detail">50 cm step up onto box. Drive through heel of leading foot and stand tall at the top with a controlled descent. Alternate legs.<div class="wt-row"><span class="wt-prev" id="wtp-dd-step-ups">No previous entry</span><input type="number" class="wt-input" id="wt-dd-step-ups" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-step-ups')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">STANDING CALF RAISES</span><br>3×15</div><div class="si-detail">Feet shoulder-width on edge of step. Full range — heel below step at bottom, full rise on toes at top. Controlled descent. Add weight when 3×15 feels easy.<div class="wt-row"><span class="wt-prev" id="wtp-dd-calf-raises">No previous entry</span><input type="number" class="wt-input" id="wt-dd-calf-raises" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-calf-raises')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">ROMANIAN DEADLIFT</span><br>3×10</div><div class="si-detail">Barbell or DBs. Hinge at the hips — soft knee, back flat, send hips back. Lower the weight down the front of your legs until you feel a strong hamstring stretch, then drive hips forward to stand. Slow controlled descent — 3 sec down. Builds the hamstrings and hip hinge pattern that drives kick recovery and posterior chain strength. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-rdl">No previous entry</span><input type="number" class="wt-input" id="wt-dd-rdl" placeholder="kg" step="2.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-rdl')">Log ✓</button></div></div></div>
@@ -1419,39 +1414,13 @@ async function _onAuth(session) {
   _flush();
 }
 
-// ── Stats ─────────────────────────────────────────────────────────────────
-const statDefaults={pressups:'—',deadlift:'60 kg',swimmax:'100m',chestpress:'—'};
-function loadStats(){
-  const saved=LS.get('stats')||{};
-  Object.keys(statDefaults).forEach(k=>{
-    const el=document.getElementById('sv-'+k);
-    if(el) el.textContent=saved[k]||statDefaults[k];
-  });
-}
-function saveStats(){
-  const data={};
-  Object.keys(statDefaults).forEach(k=>{const el=document.getElementById('sv-'+k);if(el)data[k]=el.textContent;});
-  LS.set('stats',data);
-}
-function editStat(card,key){
-  const el=document.getElementById('sv-'+key);
-  if(!el)return;
-  const cur=el.textContent;
-  const inp=document.createElement('input');
-  inp.className='dash-stat-input';inp.value=cur;inp.type='text';
-  el.replaceWith(inp);inp.focus();inp.select();
-  function done(){const v=inp.value.trim()||cur;el.textContent=v;inp.replaceWith(el);saveStats();}
-  inp.addEventListener('blur',done);
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur();if(e.key==='Escape'){el.textContent=cur;inp.replaceWith(el);}});
-}
-
 // ── Weight logging ────────────────────────────────────────────────────────
 // ── Weight keys and equipment ─────────────────────────────────────────────────
 // Day D (Heli gym) repeats Day B's lifts. Its rows have their own element ids
 // (prefix dd-) but share Day B's history, so each lift has one progression line.
 const DAYB_KEYS=['step-ups','calf-raises','rdl','split-squat','cable-ext-rot','cable-ext-90','ytw','serratus','chest-press','db-rows','lat-pulldown','shoulder-press','pushups-b','pallof','side-plank'];
 const DAYD_SHARED=['step-ups','calf-raises','rdl','split-squat','ytw','serratus','chest-press','db-rows','shoulder-press','pushups-b','pallof','side-plank'];
-const WEIGHT_ROWS=DAYB_KEYS.concat(DAYD_SHARED.map(k=>'dd-'+k),['dd-hip-thrusts','dd-db-ext-rot','dd-db-ext-90']);
+const WEIGHT_ROWS=DAYB_KEYS.concat(DAYD_SHARED.map(k=>'dd-'+k),['dd-deadlift','dd-hip-thrusts','dd-db-ext-rot','dd-db-ext-90','swim-pb-nofins','swim-pb-fins']);
 // Storage key for a row: Day D's shared rows store under the Day B key
 function sk(key){return key.startsWith('dd-')&&DAYD_SHARED.includes(key.slice(3))?key.slice(3):key;}
 function refreshWeights(key){const k=sk(key);WEIGHT_ROWS.filter(r=>sk(r)===k).forEach(r=>{_renderEquipSeg(r);updateWeightDisplay(r);});renderPBs();}
@@ -1548,7 +1517,7 @@ function showWtHist(key){
   const modal=document.getElementById('wtHistModal');
   const title=document.getElementById('wtHistTitle');
   modal.style.display='flex';
-  title.textContent=key.replace(/^dd-/,'').replace(/-/g,' ');
+  title.textContent={'swim-pb-nofins':'Swim PB — no fins','swim-pb-fins':'Swim PB — with fins'}[key]||key.replace(/^dd-/,'').replace(/-/g,' ');
   _renderWtHist();
 }
 function closeWtHist(){
@@ -1616,14 +1585,23 @@ function saveWtEdit(idx){
 }
 
 // ── Current PBs (home page) ─────────────────────────────────────────────────
-// Heaviest logged weight (or most reps / longest hold) per lift, split by
-// equipment where the lift tracks it. Shoulder rehab is left out.
+// Heaviest logged weight (or most reps, or longest swim) per lift, split by
+// equipment where the lift tracks it. Shoulder rehab and core are left out.
+// Swim PBs reuse the weight log: kg holds metres and unit is 'm'.
 const PB_LIFTS=[
-  ['Legs',[['step-ups','Weighted step-ups'],['calf-raises','Calf raises'],['rdl','Romanian deadlift'],['split-squat','Bulgarian split squat'],['dd-hip-thrusts','Hip thrusts']]],
-  ['Upper body',[['chest-press','Chest press'],['db-rows','Bent-over rows'],['lat-pulldown','Lat pulldown'],['shoulder-press','Shoulder press'],['pushups-b','Push-ups']]],
-  ['Core',[['pallof','Pallof press'],['side-plank','Side plank']]]
+  ['Swim — continuous',[['swim-pb-nofins','No fins'],['swim-pb-fins','With fins']]],
+  ['Legs',[['dd-deadlift','Deadlift'],['step-ups','Weighted step-ups'],['calf-raises','Calf raises'],['rdl','Romanian deadlift'],['split-squat','Bulgarian split squat'],['dd-hip-thrusts','Hip thrusts']]],
+  ['Upper body',[['chest-press','Chest press'],['db-rows','Bent-over rows'],['lat-pulldown','Lat pulldown'],['shoulder-press','Shoulder press'],['pushups-b','Push-ups']]]
 ];
-function _pbDate(d){return String(d).replace(/ \d{4}$/,'');}
+// Open the session a lift is logged in and scroll to it
+function goToLift(key){
+  const inp=document.getElementById('wt-'+key);if(!inp)return;
+  const day=inp.closest('.session-card').id.replace('session-','');
+  const btn=Array.from(document.querySelectorAll('.tnav-btn')).find(b=>b.textContent.trim()==='Sessions');
+  showTab('sessions',btn);showSession(day,document.getElementById('stab-'+day));
+  const row=inp.closest('.si')||inp;
+  setTimeout(()=>{row.scrollIntoView({behavior:'smooth',block:'center'});row.classList.add('flash-row');setTimeout(()=>row.classList.remove('flash-row'),1600);},30);
+}
 function renderPBs(){
   const el=document.getElementById('pbContainer');if(!el)return;
   el.innerHTML=PB_LIFTS.map(([group,lifts])=>'<div class="pb-group">'+group+'</div>'+lifts.map(([key,name])=>{
@@ -1633,9 +1611,9 @@ function renderPBs(){
     h.slice().reverse().forEach(e=>{const eq=entryEquip(key,e)||'_';if(!best[eq]||e.kg>best[eq].kg)best[eq]=e;});
     const types=Object.keys(best).sort((x,y)=>best[y].kg-best[x].kg);
     const vals=types.length?types.map(eq=>{const e=best[eq];
-      return `<div class="pb-val">${eq!=='_'?`<span class="eq-tag eq-${eq}">${EQUIP[eq]}</span>`:''}${e.kg}${e.unit==='reps'?' reps':e.unit==='sec'?' sec':(e.unit||'kg')} <span class="pb-date">${_pbDate(e.date)}</span></div>`;}).join('')
+      return `<div class="pb-val">${eq!=='_'?`<span class="eq-tag eq-${eq}">${EQUIP[eq]}</span>`:''}${e.kg}${e.unit==='reps'?' reps':e.unit==='sec'?' sec':(e.unit||'kg')}</div>`;}).join('')
       :'<div class="pb-none">No entries yet</div>';
-    return `<div class="pb-row"><div class="pb-name">${name}</div><div class="pb-vals">${vals}</div></div>`;
+    return `<div class="pb-row" onclick="goToLift('${key}')"><div class="pb-name">${name}</div><div class="pb-vals">${vals}</div><div class="pb-chev">›</div></div>`;
   }).join('')).join('');
 }
 
@@ -1945,7 +1923,7 @@ function renderAchieved(){
 
 // ── Init ──────────────────────────────────────────────────────────────────
 function _initApp(){
-  loadStats();loadAllWeights();loadPoolDistances();loadDistLogs();calcOceanTotal();renderProgress();renderGoals();renderAchieved();
+  loadAllWeights();loadPoolDistances();loadDistLogs();calcOceanTotal();renderProgress();renderGoals();renderAchieved();
   const db2saved=LS.get('db2-active');
   toggleDB2(db2saved===true);
   const gf=document.getElementById('goalInputField');
