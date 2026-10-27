@@ -119,7 +119,7 @@ body{font-family:'Barlow',sans-serif;background:#f5f7fa;color:var(--grey);}
 .eq-seg button+button{border-left:1px solid #e5e7eb;}
 .eq-seg button.on{background:var(--navy);color:#fff;}
 .eq-tag{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.3px;border-radius:10px;padding:2px 7px;color:#fff;flex-shrink:0;}
-.eq-bb{background:#1A2B4A;}.eq-db{background:#2D7D46;}.eq-mc{background:#7B3FA0;}
+.eq-bb{background:#1A2B4A;}.eq-db{background:#2D7D46;}.eq-mc{background:#7B3FA0;}.eq-ot{background:#B45309;}
 
 
 /* TECHNIQUE TABLES */
@@ -298,6 +298,16 @@ body{background:#EAECF0;}
 .nav-card-desc{font-size:11px;color:#94A3B8;margin-top:4px;line-height:1.4;}
 .nav-card-chev{font-size:18px;color:#CBD5E1;padding:0 16px;flex-shrink:0;font-family:'Barlow Condensed',sans-serif;}
 
+.pb-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08);}
+.pb-group{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#94A3B8;text-transform:uppercase;padding:10px 14px 4px;background:#F8FAFC;border-top:1px solid #F3F4F6;}
+.pb-group:first-child{border-top:none;}
+.pb-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid #F3F4F6;}
+.pb-name{flex:1;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:#1E293B;letter-spacing:0.3px;}
+.pb-vals{text-align:right;}
+.pb-val{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:var(--navy);line-height:1.2;}
+.pb-val .eq-tag{margin-right:5px;vertical-align:2px;}
+.pb-date{font-size:10px;color:#94A3B8;}
+.pb-none{font-size:11px;color:#CBD5E1;font-style:italic;}
 .data-bar{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid #E8EBF0;}
 .data-btn{flex:1;padding:10px 12px;border-radius:10px;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .data-btn-export{background:#E3F2FD;color:#1565C0;}
@@ -375,7 +385,7 @@ input,select,textarea{font-size:16px !important;}
     <div class="dash-stat" onclick="editStat(this,'pressups')"><div class="dash-stat-label">Press-ups PB</div><div class="dash-stat-value" id="sv-pressups">—</div></div>
     <div class="dash-stat" onclick="editStat(this,'deadlift')"><div class="dash-stat-label">Deadlift PB</div><div class="dash-stat-value" id="sv-deadlift">60 kg</div></div>
     <div class="dash-stat" onclick="editStat(this,'swimmax')"><div class="dash-stat-label">Swim PB (no fins)</div><div class="dash-stat-value" id="sv-swimmax">100m</div></div>
-    <div class="dash-stat" onclick="editStat(this,'swimfins')"><div class="dash-stat-label">Swim PB (fins)</div><div class="dash-stat-value" id="sv-swimfins">—</div></div>
+    <div class="dash-stat" onclick="editStat(this,'chestpress')"><div class="dash-stat-label">Chest press PB</div><div class="dash-stat-value" id="sv-chestpress">—</div></div>
   </div>
 
   <!-- 8-day cycle targets — compact -->
@@ -399,61 +409,9 @@ input,select,textarea{font-size:16px !important;}
     </div>
   </div>
 
-  <!-- Cognitive conditioning quick ref -->
-  <div class="dash-label">COGNITIVE CONDITIONING</div>
-  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08);margin-bottom:20px;">
-    <div style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
-      <span style="font-size:22px;width:32px;text-align:center;">🚿</span>
-      <div style="flex:1;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#00838F;">COLD SHOWERS</div>
-        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">3 min cold at end of shower · Daily</div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
-      <span style="font-size:22px;width:32px;text-align:center;">💨</span>
-      <div style="flex:1;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#3949AB;">BOX BREATHING</div>
-        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">Inhale 4 · Hold 4 · Exhale 4 · Hold 4 · Repeat 4–6 times · Daily</div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;padding:12px 14px;gap:12px;">
-      <span style="font-size:22px;width:32px;text-align:center;">🔥</span>
-      <div style="flex:1;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#BF360C;">SAUNA</div>
-        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">15–20 min · Twice per week · 500ml water before and after</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Nutrition quick ref -->
-  <div class="dash-label">NUTRITION</div>
-  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08);">
-    <div style="display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
-      <span style="font-size:20px;width:32px;text-align:center;">💧</span>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#1565C0;flex:1;">DAILY WATER</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#1565C0;">2–3L</div>
-    </div>
-    <div style="display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid #F3F4F6;gap:12px;">
-      <span style="font-size:20px;width:32px;text-align:center;">🥩</span>
-      <div style="flex:1;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#C62828;">PROTEIN</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#C62828;">30–40g <span style="font-size:10px;font-weight:700;color:#94A3B8;">meal</span></div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#C62828;">15–20g <span style="font-size:10px;font-weight:700;color:#94A3B8;">snack</span></div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;padding:11px 14px;gap:12px;">
-      <span style="font-size:20px;width:32px;text-align:center;">🍬</span>
-      <div style="flex:1;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#F57F17;">ADDED SUGAR</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#F57F17;">&lt;10g <span style="font-size:10px;font-weight:700;color:#94A3B8;">per 100g</span></div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:#F57F17;">&lt;5g <span style="font-size:10px;font-weight:700;color:#94A3B8;">per snack</span></div>
-      </div>
-    </div>
-  </div>
+  <!-- Current PBs, worked out from logged weights -->
+  <div class="dash-label">CURRENT PBs — FROM YOUR LOGS</div>
+  <div class="pb-card" id="pbContainer"></div>
 
   <div class="data-bar">
     <button class="data-btn data-btn-export" onclick="exportData()">⬆ Export my data</button>
@@ -589,6 +547,7 @@ input,select,textarea{font-size:16px !important;}
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">STANDING CALF RAISES</span><br>3×15</div><div class="si-detail">Feet shoulder-width on edge of step. Full range — heel below step at bottom, full rise on toes at top. Controlled descent. Add weight when 3×15 feels easy.<div class="wt-row"><span class="wt-prev" id="wtp-dd-calf-raises">No previous entry</span><input type="number" class="wt-input" id="wt-dd-calf-raises" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-calf-raises')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">ROMANIAN DEADLIFT</span><br>3×10</div><div class="si-detail">Barbell or DBs. Hinge at the hips — soft knee, back flat, send hips back. Lower the weight down the front of your legs until you feel a strong hamstring stretch, then drive hips forward to stand. Slow controlled descent — 3 sec down. Builds the hamstrings and hip hinge pattern that drives kick recovery and posterior chain strength. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-rdl">No previous entry</span><input type="number" class="wt-input" id="wt-dd-rdl" placeholder="kg" step="2.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-rdl')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">BULGARIAN SPLIT SQUAT</span><br>3×6 each</div><div class="si-detail">Rear foot elevated on bench. Front knee tracks over toe — long stride. Controlled descent, drive through front heel to stand. 60 sec rest between sets. Unilateral loading prevents compensation, hip flexor stretch under load directly improves kick range of motion.<div class="wt-row"><span class="wt-prev" id="wtp-dd-split-squat">No previous entry</span><input type="number" class="wt-input" id="wt-dd-split-squat" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-split-squat')">Log ✓</button></div></div></div>
+      <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">HIP THRUSTS</span><br>3×12</div><div class="si-detail">Upper back on bench, barbell or DB across hips. Drive hips up — full glute squeeze at top, hold 1 sec. Lower controlled. Posterior chain power that transfers directly to swim kick drive. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-hip-thrusts">No previous entry</span><input type="number" class="wt-input" id="wt-dd-hip-thrusts" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-hip-thrusts')">Log ✓</button></div></div></div>
 
       <div class="bh" style="background:rgba(123,63,160,0.2)">SHOULDER REHABILITATION · ~15 min</div>
       <div class="si"><div class="si-phase" style="color:var(--rehab)"><span class="si-name">DB EXT. ROTATION</span><br>side-lying · 2×12 each</div><div class="si-detail">Lie on your side, top elbow bent 90° with a rolled towel between elbow and ribs. Rotate the forearm up toward the ceiling, pause, lower over 3 sec. Elbow stays on the towel. Very light — 1–3 kg. Same target as the cable version: infraspinatus and teres minor. 45 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-db-ext-rot">No previous entry</span><input type="number" class="wt-input" id="wt-dd-db-ext-rot" placeholder="kg" step="0.25" min="0"><button class="wt-btn" onclick="logWeight('dd-db-ext-rot')" style="background:var(--rehab)">Log ✓</button></div></div></div>
@@ -1461,7 +1420,7 @@ async function _onAuth(session) {
 }
 
 // ── Stats ─────────────────────────────────────────────────────────────────
-const statDefaults={pressups:'—',deadlift:'60 kg',swimmax:'100m',swimfins:'—'};
+const statDefaults={pressups:'—',deadlift:'60 kg',swimmax:'100m',chestpress:'—'};
 function loadStats(){
   const saved=LS.get('stats')||{};
   Object.keys(statDefaults).forEach(k=>{
@@ -1492,17 +1451,17 @@ function editStat(card,key){
 // (prefix dd-) but share Day B's history, so each lift has one progression line.
 const DAYB_KEYS=['step-ups','calf-raises','rdl','split-squat','cable-ext-rot','cable-ext-90','ytw','serratus','chest-press','db-rows','lat-pulldown','shoulder-press','pushups-b','pallof','side-plank'];
 const DAYD_SHARED=['step-ups','calf-raises','rdl','split-squat','ytw','serratus','chest-press','db-rows','shoulder-press','pushups-b','pallof','side-plank'];
-const WEIGHT_ROWS=DAYB_KEYS.concat(DAYD_SHARED.map(k=>'dd-'+k),['dd-db-ext-rot','dd-db-ext-90']);
+const WEIGHT_ROWS=DAYB_KEYS.concat(DAYD_SHARED.map(k=>'dd-'+k),['dd-hip-thrusts','dd-db-ext-rot','dd-db-ext-90']);
 // Storage key for a row: Day D's shared rows store under the Day B key
 function sk(key){return key.startsWith('dd-')&&DAYD_SHARED.includes(key.slice(3))?key.slice(3):key;}
-function refreshWeights(key){const k=sk(key);WEIGHT_ROWS.filter(r=>sk(r)===k).forEach(r=>{_renderEquipSeg(r);updateWeightDisplay(r);});}
+function refreshWeights(key){const k=sk(key);WEIGHT_ROWS.filter(r=>sk(r)===k).forEach(r=>{_renderEquipSeg(r);updateWeightDisplay(r);});renderPBs();}
 
 // Equipment is tracked separately where the numbers aren't comparable
 // (a 40kg bar vs 15kg dumbbells). Only these lifts get a choice.
 const EQUIP={bb:'Barbell',db:'Dumbbell',mc:'Machine',ot:'Other weight'};
-const EQUIP_OPTIONS={'calf-raises':['mc','ot'],'chest-press':['bb','db'],'db-rows':['bb','db'],'shoulder-press':['db','mc'],'lat-pulldown':['bb','db','mc']};
+const EQUIP_OPTIONS={'calf-raises':['mc','ot'],'chest-press':['bb','db'],'db-rows':['bb','db'],'shoulder-press':['db','mc']};
 // Default per lift. Entries logged before equipment tracking get this type.
-const EQUIP_DEFAULT={'calf-raises':'mc','chest-press':'db','db-rows':'db','shoulder-press':'db','lat-pulldown':'mc'};
+const EQUIP_DEFAULT={'calf-raises':'mc','chest-press':'db','db-rows':'db','shoulder-press':'db'};
 function hasEquip(key){return !!EQUIP_OPTIONS[sk(key)];}
 function entryEquip(key,e){if(!hasEquip(key))return null;const eq=e.equip||EQUIP_DEFAULT[sk(key)];return EQUIP_OPTIONS[sk(key)].includes(eq)?eq:EQUIP_DEFAULT[sk(key)];}
 // Last chosen type for this lift, else the type of its latest entry, else the default
@@ -1656,9 +1615,34 @@ function saveWtEdit(idx){
   refreshWeights(_wtHistKey);
 }
 
+// ── Current PBs (home page) ─────────────────────────────────────────────────
+// Heaviest logged weight (or most reps / longest hold) per lift, split by
+// equipment where the lift tracks it. Shoulder rehab is left out.
+const PB_LIFTS=[
+  ['Legs',[['step-ups','Weighted step-ups'],['calf-raises','Calf raises'],['rdl','Romanian deadlift'],['split-squat','Bulgarian split squat'],['dd-hip-thrusts','Hip thrusts']]],
+  ['Upper body',[['chest-press','Chest press'],['db-rows','Bent-over rows'],['lat-pulldown','Lat pulldown'],['shoulder-press','Shoulder press'],['pushups-b','Push-ups']]],
+  ['Core',[['pallof','Pallof press'],['side-plank','Side plank']]]
+];
+function _pbDate(d){return String(d).replace(/ \d{4}$/,'');}
+function renderPBs(){
+  const el=document.getElementById('pbContainer');if(!el)return;
+  el.innerHTML=PB_LIFTS.map(([group,lifts])=>'<div class="pb-group">'+group+'</div>'+lifts.map(([key,name])=>{
+    const h=LS.get('weights_'+sk(key))||[];
+    // oldest first, so a tie keeps the date it was first reached
+    const best={};
+    h.slice().reverse().forEach(e=>{const eq=entryEquip(key,e)||'_';if(!best[eq]||e.kg>best[eq].kg)best[eq]=e;});
+    const types=Object.keys(best).sort((x,y)=>best[y].kg-best[x].kg);
+    const vals=types.length?types.map(eq=>{const e=best[eq];
+      return `<div class="pb-val">${eq!=='_'?`<span class="eq-tag eq-${eq}">${EQUIP[eq]}</span>`:''}${e.kg}${e.unit==='reps'?' reps':e.unit==='sec'?' sec':(e.unit||'kg')} <span class="pb-date">${_pbDate(e.date)}</span></div>`;}).join('')
+      :'<div class="pb-none">No entries yet</div>';
+    return `<div class="pb-row"><div class="pb-name">${name}</div><div class="pb-vals">${vals}</div></div>`;
+  }).join('')).join('');
+}
+
 function loadAllWeights(){
   WEIGHT_ROWS.forEach(_addEquipSeg);
   WEIGHT_ROWS.forEach(updateWeightDisplay);
+  renderPBs();
 }
 
 // ── Distance logging ─────────────────────────────────────────────────────────
