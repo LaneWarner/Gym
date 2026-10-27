@@ -310,6 +310,20 @@ body{background:#EAECF0;}
 .data-btn{flex:1;padding:10px 12px;border-radius:10px;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .data-btn-export{background:#E3F2FD;color:#1565C0;}
 .data-btn-import{background:#E8F5E9;color:#2E7D32;}
+.opt-block{margin:12px 14px;border:2px dashed #8BB8D8;border-radius:12px;background:rgba(255,255,255,0.5);overflow:hidden;transition:border-color .2s,background .2s;}
+.opt-block.on{border-style:solid;border-color:var(--pool);background:#fff;}
+.opt-head{width:100%;display:flex;align-items:center;gap:10px;padding:12px;text-align:left;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.opt-badge{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1px;color:#fff;background:#94A3B8;border-radius:6px;padding:3px 7px;flex-shrink:0;}
+.opt-block.on .opt-badge{background:var(--pool);}
+.opt-text{flex:1;min-width:0;}
+.opt-title{display:block;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:var(--navy);letter-spacing:0.3px;}
+.opt-sub{display:block;font-size:11px;color:#64748B;margin-top:1px;}
+.opt-switch{width:50px;height:30px;border-radius:15px;background:#CBD5E1;position:relative;flex-shrink:0;transition:background .2s;}
+.opt-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.25);transition:left .2s;}
+.opt-block.on .opt-switch{background:var(--pool);}
+.opt-block.on .opt-knob{left:23px;}
+.opt-state{font-size:12px;color:#64748B;font-style:italic;padding:0 12px 12px;}
+.opt-block.on .opt-state{color:var(--pool);font-style:normal;font-weight:600;}
 .dist-hist-btn{background:rgba(29,125,179,0.12);color:var(--pool);border:1px solid rgba(29,125,179,0.25);border-radius:6px;padding:4px 7px;font-family:"Barlow Condensed",sans-serif;font-size:10px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap;letter-spacing:0.3px;}
 /* Prevent iOS auto-zoom on input focus */
 input,select,textarea{font-size:16px !important;}
@@ -435,8 +449,6 @@ input,select,textarea{font-size:16px !important;}
       <div class="bh" style="background:rgba(29,125,179,0.2)">DRILL BLOCK</div>
       <div class="pool-set"><b class="pool-set-title">Catch-up drill</b><div class="pool-set-name">Pause lead hand at extension until trailing hand arrives. Long stroke timing.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-dk)">🤿 Snorkel optional</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db-catchup" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db-catchup-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db-catchup')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db-catchup')">History</button></div></div>
       <div class="dist-log-prev" id="dl-db-catchup"></div>
-      <div class="pool-set"><b class="pool-set-title">Fingertip drag</b><div class="pool-set-name">Drag fingertips along surface on recovery — builds high elbow habit.</div><div class="dist-wrap"><input class="dist-input" data-key="db-drag" value="25" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db-drag-reps" value="4" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db-drag')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db-drag')">History</button></div></div>
-      <div class="dist-log-prev" id="dl-db-drag"></div>
 
 
       <div class="bh" style="background:rgba(29,125,179,0.2)">LEG STRENGTH DRILL</div>
@@ -451,10 +463,13 @@ input,select,textarea{font-size:16px !important;}
       <div class="pool-set"><b class="pool-set-title">Continuous freestyle</b><div class="pool-set-name">Single effort at comfortable pace. Bilateral breathing. Hold same stroke rhythm as intervals.</div><div class="dist-wrap"><input class="dist-input" data-key="fs-cont" value="100" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="fs-cont-reps" value="1" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('fs-cont')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('fs-cont')">History</button></div></div>
       <div class="dist-log-prev" id="dl-fs-cont"></div>
 
-      <div onclick="toggleDB2()" style="background:rgba(29,125,179,0.2);display:flex;justify-content:space-between;align-items:center;padding:7px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;">
-        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--navy);">DRILL BLOCK 2 <span style="font-size:10px;font-weight:400;opacity:0.6;">Snorkel · Paddles · Pull Buoy</span></span>
-        <div id="db2-pill" style="border-radius:20px;padding:5px 14px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:0.5px;background:#94A3B8;transition:background 0.2s;flex-shrink:0;">SKIP</div>
-      </div>
+      <div class="opt-block" id="db2-block">
+      <button type="button" class="opt-head" id="db2-toggle" onclick="toggleDB2()" aria-pressed="false">
+        <span class="opt-badge" id="db2-badge">OPTIONAL</span>
+        <span class="opt-text"><span class="opt-title">Drill block 2</span><span class="opt-sub">Snorkel · Paddles · Pull buoy · <span id="db2-dist">—</span></span></span>
+        <span class="opt-switch"><span class="opt-knob"></span></span>
+      </button>
+      <div class="opt-state" id="db2-state">Not in today's session — tap to add</div>
       <div id="db2-body" style="display:none;">
       <div class="pool-set"><b class="pool-set-title">Snorkel freestyle</b><div class="pool-set-name">Focus on body rotation and high elbow catch — breathing removed.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-dk)">🤿 Snorkel</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db2-snorkel" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db2-snorkel-reps" value="2" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db2-snorkel')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db2-snorkel')">History</button></div></div>
       <div class="dist-log-prev" id="dl-db2-snorkel"></div>
@@ -462,6 +477,7 @@ input,select,textarea{font-size:16px !important;}
       <div class="dist-log-prev" id="dl-db2-paddles"></div>
       <div class="pool-set"><b class="pool-set-title">Pull buoy</b><div class="pool-set-name">Legs passive, arms only. Focus entirely on catch, pull and push phases.<div class="gear-tags"><span class="gear-tag" style="background:var(--gear-red)">🔴 Pull Buoy</span></div></div><div class="dist-wrap"><input class="dist-input" data-key="db2-buoy" value="50" type="number" step="25" min="25"><span class="dist-unit">m × </span><input class="dist-input" data-key="db2-buoy-reps" value="2" type="number" step="1" min="1" style="width:44px"><button class="dist-log-btn" onclick="logDist('db2-buoy')">Log</button><button class="dist-hist-btn" onclick="showSwimHist('db2-buoy')">History</button></div></div>
       <div class="dist-log-prev" id="dl-db2-buoy"></div>
+      </div>
       </div>
 
       <div class="bh" style="background:rgba(29,125,179,0.2)">FINS BLOCK</div>
@@ -540,7 +556,6 @@ input,select,textarea{font-size:16px !important;}
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">DEADLIFT</span><br>3×5</div><div class="si-detail">Heaviest lift of the day — do it first while fresh. Bar over mid-foot, shins close. Hinge down and grip just outside the knees, chest up, lats tight. Push the floor away with the bar dragging up your legs, then stand tall without leaning back. Lower under control. 2–3 min rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-deadlift">No previous entry</span><input type="number" class="wt-input" id="wt-dd-deadlift" placeholder="kg" step="2.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-deadlift')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">WEIGHTED STEP-UPS</span><br>25 reps × 2</div><div class="si-detail">50 cm step up onto box. Drive through heel of leading foot and stand tall at the top with a controlled descent. Alternate legs.<div class="wt-row"><span class="wt-prev" id="wtp-dd-step-ups">No previous entry</span><input type="number" class="wt-input" id="wt-dd-step-ups" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-step-ups')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">STANDING CALF RAISES</span><br>3×15</div><div class="si-detail">Feet shoulder-width on edge of step. Full range — heel below step at bottom, full rise on toes at top. Controlled descent. Add weight when 3×15 feels easy.<div class="wt-row"><span class="wt-prev" id="wtp-dd-calf-raises">No previous entry</span><input type="number" class="wt-input" id="wt-dd-calf-raises" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-calf-raises')">Log ✓</button></div></div></div>
-      <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">ROMANIAN DEADLIFT</span><br>3×10</div><div class="si-detail">Barbell or DBs. Hinge at the hips — soft knee, back flat, send hips back. Lower the weight down the front of your legs until you feel a strong hamstring stretch, then drive hips forward to stand. Slow controlled descent — 3 sec down. Builds the hamstrings and hip hinge pattern that drives kick recovery and posterior chain strength. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-rdl">No previous entry</span><input type="number" class="wt-input" id="wt-dd-rdl" placeholder="kg" step="2.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-rdl')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">BULGARIAN SPLIT SQUAT</span><br>3×6 each</div><div class="si-detail">Rear foot elevated on bench. Front knee tracks over toe — long stride. Controlled descent, drive through front heel to stand. 60 sec rest between sets. Unilateral loading prevents compensation, hip flexor stretch under load directly improves kick range of motion.<div class="wt-row"><span class="wt-prev" id="wtp-dd-split-squat">No previous entry</span><input type="number" class="wt-input" id="wt-dd-split-squat" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-split-squat')">Log ✓</button></div></div></div>
       <div class="si"><div class="si-phase" style="color:var(--orange)"><span class="si-name">HIP THRUSTS</span><br>3×12</div><div class="si-detail">Upper back on bench, barbell or DB across hips. Drive hips up — full glute squeeze at top, hold 1 sec. Lower controlled. Posterior chain power that transfers directly to swim kick drive. 60 sec rest.<div class="wt-row"><span class="wt-prev" id="wtp-dd-hip-thrusts">No previous entry</span><input type="number" class="wt-input" id="wt-dd-hip-thrusts" placeholder="kg" step="0.5" min="0"><button class="wt-btn" style="background:var(--orange)" onclick="logWeight('dd-hip-thrusts')">Log ✓</button></div></div></div>
 
@@ -1154,7 +1169,7 @@ function showSwimHist(key){
   const modal=document.getElementById('swHistModal');
   const title=document.getElementById('swHistTitle');
   modal.style.display='flex';
-  const labels={'wu-kick':'Kickboard kick','wu-free':'Easy freestyle','db-catchup':'Catch-up drill','db-drag':'Fingertip drag drill','leg-vert':'Vertical kick','leg-sprint':'Kickboard sprint','fs-interval':'Freestyle intervals','fs-cont':'Continuous freestyle','db2-snorkel':'Snorkel freestyle','db2-paddles':'Hand paddles','db2-buoy':'Pull buoy','fins-2':'Freestyle with fins'};
+  const labels={'wu-kick':'Kickboard kick','wu-free':'Easy freestyle','db-catchup':'Catch-up drill','leg-vert':'Vertical kick','leg-sprint':'Kickboard sprint','fs-interval':'Freestyle intervals','fs-cont':'Continuous freestyle','db2-snorkel':'Snorkel freestyle','db2-paddles':'Hand paddles','db2-buoy':'Pull buoy','fins-2':'Freestyle with fins'};
   title.textContent=labels[key]||key;
   _renderSwimHist();
 }
@@ -1419,7 +1434,7 @@ async function _onAuth(session) {
 // Day D (Heli gym) repeats Day B's lifts. Its rows have their own element ids
 // (prefix dd-) but share Day B's history, so each lift has one progression line.
 const DAYB_KEYS=['step-ups','calf-raises','rdl','split-squat','cable-ext-rot','cable-ext-90','ytw','serratus','chest-press','db-rows','lat-pulldown','shoulder-press','pushups-b','pallof','side-plank'];
-const DAYD_SHARED=['step-ups','calf-raises','rdl','split-squat','ytw','serratus','chest-press','db-rows','shoulder-press','pushups-b','pallof','side-plank'];
+const DAYD_SHARED=['step-ups','calf-raises','split-squat','ytw','serratus','chest-press','db-rows','shoulder-press','pushups-b','pallof','side-plank'];
 const WEIGHT_ROWS=DAYB_KEYS.concat(DAYD_SHARED.map(k=>'dd-'+k),['dd-deadlift','dd-hip-thrusts','dd-db-ext-rot','dd-db-ext-90','swim-pb-nofins','swim-pb-fins']);
 // Storage key for a row: Day D's shared rows store under the Day B key
 function sk(key){return key.startsWith('dd-')&&DAYD_SHARED.includes(key.slice(3))?key.slice(3):key;}
@@ -1661,7 +1676,7 @@ function calcOceanTotal(){
   if(b) b.textContent=(base+dv('ocean-optB')).toLocaleString()+'m';
 }
 function loadDistLogs(){
-  ['wu-kick','wu-free','db-catchup','db-drag','leg-vert','leg-sprint',
+  ['wu-kick','wu-free','db-catchup','leg-vert','leg-sprint',
    'fs-interval','fs-cont','db2-snorkel','db2-paddles','db2-buoy','fins-2',
    'ocean-beach','ocean-sight','ocean-optA','ocean-optB'].forEach(updateDistLog);
 }
@@ -1672,17 +1687,17 @@ function distVal(key){
   return el ? (parseFloat(el.value)||0) : 0;
 }
 function calcPoolTotal(){
-  const db2On=_db2active;
-  const db2Total=db2On?(
+  const db2Dist=
     (distVal('db2-snorkel')*distVal('db2-snorkel-reps'))+
     (distVal('db2-paddles')*distVal('db2-paddles-reps'))+
-    (distVal('db2-buoy')*distVal('db2-buoy-reps'))
-  ):0;
+    (distVal('db2-buoy')*distVal('db2-buoy-reps'));
+  const db2El=document.getElementById('db2-dist');
+  if(db2El)db2El.textContent='+'+db2Dist.toLocaleString()+'m';
+  const db2Total=_db2active?db2Dist:0;
   const total =
     (distVal('wu-kick')*distVal('wu-kick-reps'))+
     (distVal('wu-free')*distVal('wu-free-reps'))+
     (distVal('db-catchup')*distVal('db-catchup-reps'))+
-    (distVal('db-drag')*distVal('db-drag-reps'))+
     (distVal('leg-sprint')*distVal('leg-sprint-reps'))+
     (distVal('fs-interval')*distVal('fs-reps'))+
     (distVal('fs-cont')*distVal('fs-cont-reps'))+
@@ -1697,9 +1712,13 @@ function toggleDB2(force){
   else _db2active=force;
   LS.set('db2-active',_db2active);
   const body=document.getElementById('db2-body');
-  const pill=document.getElementById('db2-pill');
   if(body)body.style.display=_db2active?'block':'none';
-  if(pill){pill.textContent=_db2active?'✓ DOING IT':'SKIP';pill.style.background=_db2active?'var(--pool)':'#94A3B8';}
+  const block=document.getElementById('db2-block');
+  if(block)block.classList.toggle('on',_db2active);
+  const btn=document.getElementById('db2-toggle');if(btn)btn.setAttribute('aria-pressed',_db2active);
+  const badge=document.getElementById('db2-badge');if(badge)badge.textContent=_db2active?'✓ ADDED':'OPTIONAL';
+  const st=document.getElementById('db2-state');
+  if(st)st.textContent=_db2active?"Included in today's total — tap the switch to remove":"Not in today's session — tap to add";
   calcPoolTotal();
 }
 function loadPoolDistances(){
