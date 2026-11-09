@@ -101,15 +101,15 @@ body{font-family:'Barlow',sans-serif;background:#f5f7fa;color:var(--grey);}
 .dist-input:focus{border-color:var(--pool);}
 .dist-log-btn{background:var(--pool);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
 .dist-log-btn.ocean{background:var(--ocean);}
-.dist-log-prev{font-size:10px;color:#888;padding:1px 14px 5px;font-style:italic;}
-.dist-log-prev b{color:var(--pool);font-style:normal;}
+.dist-log-prev{font-size:14px;color:#64748B;padding:2px 14px 8px;font-style:italic;line-height:1.4;}
+.dist-log-prev b{color:var(--pool);font-style:normal;font-size:16px;font-weight:700;}
 .dist-log-prev.ocean b{color:var(--ocean);}
 .dist-unit{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:#888;font-weight:700;}
 
 /* WEIGHT TRACKER */
 .wt-row{margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.wt-prev{font-size:11px;color:#888;font-style:italic;flex:1;min-width:100px;}
-.wt-prev b{color:var(--gym);font-style:normal;}
+.wt-prev{font-size:14px;color:#64748B;font-style:italic;flex:1;min-width:120px;line-height:1.45;}
+.wt-prev b{color:var(--gym);font-style:normal;font-size:16px;font-weight:700;}
 .wt-input{width:64px;border:1.5px solid #c8e6c9;border-radius:7px;padding:5px 6px;font-size:13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--gym);text-align:center;background:#fff;outline:none;}
 .wt-input:focus{border-color:var(--gym);}
 .wt-btn{background:var(--gym);color:#fff;border:none;border-radius:7px;padding:6px 11px;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -1404,7 +1404,7 @@ function updateWeightDisplay(key){
   if(!el)return;
   const history=LS.get('weights_'+sk(key))||[];
   if(history.length===0){el.innerHTML='No previous entry';return;}
-  const dateSpan=d=>' <span style="color:#bbb;font-size:10px;">'+d+'</span>';
+  const dateSpan=d=>' <span style="color:#94A3B8;font-size:12px;">'+d+'</span>';
   if(!hasEquip(key)){
     const last=history[0];
     el.innerHTML='Last: <b>'+(isTimeUnit(last.unit)?fmtTime(last.kg):last.kg+(last.unit||'kg'))+'</b>'+dateSpan(last.date);
@@ -1573,8 +1573,8 @@ function updateDistLog(key){
   if(history.length===0){el.innerHTML='';return;}
   const last=history[0];
   const unit=last.unit||'m';
-  const repsStr=(last.reps&&last.reps>1)?' <b>× '+last.reps+'</b> <span style="color:#94A3B8;font-size:10px;">('+last.total+unit+')</span>':'';
-  el.innerHTML='Last: <b>'+last.val+unit+'</b>'+repsStr+' <span style="color:#bbb;font-size:10px;">· '+last.date+'</span>';
+  const repsStr=(last.reps&&last.reps>1)?' <b>× '+last.reps+'</b> <span style="color:#94A3B8;font-size:13px;">('+last.total+unit+')</span>':'';
+  el.innerHTML='Last: <b>'+last.val+unit+'</b>'+repsStr+' <span style="color:#94A3B8;font-size:12px;">· '+last.date+'</span>';
 }
 function calcOceanTotal(){
   const dv=k=>{const e=document.querySelector('.dist-input[data-key="'+k+'"]');return e?(parseFloat(e.value)||0):0;};
